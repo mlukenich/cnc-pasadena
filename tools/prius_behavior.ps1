@@ -41,11 +41,11 @@ function ConvertTo-PriusObjectContent([string]$Content) {
     }
     $shape = $shapes[0]
 
-    # Columbia Prius dimensions: length ~50 (radius 25), width ~24 (radius 12), height ~18
+    # Columbia Prius dimensions: length ~50 (radius 26), width ~24 (radius 12), height ~19
     $geometry.SetAttribute('IsSmall', 'true')
     $shape.SetAttribute('MajorRadius', '26.0')
     $shape.SetAttribute('MinorRadius', '12.0')
-    $shape.SetAttribute('Height', '18.0')
+    $shape.SetAttribute('Height', '19.0')
 
     return $document.OuterXml
 }

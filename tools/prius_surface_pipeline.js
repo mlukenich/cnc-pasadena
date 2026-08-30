@@ -21,7 +21,7 @@ function smoothNormals({ vertices, normals, triangles, groups }) {
 
   triangles.forEach((t, i) => {
     const g = groups[i];
-    const smoothGroup = /^(hood-top|roof-surface|windshield|rear-glass|side-glass|fender-flare.*|front-bumper-curve|rear-bumper-curve|wheel-rim.*|wheel-tire.*|turret-dome|laser-barrel.*|emp-dish.*)$/.test(g);
+    const smoothGroup = /^(hood-top|roof-surface|windshield|rear-glass|wheel-.*|turret-dome|laser-barrel.*|laser-heatsink.*|laser-focus.*|emp-dish.*|emp-emitter.*)$/.test(g);
     if (!smoothGroup) return;
 
     for (let corner = 0; corner < 3; corner++) {
@@ -42,7 +42,7 @@ function smoothNormals({ vertices, normals, triangles, groups }) {
     for (const i of ids) {
       const sum = [0, 0, 0];
       for (const j of ids) {
-        if (dot(old[i], old[j]) > 0.45) {
+        if (dot(old[i], old[j]) > 0.65) {
           for (let k = 0; k < 3; k++) sum[k] += old[j][k] * (surfaceWeights.get(j) || 1);
         }
       }
@@ -103,62 +103,65 @@ function writeTga(file, size, rgba) {
   fs.writeFileSync(file, Buffer.concat([header, pixels]));
 }
 
-// Technical height function for generating tangent normal map
+function readTga(file) {
+  if (!fs.existsSync(file)) return null;
+  const buf = fs.readFileSync(file);
+  const width = buf.readUInt16LE(12);
+  const height = buf.readUInt16LE(14);
+  const bpp = buf[16];
+  const raw = buf.slice(18);
+  // Convert BGRA to RGBA buffer
+  const rgba = Buffer.alloc(width * height * 4);
+  for (let i = 0; i < rgba.length; i += 4) {
+    rgba[i] = raw[i + 2];     // R
+    rgba[i + 1] = raw[i + 1]; // G
+    rgba[i + 2] = raw[i];     // B
+    rgba[i + 3] = bpp === 32 ? raw[i + 3] : 255;
+  }
+  return { width, height, rgba };
+}
+
 function heightAt(cell, u, v) {
+  const edge = Math.min(u, v, 1 - u, 1 - v);
   let h = 0.5;
 
-  // Solar cells pattern on roof (Cell 10)
-  if (cell === 10) {
-    const gridX = Math.abs(Math.sin(u * Math.PI * 16));
-    const gridY = Math.abs(Math.sin(v * Math.PI * 24));
-    h += (gridX > 0.95 || gridY > 0.95) ? -0.04 : 0.02;
+  // Seams & bevels
+  if (cell === 8) { // Hood
+    h += 0.05 * Math.sin(u * Math.PI * 4) * Math.cos(v * Math.PI * 2);
   }
-  // Hood styling grooves (Cell 8)
-  if (cell === 8) {
-    const groove1 = Math.exp(-Math.pow((Math.abs(u - 0.5) - 0.28) / 0.02, 2));
-    const groove2 = Math.exp(-Math.pow((Math.abs(u - 0.5) - 0.42) / 0.015, 2));
-    h -= 0.05 * (groove1 + groove2);
+  if (cell === 9) { // Door
+    h -= 0.08 * Math.exp(-Math.pow((edge - 0.02) / 0.015, 2));
+    if (u > 0.65 && u < 0.85 && v > 0.18 && v < 0.28) h -= 0.12; // handle recess
   }
-  // Door panel enforcement emblem contour (Cell 9)
-  if (cell === 9) {
-    const r = Math.hypot(u - 0.5, v - 0.5);
-    if (r < 0.32 && r > 0.28) h += 0.06; // circular seal border
-    if (r < 0.28 && r > 0.26) h += 0.04;
+  if (cell === 10) { // Solar Roof
+    const gx = Math.abs(Math.sin(u * Math.PI * 16));
+    const gy = Math.abs(Math.sin(v * Math.PI * 24));
+    if (gx > 0.9 || gy > 0.9) h += 0.04;
   }
-  // Tire tread grooves (Cell 14)
-  if (cell === 14) {
-    const treadPattern = Math.sin(v * Math.PI * 32) * Math.sin(u * Math.PI * 8);
-    h += 0.08 * (treadPattern > 0.2 ? 1 : -1);
+  if (cell === 14) { // Tire Tread
+    h += 0.08 * Math.cos(u * Math.PI * 18) * Math.sin(v * Math.PI * 6);
   }
-  // Front LED grille ribs (Cell 12)
-  if (cell === 12) {
-    h += 0.05 * Math.sin(v * Math.PI * 20);
-  }
-  // Laser emitter muzzle grooves (Cell 15)
-  if (cell === 15) {
+  if (cell === 15) { // Laser Face
     const rL = Math.hypot(u - 0.3, v - 0.5);
     const rR = Math.hypot(u - 0.7, v - 0.5);
-    if (rL < 0.15 || rR < 0.15) h -= 0.12; // aperture bore
+    if (rL < 0.15 || rR < 0.15) h -= 0.2;
   }
-
   return h;
 }
 
-// Shader response and material definitions
-// Pearl white & cyan paint ceilings strictly <= 14 to prevent sun wash-out in ObjectsGDI.fx
 const materialResponses = [
-  { name: 'pearl paint', specular: 12, reflection: 0 },
-  { name: 'cyan trim', specular: 14, reflection: 0 },
-  { name: 'matte rubber', specular: 2, reflection: 0 },
-  { name: 'chrome trim', specular: 95, reflection: 25 },
-  { name: 'solar glass', specular: 85, reflection: 35 },
+  { name: 'pearl white paint', specular: 14, reflection: 0 },
+  { name: 'columbia cyan', specular: 14, reflection: 0 },
+  { name: 'eco tire rubber', specular: 2, reflection: 0 },
+  { name: 'aero alloy/chrome', specular: 95, reflection: 20 },
+  { name: 'solar blue glass', specular: 85, reflection: 35 },
   { name: 'carbon fiber', specular: 4, reflection: 0 },
-  { name: 'citation strobe', specular: 90, reflection: 20 },
-  { name: 'gunmetal alloy', specular: 45, reflection: 5 },
-  { name: 'hood panel', specular: 12, reflection: 0 },
-  { name: 'door emblem panel', specular: 12, reflection: 0 },
+  { name: 'strobe optics', specular: 90, reflection: 15 },
+  { name: 'gunmetal alloy', specular: 50, reflection: 4 },
+  { name: 'hood panel', specular: 14, reflection: 0 },
+  { name: 'door panel', specular: 14, reflection: 0 },
   { name: 'solar roof matrix', specular: 70, reflection: 25 },
-  { name: 'rear hatch/spoiler', specular: 12, reflection: 0 },
+  { name: 'rear hatch/spoiler', specular: 14, reflection: 0 },
   { name: 'front led fascia', specular: 50, reflection: 8 },
   { name: 'team badge strip', specular: 14, reflection: 0 },
   { name: 'tire tread', specular: 2, reflection: 0 },
@@ -174,24 +177,16 @@ function writeMaterialMaps(outputDir) {
   const specRgba = Buffer.alloc(size * size * 4);
   const houseRgba = Buffer.alloc(size * size * 4);
 
-  // Palette base definitions
+  // Check if high-resolution source atlas exists
+  const sourceAtlasPath = path.join(outputDir, 'Textures', 'prius-panels-v1.tga');
+  const sourceAtlas = readTga(sourceAtlasPath);
+
+  // Fallback palette
   const colors = [
-    [236, 240, 245], // 0: Pearl White body
-    [0, 168, 204],   // 1: Columbia Cyan
-    [25, 26, 28],    // 2: Eco Rubber
-    [220, 225, 230], // 3: Chrome
-    [16, 32, 54],    // 4: Solar Blue Glass
-    [32, 34, 36],    // 5: Carbon Fiber
-    [255, 60, 40],   // 6: Strobe Amber/Red
-    [48, 50, 56],    // 7: Gunmetal
-    [232, 236, 242], // 8: Hood
-    [235, 239, 244], // 9: Door
-    [18, 38, 62],    // 10: Solar Roof
-    [232, 236, 242], // 11: Rear Hatch
-    [30, 32, 36],    // 12: Front Fascia / LED
-    [220, 225, 230], // 13: Team Badge
-    [22, 23, 25],    // 14: Tire Tread
-    [40, 42, 48],    // 15: Laser Face
+    [236, 240, 245], [0, 168, 204], [25, 26, 28], [220, 225, 230],
+    [16, 32, 54],    [32, 34, 36],  [255, 60, 40], [48, 50, 56],
+    [232, 236, 242], [235, 239, 244], [18, 38, 62], [232, 236, 242],
+    [30, 32, 36],    [220, 225, 230], [22, 23, 25],  [40, 42, 48],
   ];
 
   for (let y = 0; y < size; y++) {
@@ -204,83 +199,29 @@ function writeMaterialMaps(outputDir) {
       const cell = row * 4 + col;
       const offset = (y * size + x) * 4;
 
-      const baseColor = [...colors[cell]];
+      let r, g, b;
+      if (sourceAtlas && sourceAtlas.width === size && sourceAtlas.height === size) {
+        r = sourceAtlas.rgba[offset];
+        g = sourceAtlas.rgba[offset + 1];
+        b = sourceAtlas.rgba[offset + 2];
+      } else {
+        [r, g, b] = colors[cell];
+      }
+
       const mat = materialResponses[cell];
 
-      // Procedural detailing per cell
-      let isTeamColor = (cell === 1 || cell === 13);
-      let teamAlpha = isTeamColor ? 255 : 0;
-
-      // Carbon fiber micro-weave
-      if (cell === 5) {
-        const weave = ((Math.floor(x / 2) + Math.floor(y / 2)) % 2 === 0) ? 12 : -12;
-        baseColor[0] = clamp(baseColor[0] + weave, 0, 255);
-        baseColor[1] = clamp(baseColor[1] + weave, 0, 255);
-        baseColor[2] = clamp(baseColor[2] + weave, 0, 255);
-      }
-
-      // Solar Roof Matrix (Cell 10)
-      if (cell === 10) {
-        const gridX = Math.abs(Math.sin(localX * Math.PI * 16));
-        const gridY = Math.abs(Math.sin(localY * Math.PI * 24));
-        if (gridX > 0.95 || gridY > 0.95) {
-          baseColor[0] = 70; baseColor[1] = 90; baseColor[2] = 120; // grid wire
-        }
-      }
-
-      // Door Enforcement Emblem (Cell 9)
-      if (cell === 9) {
-        const r = Math.hypot(localX - 0.5, localY - 0.5);
-        if (r < 0.32 && r > 0.28) {
-          baseColor[0] = 0; baseColor[1] = 168; baseColor[2] = 204; // cyan badge ring
-        } else if (r <= 0.28 && r > 0.05) {
-          baseColor[0] = 245; baseColor[1] = 248; baseColor[2] = 252;
-          // Star/shield in center
-          if (r < 0.15 && Math.abs(localX - 0.5) < 0.08) {
-            baseColor[0] = 0; baseColor[1] = 168; baseColor[2] = 204;
-          }
-        }
-      }
-
-      // Front Fascia LED strips (Cell 12)
-      if (cell === 12) {
-        if (localY > 0.35 && localY < 0.45) {
-          baseColor[0] = 220; baseColor[1] = 245; baseColor[2] = 255; // White LED beam
-        }
-      }
-
-      // Strobe Lightbar (Cell 6)
-      if (cell === 6) {
-        if (localX < 0.48) {
-          baseColor[0] = 240; baseColor[1] = 20; baseColor[2] = 30; // Red strobe
-        } else if (localX > 0.52) {
-          baseColor[0] = 20; baseColor[1] = 100; baseColor[2] = 255; // Blue strobe
-        } else {
-          baseColor[0] = 255; baseColor[1] = 180; baseColor[2] = 0; // Amber center
-        }
-      }
-
-      // Laser Emitter Face (Cell 15)
-      if (cell === 15) {
-        const rL = Math.hypot(localX - 0.3, localY - 0.5);
-        const rR = Math.hypot(localX - 0.7, localY - 0.5);
-        if (rL < 0.12 || rR < 0.12) {
-          baseColor[0] = 10; baseColor[1] = 15; baseColor[2] = 25; // bore hole
-        } else if (rL < 0.18 || rR < 0.18) {
-          baseColor[0] = 0; baseColor[1] = 180; baseColor[2] = 220; // cyan diode lens
-        }
-      }
-
-      // Team Badge Trim (Cell 13)
-      if (cell === 13) {
+      // Recolor mask: Team color on Cell 1 (cyan trim), Cell 9 (door cyan stripe), and Cell 13 (badge)
+      let teamAlpha = 0;
+      if (cell === 1 || cell === 13) {
         teamAlpha = 255;
-        baseColor[0] = 180; baseColor[1] = 180; baseColor[2] = 180;
+      } else if (cell === 9 && localY > 0.38 && localY < 0.62) {
+        teamAlpha = 255; // horizontal cyan stripe on door
       }
 
       // 1. Diffuse (RGBA)
-      diffuseRgba[offset] = baseColor[0];
-      diffuseRgba[offset + 1] = baseColor[1];
-      diffuseRgba[offset + 2] = baseColor[2];
+      diffuseRgba[offset] = r;
+      diffuseRgba[offset + 1] = g;
+      diffuseRgba[offset + 2] = b;
       diffuseRgba[offset + 3] = 255;
 
       // 2. Normal Map (Sobel from height)
@@ -300,11 +241,11 @@ function writeMaterialMaps(outputDir) {
       // 3. SpecMap: R = Specular Highlight, G = Reflection, B = Glow
       specRgba[offset] = mat.specular;
       specRgba[offset + 1] = mat.reflection;
-      specRgba[offset + 2] = (cell === 6 || (cell === 12 && localY > 0.35 && localY < 0.45)) ? 180 : 0; // glow for strobe/LED
+      specRgba[offset + 2] = (cell === 6 || (cell === 12 && localY > 0.35 && localY < 0.45)) ? 180 : 0;
       specRgba[offset + 3] = 255;
 
       // 4. RecolorTexture: Grayscale luminance in RGB, team color mask in Alpha
-      const lum = Math.round(0.299 * baseColor[0] + 0.587 * baseColor[1] + 0.114 * baseColor[2]);
+      const lum = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
       houseRgba[offset] = lum;
       houseRgba[offset + 1] = lum;
       houseRgba[offset + 2] = lum;
@@ -319,69 +260,18 @@ function writeMaterialMaps(outputDir) {
 }
 
 function writePortraitTga(outputDir) {
-  const size = 128;
-  const rgba = Buffer.alloc(size * size * 4);
-
-  // Stylized Columbia Prius UI Portrait
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const offset = (y * size + x) * 4;
-      const u = x / size, v = y / size;
-
-      // Clean high-tech gradient background
-      let r = Math.round(15 + v * 25 + (1 - u) * 20);
-      let g = Math.round(35 + v * 40 + (1 - u) * 35);
-      let b = Math.round(55 + v * 60 + (1 - u) * 45);
-
-      // Prius silhouette / front three-quarter outline
-      const carDx = (u - 0.5) * 1.4;
-      const carDy = (v - 0.58) * 1.8;
-      const inBody = (Math.abs(carDx) < 0.45 && carDy > -0.25 && carDy < 0.35 && (carDy > -0.05 || Math.abs(carDx) < 0.32));
-      const inRoof = (carDy >= -0.28 && carDy <= -0.05 && Math.abs(carDx) < 0.28 - (carDy + 0.05) * 0.4);
-      const inStrobe = (carDy >= -0.34 && carDy < -0.28 && Math.abs(carDx) < 0.18);
-
-      if (inBody || inRoof) {
-        // High-gloss Pearl White with Cyan accents
-        r = 230 + Math.round((1 - carDy) * 20);
-        g = 238 + Math.round((1 - carDy) * 15);
-        b = 245;
-        if (Math.abs(carDx) > 0.35 || carDy > 0.25) {
-          // Cyan lower rocker / bumper trim
-          r = 0; g = 168; b = 204;
-        }
-        if (inRoof && carDy < -0.1) {
-          // Solar glass
-          r = 20; g = 45; b = 75;
-        }
-        if (carDy > 0.15 && carDy < 0.22 && Math.abs(carDx) < 0.35 && Math.abs(carDx) > 0.15) {
-          // LED Headlights
-          r = 240; g = 250; b = 255;
-        }
-      } else if (inStrobe) {
-        // Flashing citation lightbar
-        if (carDx < 0) { r = 240; g = 30; b = 40; }
-        else { r = 30; g = 120; b = 255; }
-      }
-
-      // Border framing
-      if (x < 2 || x >= size - 2 || y < 2 || y >= size - 2) {
-        r = 0; g = 168; b = 204; // Columbia Cyan frame
-      }
-
-      rgba[offset] = clamp(r, 0, 255);
-      rgba[offset + 1] = clamp(g, 0, 255);
-      rgba[offset + 2] = clamp(b, 0, 255);
-      rgba[offset + 3] = 255;
-    }
+  const targetPath = path.join(outputDir, 'CVPriusPortrait.tga');
+  // If the converted high-res portrait already exists, preserve it!
+  if (fs.existsSync(targetPath) && fs.statSync(targetPath).size > 1000) {
+    return;
   }
-
-  writeTga(path.join(outputDir, 'CVPriusPortrait.tga'), size, rgba);
 }
 
 module.exports = {
   smoothNormals,
   tangentFrame,
   writeTga,
+  readTga,
   heightAt,
   materialResponses,
   writeMaterialMaps,

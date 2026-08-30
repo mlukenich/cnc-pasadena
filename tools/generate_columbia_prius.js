@@ -62,24 +62,24 @@ function faceUvs(material, points, normal, group) {
   const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
 
   // Dedicated panel projections
-  if (group === 'hood-top' && normal[2] > 0.5) {
-    index = 8; projection = p => [(p[1] + 9.0) / 18.0, (26.5 - p[0]) / 13.5];
-  } else if (group === 'door-badge-panel' && Math.abs(normal[1]) > 0.7) {
-    index = 9; projection = p => [(p[0] + 13.0) / 26.0, (13.2 - p[2]) / 2.7];
-  } else if (group === 'roof-surface' && normal[2] > 0.6) {
-    index = 10; projection = p => [(p[1] + 6.8) / 13.6, (2.5 - p[0]) / 10.5];
-  } else if (group === 'tailgate-panel' && normal[0] < -0.5) {
-    index = 11; projection = p => [(p[1] + 7.5) / 15.0, (11.2 - p[2]) / 3.0];
-  } else if (group === 'front-headlights' && normal[0] > 0.6) {
-    index = 12; projection = p => [(p[1] + 7.4) / 14.8, (8.4 - p[2]) / 1.2];
-  } else if (group === 'turret-strobe-lens' && normal[2] > 0.5) {
-    index = 6; projection = p => [(p[1] + 3.6) / 7.2, (p[0] + 2.2) / 6.0];
+  if (group === 'hood-top' && normal[2] > 0.4) {
+    index = 8; projection = p => [(p[1] + 8.6) / 17.2, (26.8 - p[0]) / 15.3];
+  } else if (group === 'door-badge-panel' && Math.abs(normal[1]) > 0.6) {
+    index = 9; projection = p => [(p[0] + 9.5) / 19.0, (13.4 - p[2]) / 2.9];
+  } else if (group === 'roof-surface' && normal[2] > 0.5) {
+    index = 10; projection = p => [(p[1] + 6.8) / 13.6, (1.5 - p[0]) / 10.5];
+  } else if (group === 'tailgate-panel' && normal[0] < -0.4) {
+    index = 11; projection = p => [(p[1] + 7.5) / 15.0, (11.2 - p[2]) / 3.2];
+  } else if (group === 'front-headlights' && normal[0] > 0.5) {
+    index = 12; projection = p => [(p[1] + 7.4) / 14.8, (8.6 - p[2]) / 1.4];
+  } else if (group === 'turret-strobe-lens' && normal[2] > 0.4) {
+    index = 6; projection = p => [(p[1] + 3.8) / 7.6, (p[0] + 2.4) / 6.6];
   } else if (group.startsWith('wheel-')) {
     const cx = group.includes('front') ? 16.0 : -16.0;
     const cy = group.includes('left') ? 9.8 : -9.8;
     const ySign = group.includes('left') ? 1.0 : -1.0;
     const cz = 5.2;
-    if (group.includes('tire-outer') && Math.abs(normal[1]) < 0.8) {
+    if (group.includes('tire-outer') && Math.abs(normal[1]) < 0.75) {
       index = 14;
       projection = p => {
         const theta = Math.atan2(p[2] - cz, p[0] - cx);

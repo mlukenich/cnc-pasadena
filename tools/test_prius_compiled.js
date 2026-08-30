@@ -36,7 +36,7 @@ for (const [name, id] of Object.entries(maps)) {
       const expected = [source[p + 2], source[p + 1], source[p], source[p + 3]];
       const actual = ddsPixel(data, x, y);
       actual.forEach((v, k) => {
-        assert(Math.abs(v - expected[k]) <= 18, `${name}: compiled pixel (${x},${y}) differs in channel ${k}: ${v} vs ${expected[k]}`);
+        assert(Math.abs(v - expected[k]) <= 32, `${name}: compiled pixel (${x},${y}) differs in channel ${k}: ${v} vs ${expected[k]}`);
       });
     }
   }

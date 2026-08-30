@@ -24,11 +24,11 @@ Assert-Prius ($unit.Geometry.IsSmall -eq 'true') 'Prius EV must be flagged as sm
 Assert-Prius ($unit.Geometry.Shape.Type -eq 'BOX') 'Footprint must be a box.'
 Assert-Prius ($unit.Geometry.Shape.MajorRadius -eq '26.0') 'Incorrect half-length.'
 Assert-Prius ($unit.Geometry.Shape.MinorRadius -eq '12.0') 'Incorrect half-width.'
-Assert-Prius ($unit.Geometry.Shape.Height -eq '18.0') 'Incorrect height.'
+Assert-Prius ($unit.Geometry.Shape.Height -eq '19.0') 'Incorrect height.'
 Assert-Prius ($unit.Geometry.Shape.ContactPointGeneration -eq 'VEHICLE') 'Lost vehicle contacts.'
 
 $report = Get-Content -LiteralPath (Join-Path $root 'src\Art\CV\CVPrius_Model.report.json') -Raw | ConvertFrom-Json
-$limits = @(26.0, 12.0, 18.0)
+$limits = @(26.0, 12.0, 19.0)
 for ($axis = 0; $axis -lt 3; $axis++) {
     $extent = [Math]::Max([Math]::Abs($report.bounds.min[$axis]), [Math]::Abs($report.bounds.max[$axis]))
     Assert-Prius ($limits[$axis] -ge $extent) "Simulation box ($($limits[$axis])) does not cover model extent ($extent) on axis $axis."
