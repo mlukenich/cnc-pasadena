@@ -1,5 +1,7 @@
 # How we built and debugged the custom C&C 3 unit
 
+**Current process:** [UNIT_MODEL_WORKFLOW.md](UNIT_MODEL_WORKFLOW.md) is the start-to-finish standard adopted after the user approved the Monster Mud Tank revision 2 render. It adds explicit exterior-winding checks, component UV mapping, real-model render iterations, clearance checks and separate visual/build/runtime evidence. The guide below preserves the earlier Rolling Coal technical investigation.
+
 A technical learning guide for the project owner. Written against the project as it exists on 2026-08-30.
 
 This explains the work behind the Lifted F-250 "Rolling Coal": how an idea became a real in-game model, why several early versions looked wrong, how we found the causes, and which parts remain unfinished. It is not a claim that the exemplar already matches every aspect of the original game's production quality.

@@ -90,7 +90,7 @@ For a render-only request, deliver the inspected render and source checks withou
 
 1. Run focused geometry, material and behavior tests for the candidate and relevant unchanged exemplars.
 2. Confirm no other task is using shared staging and do not replace an archive a running game may be using. Do not kill the user's game.
-3. Compile main and LowLOD streams to a dedicated `build/<unit>-<revision>` candidate using `tools/build_mod.ps1 -OutputDirectory ...`. Do not use `build.bat -Install` or normal-release output for an experiment.
+3. Compile main and LowLOD streams to a dedicated `build/<unit>-<revision>` candidate using `tools/build_mod.ps1 -OutputDirectory ...`. Do not use `build.bat` (which installs), pass `-Install`, or use normal-release output for an experiment.
 4. Verify compiled positions, normals, tangent frames, UV convention, texture formats/channels and shader bindings. Inspect unexpected compiler errors; missing stock raw-art notices are not blanket permission to ignore failures.
 5. Verify the launcher selects that exact archive/configuration; record its hash. A launcher preflight is not a runtime test.
 6. Test a fresh skirmish: fixed-camera appearance beside stock units; driving/turning; wheel motion; turret tracking/firing; muzzle FX; damaged/dying states; factory exits; group spacing near buildings; low settings and many-unit performance.

@@ -29,7 +29,13 @@ const palette = {
   stealthTread: 14,
   microwaveFace: 15,
 };
-const materialKeys = Object.keys(palette);
+const groupBounds = new Map();
+let collectingBounds = true;
+function collectBounds(points, group) {
+  if (!groupBounds.has(group)) groupBounds.set(group, {min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity]});
+  const b=groupBounds.get(group);
+  for (const p of points) for(let k=0;k<3;k++) { b.min[k]=Math.min(b.min[k],p[k]); b.max[k]=Math.max(b.max[k],p[k]); }
+}
 
 const vertices = [];
 const normals = [];
@@ -65,70 +71,49 @@ function triangleNormal(triangle, points) {
 }
 
 function faceUvs(material, points, normal, group) {
-  let index = materialKeys.indexOf(material);
-  let projection;
-  const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
-
-  // Dedicated panel projections
-  if (group.startsWith('wedge-') && normal[2] > 0.3) {
-    index = 8; projection = p => [(p[1] + 11.0) / 22.0, (23.0 - p[0]) / 18.0];
-  } else if (group === 'skirt-outer-panel') {
-    index = 9; projection = p => [(p[0] + 19.0) / 38.0, (8.5 - p[2]) / 5.0];
-  } else if (group === 'turret-solar-roof' && normal[2] > 0.4) {
-    index = 10; projection = p => [(p[1] + 4.5) / 9.0, (3.0 - p[0]) / 9.0];
-  } else if (group === 'rear-engine-deck' && normal[2] > 0.3) {
-    index = 11; projection = p => [(p[1] + 10.5) / 21.0, (-12.0 - p[0]) / 8.0];
-  } else if (group === 'front-fascia-intake' && normal[0] > 0.3) {
-    index = 12; projection = p => [(p[1] + 8.0) / 16.0, (6.0 - p[2]) / 2.0];
-  } else if (group === 'rear-service-hatch') {
-    index = 13;
-  } else if (group.startsWith('wheel-')) {
-    if (group.includes('tread')) {
-      index = 14;
-    } else if (group.includes('rim')) {
-      index = 3;
-    } else if (group.includes('sidewall')) {
-      index = 2;
-    } else {
-      index = 1;
-    }
+  const index = palette[material === 'chrome' ? 'aerospaceChrome' : material];
+  if (index === undefined) throw new Error('Unknown Roundabout material: '+material);
+  const b=groupBounds.get(group);
+  const fraction=(p,k)=>(p[k]-b.min[k])/Math.max(b.max[k]-b.min[k],0.00001);
+  const axis=normal.map(Math.abs).indexOf(Math.max(...normal.map(Math.abs)));
+  let project = p => axis===2 ? [fraction(p,1),1-fraction(p,0)] :
+    axis===1 ? [normal[1]<0 ? fraction(p,0):1-fraction(p,0),1-fraction(p,2)] :
+    [normal[0]>0 ? fraction(p,1):1-fraction(p,1),1-fraction(p,2)];
+  // Only sample the useful artwork. Caption bands never reach the model.
+  let crop=[0.06,0.06,0.94,0.84];
+  if(index===0) crop=[0.15,0.12,0.85,0.73];
+  if(index===2) crop=[0.18,0.23,0.8,0.73];
+  if(index===3 && axis!==1 && !group.includes('dish')) crop=[0.32,0.26,0.66,0.60];
+  if(index===7) crop=[0.25,0.22,0.75,0.66];
+  // A strobe swatch is a complete light module: use its upper luminous strip.
+  if(index===6) crop=[0.34,0.155,0.68,0.195];
+  if(index===10) crop=[0.075,0.12,0.94,0.91];
+  if(index===11) crop=[0.06,0.05,0.94,0.91];
+  if(index===9) crop=[0.035,0.07,0.965,0.90];
+  if(index===12) crop=[0.05,0.04,0.95,0.88];
+  if(index===15) crop=[0.04,0.015,0.96,0.88];
+  if(group.startsWith('wheel-') && /sidewall|planetary-rim|hub-light-ring/.test(group)) {
+    const cx=group.includes('front')?13:-13, cz=4.8;
+    const r=group.includes('sidewall')?3.8:group.includes('rim')?2.4:1.8;
+    project=p=>[0.5+(p[0]-cx)/(2*r),0.5-(p[2]-cz)/(2*r)];
+    if(index===3) crop=[0.05,0.02,0.95,0.87];
+    // Axial portions of an annulus need their own projection.
+    if(Math.abs(normal[1])<0.05) project=p=>[fraction(p,1),fraction(p,Math.abs(normal[0])>Math.abs(normal[2])?2:0)];
   }
-
-  if (index < 0) index = 0;
-  const col = index % 4, row = Math.floor(index / 4);
-
-  if (projection) {
-    return points.map(p => {
-      const [u, v] = projection(p);
-      return [(col + 0.03 + 0.94 * clamp(u)) / 4, (row + 0.03 + 0.94 * clamp(v)) / 4];
-    });
+  if(group.includes('tire-tread')) {
+    const cx=group.includes('front')?13:-13;
+    const angles=points.map(p=>Math.atan2(p[2]-4.8,p[0]-cx));
+    if(Math.max(...angles)-Math.min(...angles)>Math.PI) angles.forEach((a,i)=>{if(a<0)angles[i]+=Math.PI*2;});
+    const low=Math.floor(Math.min(...angles)/(Math.PI/2));
+    project=p=>[fraction(p,1), (angles[points.indexOf(p)]/(Math.PI/2)-low)/1.21];
   }
-
-  const u0 = col / 4 + 0.035;
-  const v0 = row / 4 + 0.035;
-  const dist = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
-  const w = dist(points[0], points[1]) || 0.01;
-  const edge = points[1].map((v, i) => (v - points[0][i]) / w);
-  const vertical = [
-    normal[1] * edge[2] - normal[2] * edge[1],
-    normal[2] * edge[0] - normal[0] * edge[2],
-    normal[0] * edge[1] - normal[1] * edge[0],
-  ];
-  const local = points.map(p => {
-    const d = p.map((v, i) => v - points[0][i]);
-    return [
-      d.reduce((s, v, i) => s + v * edge[i], 0),
-      d.reduce((s, v, i) => s + v * vertical[i], 0)
-    ];
-  });
-  const low = [0, 1].map(k => Math.min(...local.map(p => p[k])));
-  const high = [0, 1].map(k => Math.max(...local.map(p => p[k])));
-  const span = Math.max(high[0] - low[0], high[1] - low[1], 0.01);
-  const scale = 0.18 / span;
-  return local.map(p => [u0 + (p[0] - low[0]) * scale, v0 + (p[1] - low[1]) * scale]);
+  return points.map(p=>{const [u,v]=project(p);return [
+    (index%4+crop[0]+u*(crop[2]-crop[0]))/4,
+    (Math.floor(index/4)+crop[1]+v*(crop[3]-crop[1]))/4];});
 }
 
 function addFace(points, normal, material, group) {
+  if(collectingBounds) {collectBounds(points,group);return;}
   normal = normal.map(v => v / Math.hypot(...normal));
   if (triangleNormal([0, 1, 2], points).reduce((s, n, i) => s + n * normal[i], 0) < 0) points = [...points].reverse();
   const start = vertices.length;
@@ -144,6 +129,7 @@ function addFace(points, normal, material, group) {
 }
 
 function addTriangle(points, normal, material, group) {
+  if(collectingBounds) {collectBounds(points,group);return;}
   normal = normal.map(v => v / Math.hypot(...normal));
   if (triangleNormal([0, 1, 2], points).reduce((s, n, i) => s + n * normal[i], 0) < 0) points = [points[0], points[2], points[1]];
   const start = vertices.length;
@@ -217,6 +203,9 @@ function addCylinder(name, cx, cy, cz, radius, length, axis = 'x', segments = 12
 
 // Build 3D Roundabout Tank Geometry
 buildRoundaboutTank({ addBox, addCylinder, addFace, addTriangle });
+collectingBounds=false;
+buildRoundaboutTank({ addBox, addCylinder, addFace, addTriangle });
+smoothNormals({vertices,normals,triangles,groups});
 
 function bounds(pts) {
   const min = [0, 1, 2].map(k => Math.min(...pts.map(p => p[k])));
@@ -241,6 +230,7 @@ function selectMesh(predicate, offset) {
   const selectedNormals = [];
   const selectedUvs = [];
   const selectedTriangles = [];
+  const selectedGroups = [];
   const remap = new Map();
 
   triangles.forEach((triangle, triangleIndex) => {
@@ -259,11 +249,13 @@ function selectMesh(predicate, offset) {
       return remap.get(oldIndex);
     });
     selectedTriangles.push(mapped);
+    selectedGroups.push(groups[triangleIndex]);
   });
   return {
     vertices: selectedVertices.map(scalePoint),
     normals: selectedNormals,
     uvs: selectedUvs,
+    groups: selectedGroups,
     triangles: selectedTriangles
   };
 }
@@ -287,7 +279,7 @@ const wheelMeshes = [
 function makeMeshXml(id, mesh) {
   const b = bounds(mesh.vertices);
   const smoothedNormals = mesh.normals.map(n => [...n]);
-  smoothNormals({ vertices: mesh.vertices, normals: smoothedNormals, triangles: mesh.triangles, groups: mesh.triangles.map(() => id) });
+  // Normals already smoothed using actual group identities before partitioning.
   const { tangents, binormals } = tangentFrame({ vertices: mesh.vertices, normals: smoothedNormals, uvs: mesh.uvs, triangles: mesh.triangles });
 
   return `\t<W3DMesh id="${id}" CastShadow="true" GeometryType="Normal">
@@ -366,11 +358,11 @@ const pivots = [
   ['Bone_Turret', 0, 0, 0, 8.5],
   ['GunPitch', 1, 6.5, 0, 1.7],
   ['GUN', 2, 3.0, 0, 0],
-  ['TurretFX', 3, 16.0, 0, 0],
-  ['MuzzleFlash_01', 3, 16.0, 0, 0],
+  ['TurretFX', 3, 16.4, -2.4, 0],
+  ['MuzzleFlash_01', 3, 16.4, -2.4, 0],
   ['Turret2', 0, -14.0, 0, 8.5],
   ['Turret2_Gun', 6, -5.5, 0, 9.3],
-  ['TurretMS', 7, -1.5, 0, 0],
+  ['TurretMS', 7, -1.975, 0, 0],
   ['Bone_Tail', 6, 0, 0, 0],
   ['Bone_TireLF', 0, 13.0, 9.8, 4.8],
   ['Bone_TireRF', 0, 13.0, -9.8, 4.8],
@@ -406,15 +398,15 @@ const outputDir = path.resolve(__dirname, '..', 'src', 'Art', 'CR');
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 const submeshes = [
-  { name: 'BODY', mesh: bodyMesh },
-  { name: 'TURRET', mesh: turretMesh },
-  { name: 'GUN', mesh: gunMesh },
-  { name: 'TAIL', mesh: tailMesh },
-  ...wheelMeshes.map(b => ({ name: b.id, mesh: b.mesh })),
+  { name: 'BODY', bone: 0, mesh: bodyMesh },
+  { name: 'TURRET', bone: 1, mesh: turretMesh },
+  { name: 'GUN', bone: 3, mesh: gunMesh },
+  { name: 'TAIL', bone: 6, mesh: tailMesh },
+  ...wheelMeshes.map(b => ({ name: b.id, bone: b.bone, mesh: b.mesh })),
 ];
 
 const report = {
-  artVersion: 1,
+  artVersion: 2,
   unit: 'ColumbiaVehicleRoundabout',
   slot: 'NODRaiderTank',
   artScale,
@@ -445,10 +437,12 @@ function exportAssets() {
 
   let obj = '# Columbia Roundabout Enforcer Tank OBJ\nmtllib CRRoundabout.mtl\n';
   let objVertOffset = 1;
-  submeshes.forEach(({ name, mesh }) => {
+  submeshes.forEach(({ name, bone, mesh }) => {
+    const pivot=i=>pivots[i].slice(2).map((v,k)=>v+(pivots[i][1]<0?0:pivot(pivots[i][1])[k]));
+    const offset=pivot(bone);
     obj += `o ${name}\nusemtl ObjectsGDI\n`;
-    mesh.vertices.forEach(v => { obj += `v ${fmt(v[0])} ${fmt(v[1])} ${fmt(v[2])}\n`; });
-    mesh.uvs.forEach(uv => { obj += `vt ${fmt(uv[0])} ${fmt(uv[1])}\n`; });
+    mesh.vertices.forEach(v => { obj += `v ${fmt(v[0]+offset[0])} ${fmt(v[1]+offset[1])} ${fmt(v[2]+offset[2])}\n`; });
+    mesh.uvs.forEach(uv => { obj += `vt ${fmt(uv[0])} ${fmt(1-uv[1])}\n`; });
     mesh.normals.forEach(n => { obj += `vn ${fmt(n[0])} ${fmt(n[1]) || 0} ${fmt(n[2])}\n`; });
     mesh.triangles.forEach(t => {
       const f = t.map(i => i + objVertOffset);
@@ -477,6 +471,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  worldMesh: { vertices: vertices.map(scalePoint), normals, uvs, triangles, groups, materials },
+  pivots,
   report,
   submeshes,
   w3x,

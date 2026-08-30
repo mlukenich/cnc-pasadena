@@ -1,0 +1,57 @@
+{
+  "artVersion": 1,
+  "unit": "ColumbiaVehicleStreetSweeper",
+  "slot": "NODFlameTank",
+  "shader": "ObjectsGDI.fx",
+  "model": "CSSWEEPER_SKIN",
+  "vertices": 4848,
+  "triangles": 2130,
+  "bounds": {
+    "min": [
+      -20.5,
+      -18.7,
+      0.2
+    ],
+    "max": [
+      24.2,
+      18.7,
+      20.8
+    ],
+    "center": [
+      1.8499999999999996,
+      0,
+      10.5
+    ],
+    "radius": 29.07462133559477
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Turret",
+    "FXFireL",
+    "FXFireR",
+    "Brush_L",
+    "Brush_R",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "FXTracksL",
+    "FXTracksR",
+    "FXTracksB",
+    "FXHULKFIRE",
+    "FXTreadL",
+    "FXTreadR"
+  ],
+  "outputs": [
+    "CSSweeper_Model.w3x",
+    "CSSweeper_Texture.xml",
+    "CSSweeperAtlas.tga",
+    "CSSweeperNormal.tga",
+    "CSSweeperSpec.tga",
+    "CSSweeperHouse.tga",
+    "CSSweeper_Portrait.xml",
+    "CSSweeperPortrait.tga",
+    "CSSweeper.obj",
+    "CSSweeper.mtl"
+  ]
+}

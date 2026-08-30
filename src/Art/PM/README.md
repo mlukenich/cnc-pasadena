@@ -1,5 +1,7 @@
 # Monster Mud Tank — art revision 2
 
+The user approved the finished render on 2026-08-30 and selected its process as the project standard. Follow [UNIT_MODEL_WORKFLOW.md](../../../UNIT_MODEL_WORKFLOW.md) for future units. The approved [front](../../../docs/unit-art/reference/monster-truck-approved-front.png) and [rear](../../../docs/unit-art/reference/monster-truck-approved-rear.png) images are frozen references, separate from regeneratable previews. This approval establishes visual acceptance only.
+
 Actual model renders are in `Preview/mudtank-v2-front.png`, `mudtank-v2-rear.png`, `mudtank-v2-side.png` and `mudtank-v2-sun-check.png`. These render the generated model, UVs and material maps with approximate game lighting. They are not concept images or in-game screenshots.
 
 ## Changes

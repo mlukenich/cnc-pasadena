@@ -74,9 +74,19 @@ for (const entry of entries) {
     let pos = 0;
     while ((pos = d.indexOf(marker, pos)) >= 0) {
       if (pos >= 40 && pos + vertices.length * 60 <= d.length && d.readUInt32LE(pos + 24) === 0xffffffff) {
-        matchedData = d;
-        start = pos;
-        break;
+        let match = true;
+        if (vertices.length > 1) {
+          const v1Expected = [...vertices[1], ...normals[1]];
+          for (let k = 0; k < 6; k++) {
+            const got = d.readFloatLE(pos + 60 + k * 4);
+            if (Math.abs(got - v1Expected[k]) > 0.0001) { match = false; break; }
+          }
+        }
+        if (match) {
+          matchedData = d;
+          start = pos;
+          break;
+        }
       }
       pos += 4;
     }

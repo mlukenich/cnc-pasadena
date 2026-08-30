@@ -4,9 +4,11 @@
 
 ## Custom-model guides
 
+- **[Standard unit-model workflow](UNIT_MODEL_WORKFLOW.md)**: the start-to-finish process adopted after approval of the Monster Mud Tank render. Follow this first for every new or revised unit: silhouette, real geometry, UV/material repair, repeated actual-model renders, rig checks, candidate build and runtime verification.
+- [Approved visual reference](docs/unit-art/reference/monster-truck-approved-front.png): preserved Monster Mud Tank revision 2 render. This is visual approval, not a claim of completed in-game testing.
 - [Prius art revision 2](src/Art/CV/README.md): repaired body/wheel visibility, revised cabin and wheel openings, texture mapping, previews and verification. Available through `launch_prius_preview.bat`; the regular package is unchanged.
 
-- [Agent playbook](MODEL_CREATION_AGENT_PLAYBOOK.md): a step-by-step, lower-cost workflow for creating and refining custom in-game vehicles, with source locations, tested contracts, commands, troubleshooting, and handoff checks.
+- [Implementation reference](MODEL_CREATION_AGENT_PLAYBOOK.md): the older Rolling Coal source locations, tested contracts, commands and troubleshooting. Use the standard workflow above for the current process.
 - [Technical learning guide](HOW_THE_CUSTOM_UNIT_PIPELINE_WORKS.md): how this project's geometry, textures, shaders, skeleton, collision, compiler, and launcher work together; the defects we diagnosed and the work still outstanding.
 
 Welcome to **The Battle for Maryland**, a full-featured satire mod for *Command & Conquer 3: Tiberium Wars* pitilessly parodying the cultural stereotypes of two iconic Maryland localities: **Pasadena** ("The 'Dena") and **Columbia**.

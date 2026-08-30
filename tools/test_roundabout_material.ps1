@@ -57,4 +57,25 @@ Assert-True ($spec[$rubber + 2] -le 4) "Rubber specular ($($spec[$rubber+2])) ex
 Assert-True ($spec[$carbon + 2] -le 6) "Carbon fiber specular ($($spec[$carbon+2])) exceeds matte ceiling."
 Assert-True ($spec[$chrome + 2] -ge 60) "Aerospace chrome specular ($($spec[$chrome+2])) is too low."
 
+$house = [IO.File]::ReadAllBytes((Join-Path $ArtDirectory 'CRRoundaboutHouse.tga'))
+$atlas = [IO.File]::ReadAllBytes((Join-Path $ArtDirectory 'CRRoundaboutAtlas.tga'))
+$maskedCaution = 0
+$darkCaution = 0
+for ($y = 0; $y -lt 256; $y++) {
+    for ($x = 0; $x -lt 256; $x++) {
+        $badge = 18 + ((512 + $y) * 1024 + 256 + $x) * 4
+        Assert-True ($house[$badge + 3] -eq 0) 'Team mask obscures Columbia badge lettering.'
+        $caution = 18 + ((768 + $y) * 1024 + 256 + $x) * 4
+        $colored = $atlas[$caution + 1] -gt $atlas[$caution + 2] * 1.4 -and $atlas[$caution] -gt $atlas[$caution + 2] * 1.4
+        if ($colored) {
+            Assert-True ($house[$caution + 3] -eq 255) 'Cyan caution stripe missing team mask.'
+            $maskedCaution++
+        } else {
+            Assert-True ($house[$caution + 3] -eq 0) 'Dark caution gap lost to solid team color.'
+            $darkCaution++
+        }
+    }
+}
+Assert-True ($maskedCaution -gt 1000 -and $darkCaution -gt 1000) 'Caution stripe contrast coverage missing.'
+
 Write-Host '[PASS] Eight ObjectsGDI materials; four maps; tangent frames; safe paint specular; matte rubber/carbon; isolated team recolor.'

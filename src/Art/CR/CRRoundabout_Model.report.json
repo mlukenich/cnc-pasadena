@@ -1,21 +1,21 @@
 {
-  "artVersion": 1,
+  "artVersion": 2,
   "unit": "ColumbiaVehicleRoundabout",
   "slot": "NODRaiderTank",
   "artScale": 0.88,
   "shader": "ObjectsGDI.fx",
   "model": "CRROUNDABOUT_SKIN",
-  "vertices": 18764,
-  "triangles": 6576,
+  "vertices": 27828,
+  "triangles": 9920,
   "bounds": {
     "min": [
       -18.92,
-      -10.64448,
+      -11.1232,
       0.176
     ],
     "max": [
       22.88,
-      10.64448,
+      11.1232,
       21.577075
     ],
     "center": [
@@ -23,7 +23,7 @@
       0,
       10.8765375
     ],
-    "radius": 22.883969397569693
+    "radius": 22.812477700525218
   },
   "bones": [
     "ROOTTRANSFORM",

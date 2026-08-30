@@ -22,7 +22,7 @@ function smoothNormals({ vertices, normals, triangles, groups }) {
   triangles.forEach((t, i) => {
     const g = groups[i];
     const shell = /^(hull-.*|wedge-.*|fender-.*|roof-.*|skirt-.*|diffuser-.*)$/.test(g);
-    const smoothGroup = shell || /^(wheel-.*|emitter-.*|barrel-.*|turret-dome.*|sensor-.*|stinger-.*)$/.test(g);
+    const smoothGroup = shell || /^(wheel-.*|emitter-.*|barrel-.*|gun-.*|turret-lidar.*|sensor-.*|stinger-.*)$/.test(g);
     if (!smoothGroup) return;
 
     for (let corner = 0; corner < 3; corner++) {
@@ -65,10 +65,7 @@ function tangentFrame(mesh) {
     const det = u1 * v2 - u2 * v1;
     let tangent, bitangent;
     if (Math.abs(det) < 1e-12) {
-      const fn = unit(cross(e1, e2));
-      const arb = Math.abs(fn[2]) < 0.8 ? [0, 0, 1] : [0, 1, 0];
-      tangent = unit(cross(fn, arb));
-      bitangent = unit(cross(fn, tangent));
+      throw new Error('Degenerate Roundabout UV triangle: '+t.join(','));
     } else {
       tangent = e1.map((v, i) => (v * v2 - e2[i] * v1) / det);
       bitangent = e1.map((v, i) => (e2[i] * u1 - v * u2) / det);
@@ -134,7 +131,7 @@ function heightAt(cell, u, v) {
     // 3K Carbon fiber weave
     const su = (u * 32) % 1.0;
     const sv = (v * 32) % 1.0;
-    h = Math.sin(su * Math.PI) * Math.sin(sv * Math.PI) * 0.3 + 0.5;
+    h = Math.sin(su * Math.PI) * Math.sin(sv * Math.PI) * 0.06 + 0.5;
   } else if (cell === 10) {
     // Solar micro-hex grid
     const su = (u * 16) % 1.0;
@@ -218,11 +215,9 @@ function writeMaterialMaps(outputDir) {
 
       const mat = materialResponses[cell];
 
-      // Recolor mask: Team color on Cell 1 (cyan trim), Cell 9 (enforcer stripe/badge), Cell 13 (caution stripe)
+      // Preserve badge lettering and black gaps between caution stripes.
       let teamAlpha = 0;
-      if (cell === 1 || cell === 13) {
-        teamAlpha = 255;
-      } else if (cell === 9 && localY > 0.45 && localY < 0.65) {
+      if (cell === 1 || (cell === 13 && g > r * 1.4 && b > r * 1.4)) {
         teamAlpha = 255;
       }
 
@@ -246,7 +241,7 @@ function writeMaterialMaps(outputDir) {
       normalRgba[offset + 2] = Math.round(clamp((norm[2] * 0.5 + 0.5) * 255, 0, 255));
       normalRgba[offset + 3] = 255;
 
-      // 3. SpecMap: R = Specular Highlight, G = Reflection, B = Glow
+      // ObjectsGDI: R = highlight, G = reflection, B = house-color glow.
       specRgba[offset] = mat.specular;
       specRgba[offset + 1] = mat.reflection;
       specRgba[offset + 2] = (cell === 6 || (cell === 12 && localY > 0.35 && localY < 0.55)) ? 200 : 0;

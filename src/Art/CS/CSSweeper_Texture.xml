@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+  <Texture id="CSSweeperAtlas" File="CSSweeperAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+  <Texture id="CSSweeperNormal" File="CSSweeperNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+  <Texture id="CSSweeperSpec" File="CSSweeperSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+  <Texture id="CSSweeperHouse" File="CSSweeperHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

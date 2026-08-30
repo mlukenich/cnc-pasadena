@@ -1,16 +1,18 @@
-# Custom C&C 3 models: the lower-cost agent playbook
+# Custom C&C 3 models: implementation reference
 
-Verified against this project on 2026-08-30. Audience: an implementation-capable, lower-tier AI agent working on one unit at a time.
+**Start with [UNIT_MODEL_WORKFLOW.md](UNIT_MODEL_WORKFLOW.md).** The user adopted the Monster Mud Tank revision 2 render process as the project standard on 2026-08-30. That document governs new/refined unit work, render evidence, shared-workspace coordination and completion stages. This older playbook remains a technical reference for Rolling Coal; its example commands, dimensions, bones and baseline hashes are not universal defaults or current release status.
+
+Originally verified on 2026-08-30. Audience: an implementation agent working on one unit at a time.
 
 This is a project manual, not a new Codex skill or permission to change the game installation. Follow the user's current request, applicable agent instructions, and available tool/skill requirements first. A request to explain or review does not authorize implementing a change.
 
 For the reasoning behind this workflow, read [HOW_THE_CUSTOM_UNIT_PIPELINE_WORKS.md](HOW_THE_CUSTOM_UNIT_PIPELINE_WORKS.md). All paths below are relative to the project root unless explicitly absolute.
 
-## 1. Read this first: current state and non-negotiables
+## 1. Rolling Coal historical state and safety boundaries
 
 The playable exemplar is the Lifted F-250 "Rolling Coal," occupying the stock `GDIPitbull` object slot. It has custom truck geometry, four-map materials, separate wheel/turret/gun parts, and a custom UI portrait. It retains stock Pitbull weapons and production logic. The twin-.50-caliber description and smog ability are design intentions, not implemented behavior.
 
-The latest package combines art revision 3.4 with behavior pass 1, which fits the collision footprint to the existing truck. User screenshots show substantial visual improvement; a short video shows movement, turning, and independent idle turret rotation. That video does **not** validate combat effects, wheel rotation speed, factory exits, or multi-unit spacing. The idle turret sweep looks abrupt; no subsequent tuning has been implemented.
+At the original checkpoint, the package combined art revision 3.4 with behavior pass 1, which fits the collision footprint to the existing truck. User screenshots showed substantial visual improvement; a short video showed movement, turning, and independent idle turret rotation. That video did **not** validate combat effects, wheel rotation speed, factory exits, or multi-unit spacing. The idle turret sweep looked abrupt. Inspect current source before assuming this historical package or tuning remains current.
 
 Keep these boundaries:
 
@@ -24,7 +26,7 @@ Keep these boundaries:
 - Do not claim compilation proves visual quality, animation, combat behavior, performance, or stock-art parity.
 - Do not weaken a test just to make it pass. Explain intentional contract changes and replace obsolete expectations with equally useful checks.
 
-### Current baseline facts
+### Historical Rolling Coal baseline facts
 
 | Item | Verified value |
 | --- | --- |
@@ -38,7 +40,7 @@ Keep these boundaries:
 | Render bounds | X −33.836 to 34.980; Y ±14.960; Z approximately 0.014 to 32.575 |
 | Simulation box | Half-length 35; half-width 16; height 33; `IsSmall=false` |
 | Preview | `build/art-v3/MDShowdown.big` and `MDShowdown_1.0.skudef` |
-| Current package SHA256 | `3566608E641CE5E4294039C2C72031617ED325A7071DC0295016D62F90F41DAC` |
+| Historical package SHA256 | `3566608E641CE5E4294039C2C72031617ED325A7071DC0295016D62F90F41DAC` |
 | Previous art-3.4 backup | `build/baselines/art-pass-3-render-fixed` |
 
 The hash identifies this exact candidate, not a hash every future build should have. Update the handoff after an intentional change. Current statistics are an exemplar budget, not a documented engine-wide maximum.
@@ -379,6 +381,8 @@ For another rigid vehicle, when the user authorizes one:
 Infantry and deforming creatures require skin weights, a compatible animated skeleton, and a much broader animation-state set. That is outside the proven rigid-vehicle exporter. Do not promise a cheap drop-in conversion.
 
 ## 9. Completion and handoff template
+
+Use the evidence states in the standard workflow for current work. This older checklist describes a compiled playable candidate; a scoped render request ends with inspected renders/source checks and an explicit statement that runtime testing remains.
 
 Before saying "done," check:
 

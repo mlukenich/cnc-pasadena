@@ -9,6 +9,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'prius_behavior.ps1')
 . (Join-Path $PSScriptRoot 'mudtank_behavior.ps1')
 . (Join-Path $PSScriptRoot 'roundabout_behavior.ps1')
+. (Join-Path $PSScriptRoot 'sweeper_behavior.ps1')
 
 $workspaceDir = Split-Path -Parent $PSScriptRoot
 $sdkDir = Join-Path $workspaceDir 'ModSDK'
@@ -21,6 +22,8 @@ $sourcePmArtDir = Join-Path $sourceDir 'Art\PM'
 $sdkPmArtDir = Join-Path $sdkDir 'Art\PM'
 $sourceCrArtDir = Join-Path $sourceDir 'Art\CR'
 $sdkCrArtDir = Join-Path $sdkDir 'Art\CR'
+$sourceCsArtDir = Join-Path $sourceDir 'Art\CS'
+$sdkCsArtDir = Join-Path $sdkDir 'Art\CS'
 $stageDir = Join-Path $sdkDir 'Mods\MarylandShowdown\data'
 $overrideDir = Join-Path $stageDir 'GeneratedOverrides'
 $builtModsDir = Join-Path $sdkDir 'BuiltMods'
@@ -144,6 +147,15 @@ Assert-File (Join-Path $sourceCrArtDir 'CRRoundaboutAtlas.tga')
 Assert-File (Join-Path $sourceCrArtDir 'CRRoundabout_Portrait.xml')
 Assert-File (Join-Path $sourceCrArtDir 'CRRoundaboutPortrait.tga')
 
+& $node.Source (Join-Path $workspaceDir 'tools\test_sweeper_geometry.js')
+if ($LASTEXITCODE -ne 0) { throw "Columbia Street Sweeper asset generation failed with exit code $LASTEXITCODE" }
+& (Join-Path $PSScriptRoot 'test_sweeper_material.ps1') -ArtDirectory $sourceCsArtDir
+Assert-File (Join-Path $sourceCsArtDir 'CSSweeper_Model.w3x')
+Assert-File (Join-Path $sourceCsArtDir 'CSSweeper_Texture.xml')
+Assert-File (Join-Path $sourceCsArtDir 'CSSweeperAtlas.tga')
+Assert-File (Join-Path $sourceCsArtDir 'CSSweeper_Portrait.xml')
+Assert-File (Join-Path $sourceCsArtDir 'CSSweeperPortrait.tga')
+
 Remove-GeneratedDirectory $sdkArtDir (Join-Path $sdkDir 'Art')
 New-Item -ItemType Directory -Force -Path $sdkArtDir | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourceArtDir 'PVDually_Model.w3x') -Destination $sdkArtDir -Force
@@ -190,6 +202,18 @@ Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundaboutPortrait.tga') -D
 foreach ($materialMap in @('CRRoundaboutNormal.tga','CRRoundaboutSpec.tga','CRRoundaboutHouse.tga')) {
     Assert-File (Join-Path $sourceCrArtDir $materialMap)
     Copy-Item -LiteralPath (Join-Path $sourceCrArtDir $materialMap) -Destination $sdkCrArtDir -Force
+}
+
+Remove-GeneratedDirectory $sdkCsArtDir (Join-Path $sdkDir 'Art')
+New-Item -ItemType Directory -Force -Path $sdkCsArtDir | Out-Null
+Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeper_Model.w3x') -Destination $sdkCsArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeper_Texture.xml') -Destination $sdkCsArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeperAtlas.tga') -Destination $sdkCsArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeper_Portrait.xml') -Destination $sdkCsArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeperPortrait.tga') -Destination $sdkCsArtDir -Force
+foreach ($materialMap in @('CSSweeperNormal.tga','CSSweeperSpec.tga','CSSweeperHouse.tga')) {
+    Assert-File (Join-Path $sourceCsArtDir $materialMap)
+    Copy-Item -LiteralPath (Join-Path $sourceCsArtDir $materialMap) -Destination $sdkCsArtDir -Force
 }
 
 New-Item -ItemType Directory -Force -Path $stageDir, $buildDir | Out-Null
@@ -282,6 +306,9 @@ foreach ($item in $overrides) {
     if ($relativePath -eq 'NOD\Units\NODRaiderTank.xml') {
         $content = ConvertTo-RoundaboutObjectContent $content
     }
+    if ($relativePath -eq 'NOD\Units\NODFlameTank.xml') {
+        $content = ConvertTo-SweeperObjectContent $content
+    }
     [IO.File]::WriteAllText($targetPath, $content, (New-Object Text.UTF8Encoding($false)))
 }
 
@@ -289,6 +316,7 @@ foreach ($item in $overrides) {
 & (Join-Path $PSScriptRoot 'test_mudtank_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIPredator.xml')
 & (Join-Path $PSScriptRoot 'test_prius_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODScorpionBuggy.xml')
 & (Join-Path $PSScriptRoot 'test_roundabout_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODRaiderTank.xml')
+& (Join-Path $PSScriptRoot 'test_sweeper_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODFlameTank.xml')
 
 Copy-Item -LiteralPath (Join-Path $sourceDir 'mod.xml') -Destination (Join-Path $stageDir 'mod.xml') -Force
 
@@ -333,6 +361,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Compiled Mud Tank art verification failed; ref
 
 & $node.Source (Join-Path $workspaceDir 'tools\test_roundabout_compiled.js')
 if ($LASTEXITCODE -ne 0) { throw 'Compiled Roundabout art verification failed; refusing to package the mod.' }
+
+& $node.Source (Join-Path $workspaceDir 'tools\test_sweeper_compiled.js')
+if ($LASTEXITCODE -ne 0) { throw 'Compiled Street Sweeper art verification failed; refusing to package the mod.' }
 
 $builtDataDir = Join-Path $builtModDir 'data'
 New-Item -ItemType Directory -Force -Path $builtDataDir | Out-Null
