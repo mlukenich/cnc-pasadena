@@ -5,25 +5,25 @@
   "artScale": 0.88,
   "shader": "ObjectsGDI.fx",
   "model": "PVMUDTANK_SKIN",
-  "vertices": 26768,
-  "triangles": 9596,
+  "vertices": 31238,
+  "triangles": 11146,
   "bounds": {
     "min": [
       -22.352,
-      -10.362,
+      -10.4324,
       0.132
     ],
     "max": [
       24.068,
-      10.362,
-      18.788
+      10.4324,
+      18.904137
     ],
     "center": [
       0.8580000000000005,
       0,
-      9.46
+      9.5180685
     ],
-    "radius": 23.955696858993687
+    "radius": 23.960672887852965
   },
   "bones": [
     "ROOTTRANSFORM",

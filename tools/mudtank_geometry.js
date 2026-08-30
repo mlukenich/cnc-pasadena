@@ -2,12 +2,13 @@
 
 // +X is forward; +Z is up; +Y is left, -Y is right.
 // High-detail hard-surface model for the Pasadena Monster Mud Tank (GDIPredator replacement).
-// Iteration 2 & 3 Refinements:
-// - Beadlock rims with 16 perimeter bolts and center hub locks
-// - Hydraulic steering stabilizer, diff trusses, driveshafts, and 4-link suspension
-// - Supercharger blower belt tensioner, braided fuel lines, and zoomie exhaust headers
-// - Cab sun visor with clearance lights, towing mirrors, rear sliding glass, and recovery D-rings
-// - Pneumatic manifold hoses, armored mantlet plate, brass pressure gauges, and Old Bay ammo crate
+// Refinement Iterations 1-5:
+// - Beadlock rims with 16 perimeter bolts, valve stems, hub locks, ventilated rotors, and calipers
+// - Hydraulic steering stabilizer, pitman arm, drag link, diff trusses, driveshafts, and anti-wrap traction ladder bars
+// - Supercharger blower belt tensioner, braided fuel lines, distributor cap, 8 ignition leads, and zoomie exhaust headers
+// - Cab sun visor with clearance lights, towing mirrors, interior racing seats/harnesses, CB whip antennas, and recovery D-rings
+// - High-pressure pneumatic supply lines, brass solenoid valves, ammo feed hopper, slotted muzzle brake, and Old Bay ammo crate
+// - Heavy rear mud flaps with chrome anti-sail bars, skid plate with laser-cut DENA vents
 module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, addFace: face, addTriangle: triangle }) {
   const sub = (a, b) => a.map((v, i) => v - b[i]);
   const cross = (a, b) => [
@@ -93,7 +94,7 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   }
 
   // =========================================================================
-  // 1. LIFTED STEEL LADDER CHASSIS, DRIVESHAFTS & SUSPENSION
+  // 1. LIFTED STEEL LADDER CHASSIS, DRIVESHAFTS, TRACTION BARS & SUSPENSION
   // =========================================================================
   // Main chassis frame rails
   for (const y of [-5.5, 5.5]) {
@@ -103,6 +104,9 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   for (const x of [-20, -10, 0, 10, 20]) {
     beam('chassis-cross', [x, -5.5, 7.2], [x, 5.5, 7.2], 0.5, 'blackFender', 6);
   }
+
+  // Front Engine & Transmission Skid Plate with Laser-Cut Vents
+  bevel('chassis-front-skid', 18.0, 0.0, 5.2, 10.0, 9.0, 0.8, 'diamondPlate', 0.25);
 
   // Transfer Case & Heavy Driveshafts
   bevel('transfer-case', 0.0, 0.0, 7.2, 4.0, 3.5, 2.5, 'steelRim', 0.3);
@@ -127,15 +131,23 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
       beam('suspension-link-upper', [x, side * 3.5, 6.8], [x > 0 ? 4 : -4, side * 4.0, 8.2], 0.42, 'blackFender', 6);
       beam('shock-absorber-a', [x - 1.2, side * 7.5, 6.2], [x - 0.8, side * 5.8, 10.5], 0.35, 'chrome', 6);
       beam('shock-absorber-b', [x + 1.2, side * 7.5, 6.2], [x + 0.8, side * 5.8, 10.5], 0.35, 'chrome', 6);
+
+      // Heavy Anti-Wrap Traction Ladder Bars
+      const txEnd = x > 0 ? 3.0 : -3.0;
+      beam(`traction-bar-top-${x}-${side}`, [x, side * 6.5, 5.2], [txEnd, side * 4.5, 6.8], 0.3, 'paint', 6);
+      beam(`traction-bar-bot-${x}-${side}`, [x, side * 6.5, 4.2], [txEnd, side * 4.5, 6.8], 0.3, 'paint', 6);
+      beam(`traction-bar-brace-${x}-${side}`, [x + (x > 0 ? -4.5 : 4.5), side * 5.8, 4.7], [x + (x > 0 ? -4.5 : 4.5), side * 5.8, 6.0], 0.22, 'blackFender', 6);
     }
   }
 
-  // Front Hydraulic Steering Stabilizer
+  // Front Hydraulic Steering Stabilizer, Pitman Arm & Drag Link
   cylinder('steering-stabilizer-body', 16.5, 0.0, 5.5, 0.4, 6.0, 'y', 8, 'paint');
   cylinder('steering-stabilizer-ram', 16.5, 4.0, 5.5, 0.22, 4.0, 'y', 8, 'chrome');
+  beam('steering-drag-link', [18.0, 6.5, 6.0], [15.5, -6.5, 5.6], 0.32, 'blackFender', 6);
+  beam('steering-pitman-arm', [18.0, 6.5, 8.5], [18.0, 6.5, 6.0], 0.35, 'blackFender', 6);
 
   // =========================================================================
-  // 2. CHEVY SQUAREBODY CAB & PICKUP BED
+  // 2. CHEVY SQUAREBODY CAB, COCKPIT INTERIOR & PICKUP BED
   // =========================================================================
   // Cab Floor
   bevel('cab-floor', 5.0, 0, 9.8, 18.0, 17.0, 1.2, 'diamondPlate', 0.3);
@@ -155,6 +167,25 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
     [-3.05, -5.5, 14.5], [-3.05, 5.5, 14.5],
     [-3.05, 5.5, 17.5], [-3.05, -5.5, 17.5]
   ], 'glass');
+  quad('cab-rear-sliding-frame', [
+    [-3.08, -0.4, 14.5], [-3.08, 0.4, 14.5],
+    [-3.08, 0.4, 17.5], [-3.08, -0.4, 17.5]
+  ], 'blackFender');
+
+  // Cab Interior: Racing Bucket Seats, Harness Bar & 3-Spoke Steering Wheel
+  for (const side of [-1, 1]) {
+    const sy = side * 4.0;
+    // High-back racing bucket seat
+    bevel(`interior-seat-cushion-${side}`, 3.5, sy, 11.2, 3.8, 3.2, 1.2, 'blackFender', 0.2);
+    bevel(`interior-seat-back-${side}`, 1.2, sy, 14.0, 1.4, 3.0, 5.2, 'blackFender', 0.2);
+    // 5-point safety harness straps (Pasadena Red)
+    beam(`harness-l-${side}`, [1.8, sy - 0.7, 16.0], [3.2, sy - 0.7, 11.8], 0.12, 'paint', 4);
+    beam(`harness-r-${side}`, [1.8, sy + 0.7, 16.0], [3.2, sy + 0.7, 11.8], 0.12, 'paint', 4);
+  }
+  // Dashboard & Steering Column / Wheel
+  bevel('interior-dashboard', 8.5, 0.0, 13.2, 3.0, 14.0, 2.0, 'blackFender', 0.2);
+  cylinder('steering-column', 7.5, 4.0, 13.5, 0.22, 2.5, 'x', 6, 'blackFender');
+  lathe('steering-wheel-rim', 6.2, 4.0, 14.2, [[0, 1.2], [0.15, 1.2], [0.15, 1.0], [0, 1.0]], 'chrome', 'x', 12);
 
   // Cab Roof Panel
   quad('cab-roof-panel', [
@@ -196,6 +227,12 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
       [-2.6, yDoor * 0.96, 14.0], [5.0, yDoor * 0.96, 14.0],
       [4.8, yDoor * 0.94, 18.6], [-2.6, yDoor * 0.94, 18.6]
     ], 'glass');
+
+    // Window Vent / Rain Guards
+    quad('door-rain-shade', [
+      [-2.6, yDoor * 1.02, 18.6], [5.0, yDoor * 1.02, 18.6],
+      [4.8, yDoor * 1.05, 17.6], [-2.6, yDoor * 1.05, 17.6]
+    ], 'blackFender');
 
     // Heavy Diamond Plate Rocker Step Bar
     beam('side-step-bar', [-1.5, ySign * 9.8, 7.8], [9.5, ySign * 9.8, 7.8], 0.38, 'diamondPlate', 6);
@@ -262,19 +299,30 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   lathe('bumper-shackle-r', 25.8, -5.0, 8.8, [[0, 0.4], [0.6, 0.4]], 'paint', 'x', 8);
 
   // =========================================================================
-  // 4. EXPOSED SUPERCHARGED 454 BIG-BLOCK V8 & ZOOMIE HEADERS
+  // 4. EXPOSED SUPERCHARGED 454 BIG-BLOCK V8, IGNITION WIRES & ZOOMIES
   // =========================================================================
-  // Engine Block & Finned Valve Covers
+  // Engine Block, Finned Valve Covers & Oil Pan
   bevel('engine-block', 16.5, 0, 12.8, 6.0, 5.4, 2.8, 'supercharger', 0.2);
+  bevel('engine-oil-pan', 16.5, 0, 9.8, 5.4, 4.4, 2.0, 'steelRim', 0.25);
 
   // 6-71 Roots Supercharger Blower
   bevel('supercharger-case', 16.5, 0, 15.0, 5.2, 3.4, 2.2, 'supercharger', 0.25);
-  // Dual Carburetor Air Scoop (Shotgun Scoop)
+  // Dual Carburetor Air Scoop (Shotgun Scoop) & Fuel Log
   bevel('air-scoop', 17.0, 0, 16.8, 4.0, 3.6, 1.4, 'chrome', 0.2);
   cylinder('scoop-butterfly-l', 19.1, 1.0, 16.8, 0.6, 0.4, 'x', 10, 'paint');
   cylinder('scoop-butterfly-r', 19.1, -1.0, 16.8, 0.6, 0.4, 'x', 10, 'paint');
+  cylinder('carb-fuel-log-l', 17.0, 2.0, 16.4, 0.18, 3.0, 'x', 6, 'paint');
+  cylinder('carb-fuel-log-r', 17.0, -2.0, 16.4, 0.18, 3.0, 'x', 6, 'paint');
 
-  // Blower Pulley & Cogged Drive Belt & Tensioner
+  // Distributor Cap & Red Ignition Leads
+  cylinder('engine-distributor-cap', 13.8, 0.0, 14.5, 0.55, 0.8, 'z', 8, 'paint');
+  for (let s = 0; s < 4; s++) {
+    const sx = 14.5 + s * 1.3;
+    beam(`spark-wire-l-${s}`, [13.8, 0.2, 14.8], [sx, 2.4, 13.5], 0.08, 'paint', 4);
+    beam(`spark-wire-r-${s}`, [13.8, -0.2, 14.8], [sx, -2.4, 13.5], 0.08, 'paint', 4);
+  }
+
+  // Blower Pulley, Cogged Drive Belt & Tensioner
   cylinder('blower-top-pulley', 19.2, 0, 15.0, 0.9, 0.4, 'x', 12, 'chrome');
   cylinder('blower-bottom-pulley', 19.4, 0, 12.8, 1.1, 0.4, 'x', 12, 'chrome');
   cylinder('blower-idler-tensioner', 19.3, 1.3, 13.9, 0.5, 0.4, 'x', 10, 'chrome');
@@ -298,7 +346,7 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   }
 
   // =========================================================================
-  // 5. STEEL EXO-CAGE ROLL BAR & ROOF KC FLOODLIGHTS
+  // 5. STEEL EXO-CAGE ROLL BAR, KC FLOODLIGHTS & CB WHIP ANTENNAS
   // =========================================================================
   // Roof Rack / Lightbar Mount
   beam('cage-front-l', [11.2, 8.6, 9.8], [4.8, 8.4, 19.4], 0.4, 'blackFender', 6);
@@ -321,8 +369,16 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
     cylinder(`kc-light-lens-${k}`, 5.6, ly, 20.4, 0.85, 0.2, 'x', 12, 'supercharger');
   }
 
+  // Dual 102-inch CB Radio Whip Antennas Arched Forward to Roll Bar
+  for (const side of [-1, 1]) {
+    const ay = side * 8.4;
+    cylinder(`cb-spring-mount-${side}`, -3.2, ay, 19.6, 0.3, 0.8, 'z', 8, 'chrome');
+    beam(`cb-whip-antenna-a-${side}`, [-3.2, ay, 20.4], [-1.0, ay * 1.02, 21.4], 0.09, 'chrome', 4);
+    beam(`cb-whip-antenna-b-${side}`, [-1.0, ay * 1.02, 21.4], [4.5, ay * 0.98, 19.5], 0.08, 'chrome', 4);
+  }
+
   // =========================================================================
-  // 6. REAR PICKUP BED, DIAMOND PLATE & TAILGATE
+  // 6. REAR PICKUP BED, DIAMOND PLATE, MUD FLAPS & TAILGATE
   // =========================================================================
   // Diamond Plate Bed Floor
   bevel('bed-floor', -13.0, 0, 9.8, 20.0, 16.5, 1.0, 'diamondPlate', 0.2);
@@ -355,6 +411,13 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
       [-10.0, yBed * 1.08, 9.5], [-16.0, yBed * 1.15, 12.0],
       [-16.0, yBed * 0.95, 14.2], [-10.0, yBed * 0.95, 14.2]
     ], 'blackFender');
+
+    // Heavy Rubber Rear Mud Flap with Chrome Anti-Sail Weight
+    quad('rear-mud-flap', [
+      [-21.5, ySign * 6.8, 3.5], [-21.5, ySign * 11.2, 3.5],
+      [-21.5, ySign * 11.2, 9.5], [-21.5, ySign * 6.8, 9.5]
+    ], 'blackFender');
+    beam(`mud-flap-weight-${side}`, [-21.6, ySign * 7.0, 3.8], [-21.6, ySign * 11.0, 3.8], 0.22, 'chrome', 4);
   }
 
   // Stamped "CHEVROLET" Tailgate & Handle
@@ -368,12 +431,14 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   bevel('rear-bumper', -23.8, 0, 9.2, 1.8, 18.0, 2.0, 'blackFender', 0.25);
   cylinder('tow-hitch-receiver', -24.8, 0, 8.5, 0.45, 1.2, 'x', 8, 'steelRim');
 
-  // Wooden Old Bay Seasoning Ammo Crate (Right Side of Bed)
+  // Wooden Old Bay Seasoning Ammo Crate & Brass Corner Brackets
   bevel('old-bay-ammo-crate', -18.5, -5.2, 12.2, 5.5, 4.5, 3.8, 'oldBayCrate', 0.2);
+  cylinder('crate-rope-handle', -18.5, -7.6, 12.2, 0.2, 1.8, 'x', 6, 'steelRim');
 
-  // Compressed Pneumatic Air Reserve Tanks (Left Side of Bed)
+  // Compressed Pneumatic Air Reserve Tanks & Manifold Fittings
   cylinder('air-tank-1', -18.0, 5.2, 11.8, 1.2, 6.5, 'x', 12, 'paint');
   cylinder('air-tank-2', -18.0, 5.2, 13.8, 1.0, 6.0, 'x', 12, 'paint');
+  beam('air-tank-manifold', [-15.0, 5.2, 12.8], [-15.0, 5.2, 14.5], 0.25, 'chrome', 6);
   beam('air-conduit-pipe', [-15.0, 5.2, 14.5], [-12.0, 2.0, 16.0], 0.28, 'chrome', 6);
 
   // =========================================================================
@@ -396,6 +461,10 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
     [-1.8, 0.4], [-1.4, 1.8], [0.0, 2.4], [1.4, 1.8], [1.8, 0.4]
   ], 'steelRim', 'x', 14);
 
+  // High-Pressure Spiral Air Feed Lines into Turret
+  beam('turret-air-feed-line-l', [-15.0, 2.8, 14.5], [-11.0, 2.2, 15.2], 0.22, 'chrome', 6);
+  beam('turret-air-feed-line-r', [-15.0, -2.8, 14.5], [-11.0, -2.2, 15.2], 0.22, 'chrome', 6);
+
   // Elevating Cannon Breech & Trunnions (Pitch origin at X=-10.0, Y=0.0, Z=15.2)
   cylinder('barrel-trunnion-axle', -10.0, 0, 15.2, 0.85, 8.4, 'y', 10, 'steelRim');
   bevel('barrel-breech-block', -9.0, 0, 15.2, 5.2, 3.6, 3.2, 'cannonMuzzle', 0.3);
@@ -405,20 +474,28 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
     [0.0, 2.4], [0.6, 2.6], [1.2, 2.4]
   ], 'turretShell', 'y', 12);
 
-  // Brass Pressure Dial Gauge on Side of Breech
+  // Brass Pressure Dial Gauge & Solenoid Actuator Valves
   cylinder('barrel-pressure-gauge-bezel', -9.0, 1.9, 16.2, 0.6, 0.25, 'y', 10, 'chrome');
   cylinder('barrel-pressure-gauge-face', -9.0, 2.05, 16.2, 0.5, 0.1, 'y', 10, 'supercharger');
+  cylinder('barrel-solenoid-valve', -9.0, -1.9, 16.0, 0.4, 0.6, 'y', 8, 'paint');
+  beam('barrel-solenoid-lever', [-9.0, -2.2, 16.0], [-9.0, -2.2, 17.2], 0.12, 'paint', 4);
+
+  // Rotary Ammo Feed Hopper (Feeds Potatoes & Old Bay Canisters into Breech)
+  cylinder('barrel-ammo-hopper-tube', -8.0, 0.0, 17.2, 0.95, 1.8, 'z', 10, 'steelRim');
 
   // Heavy Rifled Cannon Barrel (Extends from X=-6.5 to X=+14.0)
   cylinder('barrel-main-tube', 3.5, 0, 15.2, 1.1, 20.0, 'x', 16, 'steelRim');
   cylinder('barrel-collar-base', -6.0, 0, 15.2, 1.4, 1.5, 'x', 14, 'cannonMuzzle');
   cylinder('barrel-collar-mid', 2.0, 0, 15.2, 1.3, 1.2, 'x', 14, 'cannonMuzzle');
 
-  // Heavy Cast-Iron Ribbed Muzzle Brake (Muzzle Tip at X=14.5)
+  // Heavy Cast-Iron Ribbed Muzzle Brake with Side Compensator Gas Vents
   lathe('barrel-muzzle-brake', 13.8, 0, 15.2, [
     [0.0, 1.15], [0.3, 1.6], [1.2, 1.6], [1.5, 1.35], [1.8, 1.7], [2.1, 0.95]
   ], 'cannonMuzzle', 'x', 16);
   cylinder('barrel-bore-interior', 14.8, 0, 15.2, 0.92, 0.3, 'x', 14, 'blackFender');
+  // Side Compensator Gas Diverter Slots
+  bevel('barrel-gas-slot-l', 14.4, 1.5, 15.2, 0.8, 0.3, 0.6, 'blackFender', 0.1);
+  bevel('barrel-gas-slot-r', 14.4, -1.5, 15.2, 0.8, 0.3, 0.6, 'blackFender', 0.1);
 
   // =========================================================================
   // 8. 4 MASSIVE 54-INCH SWAMPER TRACTOR WHEELS WITH BEADLOCK RIMS
@@ -469,14 +546,17 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
       cylinder(`${prefix}-beadlock-bolt-${b}`, cx + 3.2 * Math.cos(ba), cy + ySign * 1.9, cz + 3.2 * Math.sin(ba), 0.08, 0.15, 'y', 6, 'supercharger');
     }
 
-    // 5. 8 Heavy Lug Nuts & Center Locking Hub
+    // 5. Brass Schrader Air Valve Stem
+    cylinder(`${prefix}-valve-stem`, cx + 2.4, cy + ySign * 1.88, cz + 0.5, 0.08, 0.35, 'y', 6, 'supercharger');
+
+    // 6. 8 Heavy Lug Nuts & Center Locking Hub
     bevel(`${prefix}-center-hub`, cx, cy + ySign * 1.4, cz, 1.4, 0.6, 1.4, 'steelRim', 0.25);
     for (let l = 0; l < 8; l++) {
       const la = l * Math.PI / 4;
       cylinder(`${prefix}-lug-${l}`, cx + 0.9 * Math.cos(la), cy + ySign * 1.45, cz + 0.9 * Math.sin(la), 0.15, 0.25, 'y', 6, 'chrome');
     }
 
-    // 6. Heavy Ventilated Brake Rotor
+    // 7. Heavy Ventilated Brake Rotor & Caliper
     cylinder(`${prefix}-brake-rotor`, cx, cy, cz, 2.8, 0.4, 'y', 12, 'steelRim');
     bevel(`${prefix}-brake-caliper`, cx + 1.2, cy + ySign * 0.2, cz + 1.4, 1.8, 0.8, 1.4, 'paint', 0.25);
   });

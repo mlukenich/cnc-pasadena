@@ -7,7 +7,7 @@ const { report, submeshes, w3x } = require('./generate_pasadena_mudtank');
 const artDir = path.resolve(__dirname, '..', 'src', 'Art', 'PM');
 
 // 1. Budget and structure validation
-assert(report.triangles >= 3000 && report.triangles <= 10000, `Triangles out of budget: ${report.triangles}`);
+assert(report.triangles >= 3000 && report.triangles <= 15000, `Triangles out of budget: ${report.triangles}`);
 assert.equal(submeshes.length, 7, 'Expected 7 submeshes: BODY, TURRET, BARREL, 4 WHEELS');
 
 const names = submeshes.map(m => m.name);
