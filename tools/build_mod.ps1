@@ -8,6 +8,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'dually_behavior.ps1')
 . (Join-Path $PSScriptRoot 'prius_behavior.ps1')
 . (Join-Path $PSScriptRoot 'mudtank_behavior.ps1')
+. (Join-Path $PSScriptRoot 'roundabout_behavior.ps1')
 
 $workspaceDir = Split-Path -Parent $PSScriptRoot
 $sdkDir = Join-Path $workspaceDir 'ModSDK'
@@ -18,6 +19,8 @@ $sourceCvArtDir = Join-Path $sourceDir 'Art\CV'
 $sdkCvArtDir = Join-Path $sdkDir 'Art\CV'
 $sourcePmArtDir = Join-Path $sourceDir 'Art\PM'
 $sdkPmArtDir = Join-Path $sdkDir 'Art\PM'
+$sourceCrArtDir = Join-Path $sourceDir 'Art\CR'
+$sdkCrArtDir = Join-Path $sdkDir 'Art\CR'
 $stageDir = Join-Path $sdkDir 'Mods\MarylandShowdown\data'
 $overrideDir = Join-Path $stageDir 'GeneratedOverrides'
 $builtModsDir = Join-Path $sdkDir 'BuiltMods'
@@ -132,6 +135,15 @@ Assert-File (Join-Path $sourcePmArtDir 'PVMudTankAtlas.tga')
 Assert-File (Join-Path $sourcePmArtDir 'PVMudTank_Portrait.xml')
 Assert-File (Join-Path $sourcePmArtDir 'PVMudTankPortrait.tga')
 
+& $node.Source (Join-Path $workspaceDir 'tools\test_roundabout_geometry.js')
+if ($LASTEXITCODE -ne 0) { throw "Columbia Roundabout Tank asset generation failed with exit code $LASTEXITCODE" }
+& (Join-Path $PSScriptRoot 'test_roundabout_material.ps1') -ArtDirectory $sourceCrArtDir
+Assert-File (Join-Path $sourceCrArtDir 'CRRoundabout_Model.w3x')
+Assert-File (Join-Path $sourceCrArtDir 'CRRoundabout_Texture.xml')
+Assert-File (Join-Path $sourceCrArtDir 'CRRoundaboutAtlas.tga')
+Assert-File (Join-Path $sourceCrArtDir 'CRRoundabout_Portrait.xml')
+Assert-File (Join-Path $sourceCrArtDir 'CRRoundaboutPortrait.tga')
+
 Remove-GeneratedDirectory $sdkArtDir (Join-Path $sdkDir 'Art')
 New-Item -ItemType Directory -Force -Path $sdkArtDir | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourceArtDir 'PVDually_Model.w3x') -Destination $sdkArtDir -Force
@@ -166,6 +178,18 @@ Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTankPortrait.tga') -Dest
 foreach ($materialMap in @('PVMudTankNormal.tga','PVMudTankSpec.tga','PVMudTankHouse.tga')) {
     Assert-File (Join-Path $sourcePmArtDir $materialMap)
     Copy-Item -LiteralPath (Join-Path $sourcePmArtDir $materialMap) -Destination $sdkPmArtDir -Force
+}
+
+Remove-GeneratedDirectory $sdkCrArtDir (Join-Path $sdkDir 'Art')
+New-Item -ItemType Directory -Force -Path $sdkCrArtDir | Out-Null
+Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundabout_Model.w3x') -Destination $sdkCrArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundabout_Texture.xml') -Destination $sdkCrArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundaboutAtlas.tga') -Destination $sdkCrArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundabout_Portrait.xml') -Destination $sdkCrArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCrArtDir 'CRRoundaboutPortrait.tga') -Destination $sdkCrArtDir -Force
+foreach ($materialMap in @('CRRoundaboutNormal.tga','CRRoundaboutSpec.tga','CRRoundaboutHouse.tga')) {
+    Assert-File (Join-Path $sourceCrArtDir $materialMap)
+    Copy-Item -LiteralPath (Join-Path $sourceCrArtDir $materialMap) -Destination $sdkCrArtDir -Force
 }
 
 New-Item -ItemType Directory -Force -Path $stageDir, $buildDir | Out-Null
@@ -255,12 +279,16 @@ foreach ($item in $overrides) {
     if ($relativePath -eq 'NOD\Units\NODScorpionBuggy.xml') {
         $content = ConvertTo-PriusObjectContent $content
     }
+    if ($relativePath -eq 'NOD\Units\NODRaiderTank.xml') {
+        $content = ConvertTo-RoundaboutObjectContent $content
+    }
     [IO.File]::WriteAllText($targetPath, $content, (New-Object Text.UTF8Encoding($false)))
 }
 
 & (Join-Path $PSScriptRoot 'test_dually_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIPitbull.xml')
 & (Join-Path $PSScriptRoot 'test_mudtank_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIPredator.xml')
 & (Join-Path $PSScriptRoot 'test_prius_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODScorpionBuggy.xml')
+& (Join-Path $PSScriptRoot 'test_roundabout_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODRaiderTank.xml')
 
 Copy-Item -LiteralPath (Join-Path $sourceDir 'mod.xml') -Destination (Join-Path $stageDir 'mod.xml') -Force
 
@@ -302,6 +330,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Compiled Prius art verification failed; refusi
 
 & $node.Source (Join-Path $workspaceDir 'tools\test_mudtank_compiled.js')
 if ($LASTEXITCODE -ne 0) { throw 'Compiled Mud Tank art verification failed; refusing to package the mod.' }
+
+& $node.Source (Join-Path $workspaceDir 'tools\test_roundabout_compiled.js')
+if ($LASTEXITCODE -ne 0) { throw 'Compiled Roundabout art verification failed; refusing to package the mod.' }
 
 $builtDataDir = Join-Path $builtModDir 'data'
 New-Item -ItemType Directory -Force -Path $builtDataDir | Out-Null

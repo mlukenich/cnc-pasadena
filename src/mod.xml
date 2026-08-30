@@ -10,6 +10,8 @@
 		<Include type="all" source="ART:PM/PVMudTank_Portrait.xml"/>
 		<Include type="all" source="ART:CV/CVPrius_Model.w3x"/>
 		<Include type="all" source="ART:CV/CVPrius_Portrait.xml"/>
+		<Include type="all" source="ART:CR/CRRoundabout_Model.w3x"/>
+		<Include type="all" source="ART:CR/CRRoundabout_Portrait.xml"/>
 
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIConstructionYard.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIPowerPlant.xml"/>

@@ -21,8 +21,8 @@ function smoothNormals({ vertices, normals, triangles, groups }) {
 
   triangles.forEach((t, i) => {
     const g = groups[i];
-    const shell = /^(cab-.*|hood-.*|fender-.*|roof-.*|door-.*|bed-.*|tailgate-.*)$/.test(g);
-    const smoothGroup = shell || /^(wheel-.*|barrel-.*|muzzle-.*|turret-dome.*|airtank-.*)$/.test(g);
+    const shell = /^(hull-.*|wedge-.*|fender-.*|roof-.*|skirt-.*|diffuser-.*)$/.test(g);
+    const smoothGroup = shell || /^(wheel-.*|emitter-.*|barrel-.*|turret-dome.*|sensor-.*|stinger-.*)$/.test(g);
     if (!smoothGroup) return;
 
     for (let corner = 0; corner < 3; corner++) {
@@ -131,41 +131,49 @@ function readTga(filepath) {
 function heightAt(cell, u, v) {
   let h = 0.5;
   if (cell === 5) {
-    // Diamond plate pattern
+    // 3K Carbon fiber weave
+    const su = (u * 32) % 1.0;
+    const sv = (v * 32) % 1.0;
+    h = Math.sin(su * Math.PI) * Math.sin(sv * Math.PI) * 0.3 + 0.5;
+  } else if (cell === 10) {
+    // Solar micro-hex grid
     const su = (u * 16) % 1.0;
     const sv = (v * 16) % 1.0;
-    const d = Math.hypot(su - 0.5, sv - 0.5);
-    h = d < 0.35 ? 0.75 : 0.45;
+    h = (su > 0.08 && su < 0.92 && sv > 0.08 && sv < 0.92) ? 0.75 : 0.3;
+  } else if (cell === 11) {
+    // Rear engine louvers
+    const slat = (v * 12) % 1.0;
+    h = slat < 0.6 ? 0.8 : 0.2;
   } else if (cell === 14) {
-    // Chevron tractor tire tread pattern
-    const chevron = Math.abs((u * 8) % 1.0 - 0.5) * 2.0;
-    const tv = (v * 12 + chevron * 0.4) % 1.0;
-    h = tv < 0.45 ? 0.9 : 0.2;
+    // Composite tank tread cleat blocks
+    const tu = (u * 4) % 1.0;
+    const tv = (v * 10) % 1.0;
+    h = (tu > 0.15 && tu < 0.85 && tv > 0.15 && tv < 0.85) ? 0.9 : 0.25;
   } else if (cell === 15) {
-    // Ribbed cannon muzzle brake
-    const ring = Math.sin(v * Math.PI * 16);
-    h = ring > 0 ? 0.75 : 0.35;
+    // Concentric microwave cannon emitter rings
+    const d = Math.hypot(u - 0.5, v - 0.5);
+    h = Math.sin(d * Math.PI * 24) > 0 ? 0.8 : 0.35;
   }
   return h;
 }
 
 const materialResponses = [
-  { name: 'pasadena burgundy paint', specular: 14, reflection: 0 },
-  { name: 'matte black fender', specular: 6, reflection: 0 },
-  { name: 'muddy tractor tire rubber', specular: 2, reflection: 0 },
-  { name: 'rusty steel wheel rim', specular: 45, reflection: 4 },
-  { name: 'cast-iron turret shell', specular: 18, reflection: 0 },
-  { name: 'diamond plate steel', specular: 60, reflection: 8 },
-  { name: 'tinted glass', specular: 80, reflection: 25 },
-  { name: 'supercharger chrome', specular: 110, reflection: 20 },
-  { name: 'hood panel', specular: 14, reflection: 0 },
-  { name: 'door panel', specular: 14, reflection: 0 },
-  { name: 'cab roof panel', specular: 14, reflection: 0 },
-  { name: 'tailgate panel', specular: 14, reflection: 0 },
-  { name: 'front chevy grille', specular: 50, reflection: 8 },
-  { name: 'old bay crate decal', specular: 10, reflection: 0 },
-  { name: 'tractor tire tread', specular: 2, reflection: 0 },
-  { name: 'cannon muzzle faceplate', specular: 35, reflection: 2 },
+  { name: 'pearl white satin paint', specular: 14, reflection: 0 },
+  { name: 'columbia cyan trim', specular: 35, reflection: 4 },
+  { name: 'matte rubber skirt seals', specular: 2, reflection: 0 },
+  { name: 'machined aerospace chrome', specular: 100, reflection: 25 },
+  { name: 'dark solar blue glass', specular: 85, reflection: 35 },
+  { name: '3K twill carbon fiber', specular: 4, reflection: 0 },
+  { name: 'cyan led strobe optics', specular: 90, reflection: 15 },
+  { name: 'gunmetal magnetic rail alloy', specular: 55, reflection: 6 },
+  { name: 'sloped front wedge armor', specular: 14, reflection: 0 },
+  { name: 'side hull enforcer panel', specular: 14, reflection: 0 },
+  { name: 'turret roof solar matrix', specular: 70, reflection: 25 },
+  { name: 'rear hull engine venting', specular: 40, reflection: 4 },
+  { name: 'front laser radar fascia', specular: 50, reflection: 8 },
+  { name: 'emergency caution stripes', specular: 14, reflection: 0 },
+  { name: 'stealth tank tread segment', specular: 2, reflection: 0 },
+  { name: 'pulsed microwave cannon faceplate', specular: 80, reflection: 12 },
 ];
 
 function writeMaterialMaps(outputDir) {
@@ -178,15 +186,15 @@ function writeMaterialMaps(outputDir) {
   const houseRgba = Buffer.alloc(size * size * 4);
 
   // Check if high-resolution source atlas exists
-  const sourceAtlasPath = path.join(outputDir, 'Textures', 'mudtank-panels-v1.tga');
+  const sourceAtlasPath = path.join(outputDir, 'Textures', 'roundabout-panels-v1.tga');
   const sourceAtlas = readTga(sourceAtlasPath);
 
   // Fallback palette
   const colors = [
-    [136, 32, 42],  [30, 30, 32],   [24, 24, 26],   [90, 85, 80],
-    [55, 52, 50],   [160, 165, 170], [30, 42, 50],  [210, 215, 220],
-    [130, 30, 40],  [132, 31, 41],  [128, 28, 38],  [125, 26, 36],
-    [40, 40, 44],   [220, 180, 40], [20, 20, 22],   [70, 68, 65],
+    [240, 244, 248], [0, 180, 216],  [28, 30, 32],   [220, 225, 230],
+    [16, 32, 54],    [32, 34, 36],   [0, 210, 255],  [48, 50, 56],
+    [235, 238, 242], [236, 240, 244], [18, 38, 62],  [35, 38, 42],
+    [30, 34, 38],    [0, 180, 216],  [20, 22, 24],   [40, 44, 50],
   ];
 
   for (let y = 0; y < size; y++) {
@@ -210,10 +218,12 @@ function writeMaterialMaps(outputDir) {
 
       const mat = materialResponses[cell];
 
-      // Recolor mask: Team color on Cell 9 (Maryland flag badge), Cell 13 (Old Bay box trim)
+      // Recolor mask: Team color on Cell 1 (cyan trim), Cell 9 (enforcer stripe/badge), Cell 13 (caution stripe)
       let teamAlpha = 0;
-      if (cell === 9 && localX > 0.12 && localX < 0.88 && localY > 0.49 && localY < 0.53) {
-        teamAlpha = 255; // narrow beltline stripe; preserve the Maryland flag
+      if (cell === 1 || cell === 13) {
+        teamAlpha = 255;
+      } else if (cell === 9 && localY > 0.45 && localY < 0.65) {
+        teamAlpha = 255;
       }
 
       // 1. Diffuse (RGBA)
@@ -239,7 +249,7 @@ function writeMaterialMaps(outputDir) {
       // 3. SpecMap: R = Specular Highlight, G = Reflection, B = Glow
       specRgba[offset] = mat.specular;
       specRgba[offset + 1] = mat.reflection;
-      specRgba[offset + 2] = 0;
+      specRgba[offset + 2] = (cell === 6 || (cell === 12 && localY > 0.35 && localY < 0.55)) ? 200 : 0;
       specRgba[offset + 3] = 255;
 
       // 4. RecolorTexture: Grayscale luminance in RGB, team color mask in Alpha
@@ -251,10 +261,10 @@ function writeMaterialMaps(outputDir) {
     }
   }
 
-  writeTga(path.join(outputDir, 'PVMudTankAtlas.tga'), size, diffuseRgba);
-  writeTga(path.join(outputDir, 'PVMudTankNormal.tga'), size, normalRgba);
-  writeTga(path.join(outputDir, 'PVMudTankSpec.tga'), size, specRgba);
-  writeTga(path.join(outputDir, 'PVMudTankHouse.tga'), size, houseRgba);
+  writeTga(path.join(outputDir, 'CRRoundaboutAtlas.tga'), size, diffuseRgba);
+  writeTga(path.join(outputDir, 'CRRoundaboutNormal.tga'), size, normalRgba);
+  writeTga(path.join(outputDir, 'CRRoundaboutSpec.tga'), size, specRgba);
+  writeTga(path.join(outputDir, 'CRRoundaboutHouse.tga'), size, houseRgba);
 }
 
 module.exports = {

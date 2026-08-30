@@ -23,12 +23,12 @@ Assert-MudTank ($unit.id -eq 'GDIPredator') 'Wrong object staged.'
 Assert-MudTank ($unit.Geometry.IsSmall -eq 'false') 'Mud Tank is a medium armor combat vehicle.'
 Assert-MudTank ($unit.Geometry.Shape.Type -eq 'BOX') 'Footprint must be a box.'
 Assert-MudTank ($unit.Geometry.Shape.MajorRadius -eq '25.0') 'Incorrect half-length.'
-Assert-MudTank ($unit.Geometry.Shape.MinorRadius -eq '11.5') 'Incorrect half-width.'
-Assert-MudTank ($unit.Geometry.Shape.Height -eq '19.5') 'Incorrect height.'
+Assert-MudTank ($unit.Geometry.Shape.MinorRadius -eq '14.0') 'Incorrect half-width.'
+Assert-MudTank ($unit.Geometry.Shape.Height -eq '25.0') 'Incorrect height.'
 Assert-MudTank ($unit.Geometry.Shape.ContactPointGeneration -eq 'VEHICLE') 'Lost vehicle contacts.'
 
 $report = Get-Content -LiteralPath (Join-Path $root 'src\Art\PM\PVMudTank_Model.report.json') -Raw | ConvertFrom-Json
-$limits = @(25.0, 11.5, 19.5)
+$limits = @(25.0, 14.0, 25.0)
 for ($axis = 0; $axis -lt 3; $axis++) {
     $extent = [Math]::Max([Math]::Abs($report.bounds.min[$axis]), [Math]::Abs($report.bounds.max[$axis]))
     Assert-MudTank ($limits[$axis] -ge $extent) "Simulation box ($($limits[$axis])) does not cover model extent ($extent) on axis $axis."
@@ -60,5 +60,5 @@ Assert-MudTank ($names -contains 'FXTracksR') 'W3X missing FXTracksR bone.'
 Assert-MudTank ($unit.SelectPortrait -eq 'Portrait_PasadenaMudTank') 'Select portrait not bound.'
 Assert-MudTank ($unit.ButtonImage -eq 'Portrait_PasadenaMudTank') 'Button image not bound.'
 
-Write-Host '[PASS] Mud Tank 50x23x20 footprint covers model; all states and turret/barrel/FX references resolve.'
+Write-Host '[PASS] Mud Tank 50x28x25 footprint covers model; all states and turret/barrel/FX references resolve.'
 Write-Host '[PASS] Only art/portrait/geometry attributes changed; balance, locomotor, weapons and upgrades retained.'

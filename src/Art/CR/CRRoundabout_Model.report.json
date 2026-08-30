@@ -1,0 +1,59 @@
+{
+  "artVersion": 1,
+  "unit": "ColumbiaVehicleRoundabout",
+  "slot": "NODRaiderTank",
+  "artScale": 0.88,
+  "shader": "ObjectsGDI.fx",
+  "model": "CRROUNDABOUT_SKIN",
+  "vertices": 18764,
+  "triangles": 6576,
+  "bounds": {
+    "min": [
+      -18.92,
+      -10.64448,
+      0.176
+    ],
+    "max": [
+      22.88,
+      10.64448,
+      21.577075
+    ],
+    "center": [
+      1.9799999999999986,
+      0,
+      10.8765375
+    ],
+    "radius": 22.883969397569693
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Bone_Turret",
+    "GunPitch",
+    "GUN",
+    "TurretFX",
+    "MuzzleFlash_01",
+    "Turret2",
+    "Turret2_Gun",
+    "TurretMS",
+    "Bone_Tail",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "FXTracksL",
+    "FXTracksR",
+    "FXTracksB"
+  ],
+  "outputs": [
+    "CRRoundabout_Model.w3x",
+    "CRRoundabout_Texture.xml",
+    "CRRoundaboutAtlas.tga",
+    "CRRoundaboutNormal.tga",
+    "CRRoundaboutSpec.tga",
+    "CRRoundaboutHouse.tga",
+    "CRRoundabout_Portrait.xml",
+    "CRRoundaboutPortrait.tga",
+    "CRRoundabout.obj",
+    "CRRoundabout.mtl"
+  ]
+}

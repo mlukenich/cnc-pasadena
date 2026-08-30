@@ -37,9 +37,9 @@ module.exports=function render(mesh,artDir,options={}) {
     // A reflected sun direction deliberately puts the roof near the peak
     // highlight. This is a stress test, not a claimed copy of a game map.
     const light=unit(name==='sun-check'?[-1.05,1.3,.95]:[-.35,-.5,1]);
-    const forward=unit(eye),right=unit(cross([0,0,1],forward)),up=cross(forward,right),target=[0,0,14];
+    const forward=unit(eye),right=unit(cross([0,0,1],forward)),up=cross(forward,right),target=options.target||[0,0,14];
     const half=unit(light.map((v,i)=>v+forward[i])),fillDirection=unit([.5,.5,.25]);
-    const scale=11*size;
+    const scale=(options.scale||11)*size;
     const screen=p=>{const d=sub(p,target);return [width*.5+dot(d,right)*scale,height*.53-dot(d,up)*scale,dot(d,forward)];};
     const projected=mesh.vertices.map(screen),depth=new Float32Array(width*height).fill(-1e10),rgb=Buffer.alloc(width*height*3),shadow=new Uint8Array(width*height);
     for(let y=0;y<height;y++)for(let x=0;x<width;x++) {

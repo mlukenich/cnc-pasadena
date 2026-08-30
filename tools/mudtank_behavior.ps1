@@ -36,11 +36,12 @@ function ConvertTo-MudTankObjectContent([string]$Content) {
     }
     $shape = $shapes[0]
 
-    # Mud Tank dimensions: length ~48 (radius 25.0), width ~21 (radius 11.5), height ~19 (height 19.5)
+    # Revision 2: widened tires and raised turret; bounds ~48.2 x 26.9 x 24.8.
+    # Wider collision affects spacing/pathing; height affects targeting contacts.
     $geometry.SetAttribute('IsSmall', 'false')
     $shape.SetAttribute('MajorRadius', '25.0')
-    $shape.SetAttribute('MinorRadius', '11.5')
-    $shape.SetAttribute('Height', '19.5')
+    $shape.SetAttribute('MinorRadius', '14.0')
+    $shape.SetAttribute('Height', '25.0')
 
     return $document.OuterXml
 }

@@ -91,8 +91,8 @@
 	<String id="Desc:ColumbiaInfantryCommando">The supreme authority of the subdivision. Uses a high-gain megaphone sonic scream to devastate enemy squads.</String>
 	<String id="Name:ColumbiaVehiclePrius">Prius Patrol EV</String>
 	<String id="Desc:ColumbiaVehiclePrius">Whisper-silent electric cruiser armed with rapid-pulse laser diodes and kinetic energy shielding.</String>
-	<String id="Name:ColumbiaVehicleRoundabout">Roundabout Node</String>
-	<String id="Desc:ColumbiaVehicleRoundabout">Emits electromagnetic traffic-calming waves that trap enemy units in infinite circular pathfinding loops.</String>
+	<String id="Name:ColumbiaVehicleRoundabout">Columbia Roundabout Enforcer Tank</String>
+	<String id="Desc:ColumbiaVehicleRoundabout">Autonomous aerodynamic assault tank with dual pulsed microwave beam emitters, ground-effect skirts, 360-degree LiDAR dome, and orbital stinger uplink.</String>
 	<String id="Name:ColumbiaVehicleStreetSweeper">Autonomous Street Sweeper</String>
 	<String id="Desc:ColumbiaVehicleStreetSweeper">High-speed rotary steel brushes that grind infantry and debris into pristine asphalt.</String>
 	<String id="Name:ColumbiaVehicleDroneCarrier">Whole Foods Delivery Platform</String>

@@ -23,6 +23,15 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   const normal = p => unit(cross(sub(p[1], p[0]), sub(p[2], p[0])));
 
   function quad(name, [p0, p1, p2, p3], mat) {
+    let desired;
+    const side = Math.sign((p0[1]+p1[1]+p2[1]+p3[1])/4);
+    if (/^(door-panel|door-glass|door-rain-shade|fender-shoulder|fender-flare-.*|bed-outer-wall)$/.test(name)) desired=[0,side,0];
+    if (name==='bed-inner-wall') desired=[0,-side,0];
+    if (name==='bed-rail-top' || name==='cab-sun-visor') desired=[0,0,1];
+    if (/^cab-rear-/.test(name) || name==='rear-mud-flap' || name==='tailgate-panel') desired=[-1,0,0];
+    if (name==='front-grille-fascia' || name==='cab-firewall') desired=[1,0,0];
+    if (name==='windshield-glass') desired=[1,0,1];
+    if(desired && normal([p0,p1,p2]).reduce((s,v,k)=>s+v*desired[k],0)<0) [p0,p1,p2,p3]=[p3,p2,p1,p0];
     const n1 = normal([p0, p1, p2]);
     const n2 = normal([p0, p2, p3]);
     triangle([p0, p1, p2], n1, mat, name);
@@ -71,6 +80,10 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   }
 
   function lathe(name, cx, cy, cz, profile, mat, axis = 'y', segments = 18) {
+    // Profiles are authored inner-to-outer on each mirrored wheel. Deep-dish
+    // rims turn back toward the axle but their visible face still faces out.
+    const direction = name.startsWith('wheel-') ? Math.sign(cy) : 1;
+    const oriented = p => direction*(axis==='y'?1:-1)<0 ? [...p].reverse() : p;
     const point = (a, r, t) => axis === 'y'
       ? [cx + r * Math.cos(t), cy + a, cz + r * Math.sin(t)]
       : axis === 'z'
@@ -83,11 +96,11 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
         const t = i * 2 * Math.PI / segments, u = (i + 1) * 2 * Math.PI / segments;
         const p0 = point(a, r, t), p1 = point(b, s, t), p2 = point(b, s, u), p3 = point(a, r, u);
         if (s <= 1e-5) {
-          triangle([p0, p1, p3], normal([p0, p1, p3]), mat, name);
+          const p=oriented([p0,p1,p3]); triangle(p,normal(p),mat,name);
         } else if (r <= 1e-5) {
-          triangle([p0, p2, p3], normal([p0, p2, p3]), mat, name);
+          const p=oriented([p0,p2,p3]); triangle(p,normal(p),mat,name);
         } else {
-          quad(name, [p0, p1, p2, p3], mat);
+          quad(name, oriented([p0, p1, p2, p3]), mat);
         }
       }
     }
@@ -229,6 +242,10 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
     ], 'glass');
 
     // Window Vent / Rain Guards
+    // Triangular front quarter pane closes the gap to the sloping A-pillar.
+    const quarter=[[5.1,yDoor*0.96,14.0],[11.0,yDoor*0.92,14.1],[5.1,yDoor*0.94,18.4]];
+    triangle(quarter,[0,side,0],'glass','door-quarter-glass');
+    beam('window-divider',[5.0,yDoor*0.97,14.0],[4.8,yDoor*0.95,18.6],0.16,'paint');
     quad('door-rain-shade', [
       [-2.6, yDoor * 1.02, 18.6], [5.0, yDoor * 1.02, 18.6],
       [4.8, yDoor * 1.05, 17.6], [-2.6, yDoor * 1.05, 17.6]
@@ -360,9 +377,9 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   beam('cage-roof-side-l', [4.8, 8.4, 19.4], [-3.2, 8.4, 19.4], 0.4, 'blackFender', 6);
   beam('cage-roof-side-r', [4.8, -8.4, 19.4], [-3.2, -8.4, 19.4], 0.4, 'blackFender', 6);
 
-  // 5 Roof-Mounted Round KC Off-Road Floodlights
-  for (let k = 0; k < 5; k++) {
-    const ly = -6.0 + k * 3.0;
+  // Four lamps leave a clear center channel for the cannon.
+  for (let k = 0; k < 4; k++) {
+    const ly = [-6,-2.8,2.8,6][k];
     lathe(`kc-light-housing-${k}`, 4.9, ly, 20.4, [
       [0.0, 0.9], [0.3, 0.95], [0.6, 0.95], [0.75, 0.4]
     ], 'blackFender', 'x', 12);
@@ -445,6 +462,9 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   // 7. PNEUMATIC POTATO & OLD BAY CANNON TURRET (YAW & PITCH)
   // =========================================================================
   // Rotating Turret Pedestal Base (Yaw origin at X=-12.0, Y=0.0, Z=10.2)
+  // Fixed armored riser reaches the raised yaw assembly, above the cab.
+  cylinder('cannon-fixed-riser', -12, 0, 13.6, 2.8, 7.2, 'z', 16, 'turretShell');
+  for(const side of [-1,1]) beam('cannon-riser-brace',[-12,side*5,10.3],[-12,side*2.4,17.0],0.42,'steelRim');
   lathe('turret-ring-pedestal', -12.0, 0, 10.2, [
     [0.0, 3.8], [0.8, 3.6], [1.6, 3.4], [2.2, 3.2]
   ], 'steelRim', 'z', 16);
@@ -500,6 +520,18 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   // =========================================================================
   // 8. 4 MASSIVE 54-INCH SWAMPER TRACTOR WHEELS WITH BEADLOCK RIMS
   // =========================================================================
+  // Broad curved steel guards follow the enlarged tires, without closing the
+  // wheel opening with a rectangular panel. Coordinates precede body lift.
+  for(const cx of [-15,15]) for(const side of [-1,1]) {
+    const p=(a,y,r=8.55)=>[cx+r*Math.cos(a),side*y,5+r*Math.sin(a)];
+    for(let k=0;k<10;k++) {
+      const a=(20+k*14)*Math.PI/180,b=(34+k*14)*Math.PI/180;
+      let panel=[p(a,8.7),p(a,13.5),p(b,13.5),p(b,8.7)];
+      if(normal(panel)[2]<0)panel.reverse();
+      quad('fender-guard-skin',panel,'blackFender');
+      beam('fender-guard-lip',p(a,13.5),p(b,13.5),0.16,'blackFender',6);
+    }
+  }
   const wheelConfigs = [
     { prefix: 'wheel-front-left', cx: 15.0, cy: 9.8, cz: 6.0 },
     { prefix: 'wheel-front-right', cx: 15.0, cy: -9.8, cz: 6.0 },
@@ -510,6 +542,25 @@ module.exports = function buildMudTank({ addBox: box, addCylinder: cylinder, add
   wheelConfigs.forEach(({ prefix, cx, cy, cz }) => {
     const isLeft = cy > 0;
     const ySign = isLeft ? 1 : -1;
+
+    // Real alternating chevron cleats: visible silhouette at gameplay zoom.
+    for(let k=0;k<18;k++) for(const half of [-1,1]) {
+      const theta=k*Math.PI/9;
+      const point=(axial,tangent,r)=> {
+        const a=theta+tangent+half*axial*0.07;
+        return [cx+r*Math.cos(a),cy+0.3*ySign+axial,cz+r*Math.sin(a)];
+      };
+      const rings=[5.65,6.05].map(r=>[
+        point(half*0.08,-0.055,r),point(half*1.45,-0.055,r),
+        point(half*1.45,0.055,r),point(half*0.08,0.055,r)]);
+      const center=point(half*0.76,0,5.85);
+      for(const ids of [[0,1,2,3],[7,6,5,4],[0,4,5,1],[1,5,6,2],[2,6,7,3],[3,7,4,0]]) {
+        let p=ids.map(i=>rings.flat()[i]);
+        const n=normal(p),c=p[0].map((_,j)=>p.reduce((s,v)=>s+v[j],0)/4-center[j]);
+        if(n.reduce((s,v,j)=>s+v*c[j],0)<0)p.reverse();
+        quad(`${prefix}-cleat`,p,'tireTread');
+      }
+    }
 
     // 1. Deep-Cleat Swamper Tractor Tire (Radius 5.85, Width 3.4)
     lathe(`${prefix}-tire-tread`, cx, cy - ySign * 1.2, cz, [
