@@ -74,18 +74,18 @@ function faceUvs(material, points, normal, group) {
   const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
 
   // Dedicated panel projections
-  if (group === 'hood-top' && normal[2] > 0.4) {
-    index = 8; projection = p => [(p[1] + 9.0) / 18.0, (25.2 - p[0]) / 14.0];
-  } else if (group === 'door-badge-panel' && Math.abs(normal[1]) > 0.6) {
-    index = 9; projection = p => [(p[0] + 9.6) / 19.2, (13.2 - p[2]) / 3.0];
-  } else if (group === 'roof-surface' && normal[2] > 0.5) {
-    index = 10; projection = p => [(p[1] + 7.0) / 14.0, (1.2 - p[0]) / 10.0];
-  } else if (group === 'tailgate-panel' && normal[0] < -0.4) {
-    index = 11; projection = p => [(p[1] + 7.8) / 15.6, (10.8 - p[2]) / 3.0];
-  } else if (group === 'front-headlights' && normal[0] > 0.5) {
-    index = 12; projection = p => [(p[1] + 8.2) / 16.4, (8.4 - p[2]) / 1.4];
+  if (group === 'hood-top' && normal[2] > 0.3) {
+    index = 8; projection = p => [(p[1] + 10.0) / 20.0, (24.2 - p[0]) / 13.0];
+  } else if (group === 'door-badge-panel') {
+    index = 9; projection = p => [(p[0] + 10.0) / 22.0, (11.0 - p[2]) / 6.0];
+  } else if (group === 'roof-surface' && normal[2] > 0.4) {
+    index = 10; projection = p => [(p[1] + 8.0) / 16.0, (1.0 - p[0]) / 10.0];
+  } else if (group === 'tailgate-panel' && normal[0] < -0.3) {
+    index = 11; projection = p => [(p[1] + 9.0) / 18.0, (12.0 - p[2]) / 4.0];
+  } else if (group === 'front-headlights' && normal[0] > 0.3) {
+    index = 12; projection = p => [(p[1] + 8.5) / 17.0, (8.5 - p[2]) / 3.5];
   } else if (group === 'turret-strobe-lens' && normal[2] > 0.4) {
-    index = 6; projection = p => [(p[1] + 4.5) / 9.0, (p[0] + 3.0) / 7.5];
+    index = 6; projection = p => [(p[1] + 4.5) / 9.0, (p[0] + 2.8) / 7.2];
   } else if (group.startsWith('wheel-')) {
     if (group.includes('tire-outer')) {
       index = 14;
