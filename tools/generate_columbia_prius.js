@@ -47,6 +47,18 @@ function fmt(value) {
   return safe.toFixed(6);
 }
 
+const dot = (a, b) => a.reduce((s, v, i) => s + v * b[i], 0);
+const sub = (a, b) => a.map((v, i) => v - b[i]);
+const cross = (a, b) => [
+  a[1] * b[2] - a[2] * b[1],
+  a[2] * b[0] - a[0] * b[2],
+  a[0] * b[1] - a[1] * b[0],
+];
+const unit = a => {
+  const l = Math.hypot(...a);
+  return l > 1e-12 ? a.map(v => v / l) : [1, 0, 0];
+};
+
 function triangleNormal(triangle, points) {
   const a = points[triangle[0]], b = points[triangle[1]], c = points[triangle[2]];
   const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
@@ -63,37 +75,26 @@ function faceUvs(material, points, normal, group) {
 
   // Dedicated panel projections
   if (group === 'hood-top' && normal[2] > 0.4) {
-    index = 8; projection = p => [(p[1] + 8.6) / 17.2, (26.8 - p[0]) / 15.3];
+    index = 8; projection = p => [(p[1] + 9.0) / 18.0, (25.2 - p[0]) / 14.0];
   } else if (group === 'door-badge-panel' && Math.abs(normal[1]) > 0.6) {
-    index = 9; projection = p => [(p[0] + 9.5) / 19.0, (13.4 - p[2]) / 2.9];
+    index = 9; projection = p => [(p[0] + 9.6) / 19.2, (13.2 - p[2]) / 3.0];
   } else if (group === 'roof-surface' && normal[2] > 0.5) {
-    index = 10; projection = p => [(p[1] + 6.8) / 13.6, (1.5 - p[0]) / 10.5];
+    index = 10; projection = p => [(p[1] + 7.0) / 14.0, (1.2 - p[0]) / 10.0];
   } else if (group === 'tailgate-panel' && normal[0] < -0.4) {
-    index = 11; projection = p => [(p[1] + 7.5) / 15.0, (11.2 - p[2]) / 3.2];
+    index = 11; projection = p => [(p[1] + 7.8) / 15.6, (10.8 - p[2]) / 3.0];
   } else if (group === 'front-headlights' && normal[0] > 0.5) {
-    index = 12; projection = p => [(p[1] + 7.4) / 14.8, (8.6 - p[2]) / 1.4];
+    index = 12; projection = p => [(p[1] + 8.2) / 16.4, (8.4 - p[2]) / 1.4];
   } else if (group === 'turret-strobe-lens' && normal[2] > 0.4) {
-    index = 6; projection = p => [(p[1] + 3.8) / 7.6, (p[0] + 2.4) / 6.6];
+    index = 6; projection = p => [(p[1] + 4.5) / 9.0, (p[0] + 3.0) / 7.5];
   } else if (group.startsWith('wheel-')) {
-    const cx = group.includes('front') ? 16.0 : -16.0;
-    const cy = group.includes('left') ? 9.8 : -9.8;
-    const ySign = group.includes('left') ? 1.0 : -1.0;
-    const cz = 5.2;
-    if (group.includes('tire-outer') && Math.abs(normal[1]) < 0.75) {
+    if (group.includes('tire-outer')) {
       index = 14;
-      projection = p => {
-        const theta = Math.atan2(p[2] - cz, p[0] - cx);
-        const u = (theta / (2 * Math.PI) + 1.0) % 1.0;
-        const v = (p[1] - cy) / (2.4 * ySign);
-        return [u, v];
-      };
-    } else if (Math.abs(normal[1]) > 0.6) {
-      index = group.includes('rim') ? 3 : 2;
-      const radius = group.includes('rim') ? 3.2 : 5.0;
-      projection = p => [
-        0.5 + (p[0] - cx) / (2.2 * radius),
-        0.5 - (p[2] - cz) / (2.2 * radius)
-      ];
+    } else if (group.includes('rim')) {
+      index = 3;
+    } else if (group.includes('hub')) {
+      index = 1;
+    } else {
+      index = 2;
     }
   }
 
@@ -107,38 +108,28 @@ function faceUvs(material, points, normal, group) {
     });
   }
 
-  // Automatic planar orthogonal UV mapping
-  const u0 = col / 4 + 0.04;
-  const v0 = row / 4 + 0.04;
-
-  const absN = normal.map(Math.abs);
-  let uDir, vDir;
-  if (absN[0] >= absN[1] && absN[0] >= absN[2]) {
-    uDir = [0, normal[0] > 0 ? 1 : -1, 0];
-    vDir = [0, 0, 1];
-  } else if (absN[1] >= absN[0] && absN[1] >= absN[2]) {
-    uDir = [normal[1] > 0 ? -1 : 1, 0, 0];
-    vDir = [0, 0, 1];
-  } else {
-    uDir = [1, 0, 0];
-    vDir = [0, normal[2] > 0 ? 1 : -1, 0];
-  }
-
-  const local = points.map(pt => [
-    pt.reduce((s, v, i) => s + v * uDir[i], 0),
-    pt.reduce((s, v, i) => s + v * vDir[i], 0)
-  ]);
-  const minU = Math.min(...local.map(l => l[0])), maxU = Math.max(...local.map(l => l[0]));
-  const minV = Math.min(...local.map(l => l[1])), maxV = Math.max(...local.map(l => l[1]));
-  const spanU = Math.max(maxU - minU, 0.01);
-  const spanV = Math.max(maxV - minV, 0.01);
-  const maxSpan = Math.max(spanU, spanV, 1.0);
-  const scale = 0.16 / maxSpan;
-
-  return local.map(l => [
-    u0 + (l[0] - minU) * scale,
-    v0 + (l[1] - minV) * scale
-  ]);
+  const u0 = col / 4 + 0.035;
+  const v0 = row / 4 + 0.035;
+  const dist = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
+  const w = dist(points[0], points[1]) || 0.01;
+  const edge = points[1].map((v, i) => (v - points[0][i]) / w);
+  const vertical = [
+    normal[1] * edge[2] - normal[2] * edge[1],
+    normal[2] * edge[0] - normal[0] * edge[2],
+    normal[0] * edge[1] - normal[1] * edge[0],
+  ];
+  const local = points.map(p => {
+    const d = p.map((v, i) => v - points[0][i]);
+    return [
+      d.reduce((s, v, i) => s + v * edge[i], 0),
+      d.reduce((s, v, i) => s + v * vertical[i], 0)
+    ];
+  });
+  const low = [0, 1].map(k => Math.min(...local.map(p => p[k])));
+  const high = [0, 1].map(k => Math.max(...local.map(p => p[k])));
+  const span = Math.max(high[0] - low[0], high[1] - low[1], 0.01);
+  const scale = 0.18 / span;
+  return local.map(p => [u0 + (p[0] - low[0]) * scale, v0 + (p[1] - low[1]) * scale]);
 }
 
 function addFace(points, normal, material, group) {

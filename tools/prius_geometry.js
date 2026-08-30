@@ -1,8 +1,13 @@
 'use strict';
 
 // +X is forward; +Z is up; +Y is left, -Y is right.
-// High-detail hard-surface model for the Columbia Prius Patrol EV.
-// Target polygon count: ~6,000 - 10,000 triangles.
+// High-fidelity hard-surface model for the Columbia Prius Patrol EV.
+// Proportions and styling match the high-definition C&C 3 unit portrait:
+// - Sleek aerodynamic 4-door patrol hatchback with tucked performance wheels
+// - Swept-back aerodynamic front fascia with integrated LED headlights
+// - Realistic contoured fender arches with dark inner wheel-well liners
+// - Panoramic solar glass roof and sloping fastback rear Kammback
+// - Prominent roof emergency lightbar, dual PA speakers, articulating laser cannon turret, and EMP radar dish
 module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFace: face, addTriangle: triangle }) {
   const sub = (a, b) => a.map((v, i) => v - b[i]);
   const cross = (a, b) => [
@@ -42,7 +47,7 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
     }
   }
 
-  function bevel(name, x, y, z, sx, sy, sz, mat, c = 0.5) {
+  function bevel(name, x, y, z, sx, sy, sz, mat, c = 0.4) {
     const ring = (zz, shrink) => {
       const a = sx / 2 - shrink, b = sy / 2 - shrink, d = Math.min(c, a / 2, b / 2);
       return [
@@ -107,233 +112,231 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
   }
 
   // ==========================================
-  // 1. CHASSIS & AERODYNAMIC UNDERBODY
+  // 1. CHASSIS UNDERBODY & EV BATTERY PACK
   // ==========================================
-  // Smooth aerodynamic flat floor pan with air channels
-  bevel('underbody-tray', 0, 0, 4.8, 48, 17.5, 1.0, 'carbon', 0.3);
-  for (const y of [-5, 0, 5]) {
-    beam('underbody-stiffener', [-22, y, 4.4], [24, y, 4.4], 0.3, 'carbon', 6);
+  // Full-length aerodynamic underbody belly pan
+  bevel('underbody-battery-pack', 0, 0, 4.4, 46, 18.0, 1.2, 'carbon', 0.3);
+  for (const y of [-6, -2, 2, 6]) {
+    beam('underbody-rib', [-21, y, 3.9], [23, y, 3.9], 0.25, 'carbon', 6);
   }
 
-  // Front & rear electric drive units & suspension subframes
+  // Dual Electric Motor Subframes & Suspension Arms
   for (const x of [16.0, -16.0]) {
-    cylinder('axle-subframe', x, 0, 5.2, 0.9, 18.0, 'y', 8, 'carbon');
-    bevel('ev-motor-inverter', x, 0, 6.2, 4.2, 6.5, 2.4, 'gunmetal', 0.3);
+    cylinder('axle-subframe', x, 0, 5.2, 0.85, 18.4, 'y', 8, 'carbon');
+    bevel('ev-inverter-casing', x, 0, 6.0, 3.8, 6.2, 2.2, 'gunmetal', 0.25);
     for (const side of [-1, 1]) {
-      beam('suspension-a-arm', [x, side * 3.5, 5.0], [x, side * 8.5, 5.2], 0.4, 'gunmetal', 6);
-      beam('suspension-strut', [x, side * 8.2, 5.2], [x, side * 7.5, 9.8], 0.35, 'chrome', 6);
+      beam('suspension-control-arm', [x, side * 3.2, 4.8], [x, side * 8.6, 5.2], 0.38, 'gunmetal', 6);
+      beam('suspension-coilover', [x, side * 8.4, 5.2], [x, side * 7.8, 9.4], 0.32, 'chrome', 6);
     }
   }
 
   // ==========================================
-  // 2. SCULPTED BODY SHELL & WHEEL ARCHES
+  // 2. SCULPTED AUTOMOTIVE FUSELAGE & DOORS
   // ==========================================
-  // Lower center cabin floor between wheel arches (X: -10 to 10)
+  // Tucked body dimensions:
+  // Wheel centers at cy = +/-9.8 (wheels occupy Y from 8.6 to 11.0)
+  // Doors at y = +/-10.2
+  // Fender arches flare out to y = +/-11.4 directly over the wheels!
   for (const side of [-1, 1]) {
     const ySign = side;
-    const yRocker = ySign * 9.2;
-    const yOuter = ySign * 9.8;
+    const yDoor = ySign * 10.2;
+    const yFlare = ySign * 11.4;
+    const yInner = ySign * 8.4;
 
-    // Sculpted carbon side skirt with ground-effect winglet
-    bevel('rocker-skirt', 0, yRocker, 5.4, 20, 1.4, 1.2, 'carbon', 0.2);
-    plate('aero-winglet', [
-      [-10, yOuter, 4.8], [-6, yOuter, 4.8],
-      [-6, yOuter + ySign * 0.8, 6.5], [-10, yOuter + ySign * 0.4, 6.5]
-    ], 0.15, 'carbon');
+    // Sculpted lower rocker skirt with aero ground-effect winglet
+    bevel('rocker-panel', 0, yDoor, 5.2, 20, 1.2, 1.4, 'carbon', 0.2);
+    curvedQuad('aero-side-winglet', [
+      [-9.5, yDoor, 4.6], [-6.0, yDoor, 4.6],
+      [-6.0, yDoor + ySign * 0.9, 6.4], [-9.5, yDoor + ySign * 0.5, 6.4]
+    ], 'carbon');
 
-    // Wheel Arch Liners (Dark inner fender wells)
-    // Front wheel arch (centered at X=16.0, Z=5.2)
-    const archFront = [
-      [22.5, yRocker * 0.95, 5.0], [21.5, yRocker * 0.95, 9.5],
-      [16.0, yRocker * 0.95, 11.2], [10.5, yRocker * 0.95, 9.5], [9.5, yRocker * 0.95, 5.0]
+    // Inner wheel arch liners (dark cavity behind the wheels)
+    const archFrontPts = [
+      [22.4, yInner, 5.0], [21.5, yInner, 9.6],
+      [16.0, yInner, 11.2], [10.5, yInner, 9.6], [9.6, yInner, 5.0]
     ];
-    for (let i = 0; i < archFront.length - 1; i++) {
+    for (let i = 0; i < archFrontPts.length - 1; i++) {
       curvedQuad('arch-liner-front', [
-        archFront[i], archFront[i + 1],
-        [archFront[i + 1][0], archFront[i + 1][1] - ySign * 1.8, archFront[i + 1][2]],
-        [archFront[i][0], archFront[i][1] - ySign * 1.8, archFront[i][2]]
+        archFrontPts[i], archFrontPts[i + 1],
+        [archFrontPts[i + 1][0], archFrontPts[i + 1][1] + ySign * 2.0, archFrontPts[i + 1][2]],
+        [archFrontPts[i][0], archFrontPts[i][1] + ySign * 2.0, archFrontPts[i][2]]
       ], 'carbon');
     }
 
-    // Rear wheel arch (centered at X=-16.0, Z=5.2)
-    const archRear = [
-      [-9.5, yRocker * 0.95, 5.0], [-10.5, yRocker * 0.95, 9.5],
-      [-16.0, yRocker * 0.95, 11.2], [-21.5, yRocker * 0.95, 9.5], [-22.5, yRocker * 0.95, 5.0]
+    const archRearPts = [
+      [-9.6, yInner, 5.0], [-10.5, yInner, 9.6],
+      [-16.0, yInner, 11.2], [-21.5, yInner, 9.6], [-22.4, yInner, 5.0]
     ];
-    for (let i = 0; i < archRear.length - 1; i++) {
+    for (let i = 0; i < archRearPts.length - 1; i++) {
       curvedQuad('arch-liner-rear', [
-        archRear[i], archRear[i + 1],
-        [archRear[i + 1][0], archRear[i + 1][1] - ySign * 1.8, archRear[i + 1][2]],
-        [archRear[i][0], archRear[i][1] - ySign * 1.8, archRear[i][2]]
+        archRearPts[i], archRearPts[i + 1],
+        [archRearPts[i + 1][0], archRearPts[i + 1][1] + ySign * 2.0, archRearPts[i + 1][2]],
+        [archRearPts[i][0], archRearPts[i][1] + ySign * 2.0, archRearPts[i][2]]
       ], 'carbon');
     }
 
-    // Front Fender Flare (Pearl white outer fender)
-    curvedQuad('fender-front-flare-a', [
-      [25.0, ySign * 8.6, 7.5], [22.0, yOuter, 9.8],
-      [16.0, yOuter, 11.4], [16.0, ySign * 8.8, 11.5]
+    // Front Fender Flare (Pearl white outer aerodynamic fender curving over wheel)
+    curvedQuad('fender-front-a', [
+      [24.5, ySign * 9.2, 7.6], [21.8, yFlare, 9.8],
+      [16.0, yFlare, 11.3], [16.0, ySign * 9.6, 11.4]
     ], 'pearl');
-    curvedQuad('fender-front-flare-b', [
-      [16.0, ySign * 8.8, 11.5], [16.0, yOuter, 11.4],
-      [10.0, yOuter, 9.8], [12.0, ySign * 8.8, 11.5]
+    curvedQuad('fender-front-b', [
+      [16.0, ySign * 9.6, 11.4], [16.0, yFlare, 11.3],
+      [10.2, yFlare, 9.8], [11.2, ySign * 9.6, 11.4]
     ], 'pearl');
 
     // Rear Fender Flare
-    curvedQuad('fender-rear-flare-a', [
-      [-10.0, yOuter, 9.8], [-16.0, yOuter, 11.4],
-      [-16.0, ySign * 8.8, 11.4], [-10.0, ySign * 8.8, 11.4]
+    curvedQuad('fender-rear-a', [
+      [-10.2, yFlare, 9.8], [-16.0, yFlare, 11.3],
+      [-16.0, ySign * 9.6, 11.3], [-10.2, ySign * 9.6, 11.3]
     ], 'pearl');
-    curvedQuad('fender-rear-flare-b', [
-      [-16.0, ySign * 8.8, 11.4], [-16.0, yOuter, 11.4],
-      [-22.0, yOuter, 9.8], [-23.5, ySign * 8.6, 7.5]
+    curvedQuad('fender-rear-b', [
+      [-16.0, ySign * 9.6, 11.3], [-16.0, yFlare, 11.3],
+      [-21.8, yFlare, 9.8], [-23.4, ySign * 9.2, 7.6]
     ], 'pearl');
 
-    // Side Doors (Front & Rear Doors between arches)
-    // Lower Door Skirt / Cladding
-    plate('door-lower', [
-      [-9.5, yOuter, 6.0], [9.5, yOuter, 6.0],
-      [9.5, yOuter * 0.98, 10.5], [-9.5, yOuter * 0.98, 10.5]
-    ], 0.25, 'pearl');
+    // Side Doors (Front & Rear Doors between fender arches)
+    // Lower Door Cladding
+    curvedQuad('door-lower', [
+      [-9.6, yDoor, 5.8], [9.6, yDoor, 5.8],
+      [9.6, yDoor * 0.98, 10.2], [-9.6, yDoor * 0.98, 10.2]
+    ], 'pearl');
 
-    // Upper Door Panel with Cyan Police Stripe & Official HOA Crest
-    plate('door-badge-panel', [
-      [-9.5, yOuter * 0.98, 10.5], [9.5, yOuter * 0.98, 10.5],
-      [9.5, yOuter * 0.92, 13.4], [-9.5, yOuter * 0.92, 13.4]
-    ], 0.25, 'doorPanel');
+    // Upper Door Panel with Cyan Police Stripe & Official HOA Enforcement Crest
+    curvedQuad('door-badge-panel', [
+      [-9.6, yDoor * 0.98, 10.2], [9.6, yDoor * 0.98, 10.2],
+      [9.6, yDoor * 0.92, 13.2], [-9.6, yDoor * 0.92, 13.2]
+    ], 'doorPanel');
 
     // Recessed Door Handles (Front & Rear)
-    for (const hx of [4.5, -4.5]) {
-      bevel('door-handle-pocket', hx, yOuter * 0.93 + ySign * 0.05, 12.2, 2.4, 0.4, 0.9, 'carbon', 0.1);
+    for (const hx of [4.2, -4.2]) {
+      bevel('door-handle-pocket', hx, yDoor * 0.93 + ySign * 0.05, 12.0, 2.2, 0.35, 0.8, 'carbon', 0.1);
       plate('door-handle', [
-        [hx - 0.9, yOuter * 0.95 + ySign * 0.12, 12.0], [hx + 0.9, yOuter * 0.95 + ySign * 0.12, 12.0],
-        [hx + 0.9, yOuter * 0.95 + ySign * 0.12, 12.4], [hx - 0.9, yOuter * 0.95 + ySign * 0.12, 12.4]
-      ], 0.15, 'chrome');
+        [hx - 0.8, yDoor * 0.95 + ySign * 0.1, 11.85], [hx + 0.8, yDoor * 0.95 + ySign * 0.1, 11.85],
+        [hx + 0.8, yDoor * 0.95 + ySign * 0.1, 12.2], [hx - 0.8, yDoor * 0.95 + ySign * 0.1, 12.2]
+      ], 0.12, 'chrome');
     }
 
     // Aerodynamic Side View Mirror
-    beam('mirror-stalk', [8.0, yOuter * 0.90, 13.2], [7.5, ySign * 11.0, 13.5], 0.22, 'carbon', 6);
-    bevel('mirror-housing', 7.5, ySign * 11.5, 13.8, 2.2, 1.2, 1.4, 'cyan', 0.25);
+    beam('mirror-stalk', [7.8, yDoor * 0.90, 13.0], [7.4, ySign * 11.2, 13.4], 0.22, 'carbon', 6);
+    bevel('mirror-housing', 7.4, ySign * 11.6, 13.7, 2.0, 1.1, 1.3, 'cyan', 0.25);
     quad('mirror-glass', [
-      [6.4, ySign * 11.0, 13.2], [6.4, ySign * 12.0, 13.2],
-      [6.4, ySign * 12.0, 14.4], [6.4, ySign * 11.0, 14.4]
+      [6.4, ySign * 11.1, 13.1], [6.4, ySign * 12.1, 13.1],
+      [6.4, ySign * 12.1, 14.3], [6.4, ySign * 11.1, 14.3]
     ], 'chrome', [-1, 0, 0]);
   }
 
   // ==========================================
-  // 3. FRONT HOOD & FASCIA
+  // 3. FRONT SWEPT-BACK NOSE & HOOD
   // ==========================================
-  // Sloped aerodynamic hood with central power crease
+  // 3-section curved aerodynamic hood with center power bulge
   const hoodCowl = [
-    [11.5, -8.6, 11.8], [11.5, -5.0, 12.4], [11.5, 0, 12.7],
-    [11.5, 5.0, 12.4], [11.5, 8.6, 11.8]
+    [11.2, -9.0, 11.6], [11.2, -4.8, 12.2], [11.2, 0, 12.5],
+    [11.2, 4.8, 12.2], [11.2, 9.0, 11.6]
   ];
   const hoodMid = [
-    [19.0, -8.0, 9.8], [19.0, -4.5, 10.4], [19.0, 0, 10.8],
-    [19.0, 4.5, 10.4], [19.0, 8.0, 9.8]
+    [18.5, -8.4, 9.6], [18.5, -4.4, 10.2], [18.5, 0, 10.6],
+    [18.5, 4.4, 10.2], [18.5, 8.4, 9.6]
   ];
   const hoodNose = [
-    [26.5, -7.2, 8.0], [26.5, -3.8, 8.4], [26.8, 0, 8.7],
-    [26.5, 3.8, 8.4], [26.5, 7.2, 8.0]
+    [24.5, -7.5, 7.8], [25.0, -3.8, 8.2], [25.2, 0, 8.5],
+    [25.0, 3.8, 8.2], [24.5, 7.5, 7.8]
   ];
 
   for (let i = 0; i < 4; i++) {
-    quad('hood-top', [hoodCowl[i], hoodCowl[i + 1], hoodMid[i + 1], hoodMid[i]], 'hoodPanel');
-    quad('hood-top', [hoodMid[i], hoodMid[i + 1], hoodNose[i + 1], hoodNose[i]], 'hoodPanel');
+    curvedQuad('hood-top', [hoodCowl[i], hoodCowl[i + 1], hoodMid[i + 1], hoodMid[i]], 'hoodPanel');
+    curvedQuad('hood-top', [hoodMid[i], hoodMid[i + 1], hoodNose[i + 1], hoodNose[i]], 'hoodPanel');
   }
 
   // Hood Cowl Air Intake Grille
   quad('hood-cowl-vent', [
-    [11.7, -7.5, 12.0], [11.7, 7.5, 12.0],
-    [12.8, 7.2, 12.2], [12.8, -7.5, 12.2]
+    [11.4, -7.2, 11.8], [11.4, 7.2, 11.8],
+    [12.4, 7.0, 12.0], [12.4, -7.2, 12.0]
   ], 'carbon');
 
-  // Modern Front Fascia: Slim LED Daytime Running Lights & Radar Scanner
-  plate('front-headlights', [
-    [26.5, -7.4, 7.2], [26.5, 7.4, 7.2],
-    [26.8, 7.0, 8.6], [26.8, -7.0, 8.6]
-  ], 0.35, 'frontFascia');
+  // Modern Integrated Front Fascia with LED Headlights
+  curvedQuad('front-headlights', [
+    [24.5, -8.2, 7.0], [24.5, 8.2, 7.0],
+    [25.2, 7.8, 8.4], [25.2, -7.8, 8.4]
+  ], 'frontFascia');
 
-  // Front Aerodynamic Bumper & Lower Air Dam
-  bevel('front-bumper', 26.8, 0, 6.2, 2.4, 16.5, 2.2, 'pearl', 0.3);
-  bevel('front-lower-grille', 27.2, 0, 5.6, 1.8, 12.0, 1.2, 'carbon', 0.2);
-  bevel('front-chin-splitter', 27.6, 0, 4.6, 2.2, 17.0, 0.4, 'carbon', 0.15);
+  // Swept-back Front Bumper & Lower Air Dam (Integrated into the nose)
+  bevel('front-bumper', 25.0, 0, 5.8, 2.2, 16.8, 2.0, 'pearl', 0.35);
+  bevel('front-lower-grille', 25.4, 0, 5.2, 1.6, 12.4, 1.1, 'carbon', 0.2);
+  bevel('front-chin-splitter', 25.8, 0, 4.2, 1.8, 17.2, 0.35, 'carbon', 0.15);
 
-  // Front Push Bumper / Interceptor Bull Bar (Small Tactical Nudge Bar)
-  beam('bull-bar-left', [27.0, 4.5, 5.0], [28.2, 4.5, 8.0], 0.3, 'carbon', 6);
-  beam('bull-bar-right', [27.0, -4.5, 5.0], [28.2, -4.5, 8.0], 0.3, 'carbon', 6);
-  beam('bull-bar-cross', [28.2, -4.5, 7.8], [28.2, 4.5, 7.8], 0.28, 'carbon', 6);
+  // Tactical Push Bumper Nudge Bar
+  beam('bull-bar-l', [25.4, 4.2, 4.8], [26.4, 4.2, 7.6], 0.28, 'carbon', 6);
+  beam('bull-bar-r', [25.4, -4.2, 4.8], [26.4, -4.2, 7.6], 0.28, 'carbon', 6);
+  beam('bull-bar-cross', [26.4, -4.2, 7.4], [26.4, 4.2, 7.4], 0.25, 'carbon', 6);
 
   // ==========================================
   // 4. GREENHOUSE & PANORAMIC SOLAR ROOF
   // ==========================================
   // Raked Aerodynamic Windshield
-  const windshieldBase = [[11.5, -8.2, 12.0], [11.5, 8.2, 12.0]];
-  const windshieldTop = [[1.5, -6.8, 16.5], [1.5, 6.8, 16.5]];
-  quad('windshield', [windshieldBase[0], windshieldBase[1], windshieldTop[1], windshieldTop[0]], 'solarGlass');
+  const windshieldBase = [[11.2, -8.8, 11.8], [11.2, 8.8, 11.8]];
+  const windshieldTop = [[1.2, -7.2, 16.0], [1.2, 7.2, 16.0]];
+  curvedQuad('windshield', [windshieldBase[0], windshieldBase[1], windshieldTop[1], windshieldTop[0]], 'solarGlass');
 
   // Panoramic Photovoltaic Solar Roof Matrix
   const roofTop = windshieldTop;
-  const roofRear = [[-9.0, -6.6, 16.2], [-9.0, 6.6, 16.2]];
-  quad('roof-surface', [roofTop[0], roofTop[1], roofRear[1], roofRear[0]], 'solarRoof');
+  const roofRear = [[-8.8, -7.0, 15.7], [-8.8, 7.0, 15.7]];
+  curvedQuad('roof-surface', [roofTop[0], roofTop[1], roofRear[1], roofRear[0]], 'solarRoof');
 
   // Sloping Fastback Rear Window
-  const hatchBase = [[-22.0, -7.2, 11.2], [-22.0, 7.2, 11.2]];
-  quad('rear-glass', [roofRear[0], roofRear[1], hatchBase[1], hatchBase[0]], 'solarGlass');
+  const hatchBase = [[-21.2, -7.6, 10.8], [-21.2, 7.6, 10.8]];
+  curvedQuad('rear-glass', [roofRear[0], roofRear[1], hatchBase[1], hatchBase[0]], 'solarGlass');
 
   // Side Glass & Tapered Roof Pillars (A, B, C)
   for (const side of [-1, 1]) {
-    const yG = side * 8.6;
-    const yR = side * 6.7;
-    plate('side-glass', [
-      [10.5, yG, 12.2], [1.0, yR, 16.4],
-      [-8.5, yR, 16.1], [-20.5, yG, 11.4]
-    ], 0.15, 'solarGlass');
+    const yG = side * 9.0;
+    const yR = side * 7.1;
+    curvedQuad('side-glass', [
+      [10.2, yG, 12.0], [1.0, yR, 15.9],
+      [-8.4, yR, 15.6], [-19.8, yG, 11.0]
+    ], 'solarGlass');
 
-    // Roof Pillars with clean gloss black/pearl finish
-    beam('pillar-a', [11.5, side * 8.2, 12.0], [1.5, side * 6.8, 16.5], 0.45, 'pearl', 6);
-    beam('pillar-b', [1.0, side * 8.4, 12.8], [0.0, side * 6.7, 16.3], 0.35, 'carbon', 6);
-    beam('pillar-c', [-9.0, side * 6.6, 16.2], [-22.0, side * 7.2, 11.2], 0.5, 'pearl', 6);
+    // Roof Pillars
+    beam('pillar-a', [11.2, side * 8.8, 11.8], [1.2, side * 7.2, 16.0], 0.42, 'pearl', 6);
+    beam('pillar-b', [0.8, side * 8.8, 12.4], [0.0, side * 7.1, 15.8], 0.32, 'carbon', 6);
+    beam('pillar-c', [-8.8, side * 7.0, 15.7], [-21.2, side * 7.6, 10.8], 0.46, 'pearl', 6);
   }
 
   // ==========================================
-  // 5. REAR KAMMBACK HATCH & INTERCEPTOR SPOILER
+  // 5. REAR KAMMBACK & DUCKTAIL SPOILER
   // ==========================================
-  // Rear Tailgate / Hatch Panel with LED Tail Light Bar
-  plate('tailgate-panel', [
-    [-22.0, -7.5, 11.2], [-22.0, 7.5, 11.2],
-    [-24.5, 7.0, 8.0], [-24.5, -7.0, 8.0]
-  ], 0.35, 'tailPanel');
+  // Rear Hatch Panel with Horizontal LED Tail Light Bar
+  curvedQuad('tailgate-panel', [
+    [-21.2, -7.8, 10.8], [-21.2, 7.8, 10.8],
+    [-23.8, 7.4, 7.8], [-23.8, -7.4, 7.8]
+  ], 'tailPanel');
 
   // Rear Aerodynamic Bumper & Carbon Diffuser
-  bevel('rear-bumper', -24.6, 0, 6.4, 2.8, 17.2, 2.6, 'pearl', 0.3);
-  bevel('rear-diffuser', -25.2, 0, 4.8, 2.0, 14.0, 0.8, 'carbon', 0.2);
-  for (const dy of [-4.5, -1.5, 1.5, 4.5]) {
-    plate('diffuser-fin', [
-      [-24.2, dy, 4.4], [-26.2, dy, 4.4],
-      [-26.2, dy, 5.4], [-24.2, dy, 5.4]
-    ], 0.12, 'carbon');
+  bevel('rear-bumper', -24.0, 0, 6.2, 2.4, 17.0, 2.4, 'pearl', 0.3);
+  bevel('rear-diffuser', -24.6, 0, 4.6, 1.8, 13.6, 0.8, 'carbon', 0.2);
+  for (const dy of [-4.2, -1.4, 1.4, 4.2]) {
+    curvedQuad('diffuser-fin', [
+      [-23.8, dy, 4.2], [-25.6, dy, 4.2],
+      [-25.6, dy, 5.2], [-23.8, dy, 5.2]
+    ], 'carbon');
   }
 
-  // Interceptor Aerodynamic Rear Spoiler Wing
-  const spoilerL = [-23.0, 7.8, 13.0];
-  const spoilerR = [-23.0, -7.8, 13.0];
-  beam('spoiler-mount-left', [-21.5, 5.5, 11.2], spoilerL, 0.28, 'carbon', 6);
-  beam('spoiler-mount-right', [-21.5, -5.5, 11.2], spoilerR, 0.28, 'carbon', 6);
-  plate('spoiler-wing', [
-    [-24.5, -8.6, 13.0], [-24.5, 8.6, 13.0],
-    [-22.0, 8.6, 13.4], [-22.0, -8.6, 13.4]
-  ], 0.24, 'cyan');
-  // Endplate winglets
+  // Interceptor Ducktail Spoiler
+  curvedQuad('spoiler-wing', [
+    [-24.0, -8.4, 12.2], [-24.0, 8.4, 12.2],
+    [-21.4, 8.4, 12.6], [-21.4, -8.4, 12.6]
+  ], 'cyan');
   for (const side of [-1, 1]) {
-    plate('spoiler-endplate', [
-      [-24.8, side * 8.6, 12.4], [-21.6, side * 8.6, 12.8],
-      [-21.6, side * 8.6, 14.2], [-24.8, side * 8.6, 14.0]
-    ], 0.12, 'carbon');
+    curvedQuad('spoiler-endplate', [
+      [-24.2, side * 8.4, 11.6], [-21.2, side * 8.4, 12.0],
+      [-21.2, side * 8.4, 13.4], [-24.2, side * 8.4, 13.2]
+    ], 'carbon');
   }
 
   // ==========================================
-  // 6. HIGH-DETAIL AERO PERFORMANCE WHEELS
+  // 6. HIGH-PERFORMANCE TUCKED WHEELS
   // ==========================================
+  // Wheel centers at cy = +/-9.8 with width 2.4 (occupies Y from 8.6 to 11.0, under 11.4 fender flares)
   const wheelConfigs = [
     { prefix: 'wheel-front-left', cx: 16.0, cy: 9.8, cz: 5.2 },
     { prefix: 'wheel-front-right', cx: 16.0, cy: -9.8, cz: 5.2 },
@@ -345,103 +348,105 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
     const isLeft = cy > 0;
     const ySign = isLeft ? 1 : -1;
 
-    // 1. Tire Tread (Detailed 5-step lathe cross section)
-    lathe(`${prefix}-tire-outer`, cx, cy, cz, [
+    // 1. Tire Tread (5-step lathe cross section)
+    lathe(`${prefix}-tire-outer`, cx, cy - ySign * 0.9, cz, [
       [0.0, 4.3],
-      [ySign * 0.6, 4.85],
-      [ySign * 1.4, 5.15],
-      [ySign * 2.0, 4.95],
-      [ySign * 2.4, 4.3]
+      [ySign * 0.5, 4.8],
+      [ySign * 1.2, 5.1],
+      [ySign * 1.8, 4.9],
+      [ySign * 2.2, 4.3]
     ], 'treadPanel', 'y', 20);
 
     // 2. Tire Sidewall Ring
-    lathe(`${prefix}-tire-sidewall`, cx, cy + ySign * 2.32, cz, [
+    lathe(`${prefix}-tire-sidewall`, cx, cy + ySign * 1.3, cz, [
       [0.0, 4.3],
-      [0.0, 3.2]
+      [0.0, 3.1]
     ], 'rubber', 'y', 20);
 
     // 3. Directional Aero Turbine Alloy Rim Face
-    lathe(`${prefix}-rim-outer`, cx, cy + ySign * 2.36, cz, [
-      [0.0, 3.2],
-      [ySign * 0.12, 2.5],
-      [ySign * 0.22, 1.4],
+    lathe(`${prefix}-rim-outer`, cx, cy + ySign * 1.34, cz, [
+      [0.0, 3.1],
+      [ySign * 0.12, 2.4],
+      [ySign * 0.22, 1.3],
       [ySign * 0.14, 0.4]
     ], 'chrome', 'y', 20);
 
     // 4. Center HOA Cyan Hub Emblem
-    bevel(`${prefix}-hub-cap`, cx, cy + ySign * 2.52, cz, 1.1, 0.25, 1.1, 'cyan', 0.2);
+    bevel(`${prefix}-hub-cap`, cx, cy + ySign * 1.5, cz, 1.0, 0.22, 1.0, 'cyan', 0.2);
 
     // 5. Ventilated Metallic Brake Rotor & Cyan Performance Caliper
-    cylinder(`${prefix}-brake-rotor`, cx, cy + ySign * 1.0, cz, 2.6, 0.35, 'y', 12, 'gunmetal');
-    bevel(`${prefix}-brake-caliper`, cx + 1.2, cy + ySign * 1.1, cz + 1.4, 1.6, 0.7, 1.3, 'cyan', 0.2);
+    cylinder(`${prefix}-brake-rotor`, cx, cy, cz, 2.6, 0.35, 'y', 12, 'gunmetal');
+    bevel(`${prefix}-brake-caliper`, cx + 1.1, cy + ySign * 0.15, cz + 1.3, 1.5, 0.65, 1.2, 'cyan', 0.2);
   });
 
   // ==========================================
-  // 7. ROOF CITATION LIGHTBAR & LASER TURRET
+  // 7. PROMINENT ROOF CITATION TURRET & WEAPONS
   // ==========================================
-  // Turret Base (Yaw on Z-axis, centered at X=1.0, Y=0.0, Z=16.6)
-  // Aerodynamic roof mounting rack / fairing
-  bevel('turret-base', 1.0, 0, 16.85, 9.0, 8.2, 0.9, 'carbon', 0.35);
+  // Prominent roof mounting rack (centered at X=1.0, Y=0.0, Z=16.2)
+  bevel('turret-base', 1.0, 0, 16.5, 10.0, 9.0, 1.0, 'carbon', 0.35);
 
-  // Multi-tier Emergency Strobe Lightbar (Red Left, Blue Right, Amber Center)
-  plate('turret-strobe-lens', [
-    [-2.4, -3.8, 17.3], [4.2, -3.8, 17.3],
-    [4.2, 3.8, 17.3], [-2.4, 3.8, 17.3]
-  ], 0.55, 'strobe');
-  // Strobe housing bezel
-  plate('turret-strobe-housing', [
-    [-2.6, -4.0, 17.0], [4.4, -4.0, 17.0],
-    [4.4, 4.0, 17.0], [-2.6, 4.0, 17.0]
-  ], 0.25, 'carbon');
+  // Wide Multi-tier Emergency Strobe Lightbar (Red Left, Blue Right, Amber Center)
+  curvedQuad('turret-strobe-lens', [
+    [-3.0, -4.5, 17.0], [4.5, -4.5, 17.0],
+    [4.5, 4.5, 17.0], [-3.0, 4.5, 17.0]
+  ], 'strobe');
+  bevel('turret-strobe-housing', 0.8, 0, 16.8, 8.2, 9.4, 0.5, 'carbon', 0.2);
 
-  // Central Rotating Citation Optical Tracking Camera Dome
-  lathe('turret-dome', 1.0, 0, 17.55, [
-    [0.0, 2.8], [0.35, 2.4], [0.7, 1.5], [0.95, 0.3]
+  // Dual PA Loudspeaker Horns (Left & Right of strobe bar, matching portrait!)
+  cylinder('turret-pa-horn-l', 2.8, 2.5, 17.6, 0.75, 1.4, 'x', 10, 'carbon');
+  cylinder('turret-pa-horn-r', 2.8, -2.5, 17.6, 0.75, 1.4, 'x', 10, 'carbon');
+
+  // Central Rotating Optical Surveillance Turret Dome (Yaw)
+  lathe('turret-dome', 1.0, 0, 17.3, [
+    [0.0, 3.0], [0.4, 2.6], [0.8, 1.6], [1.1, 0.3]
   ], 'cyan', 'z', 16);
-  cylinder('turret-camera-lens', 1.8, 0, 18.1, 0.45, 0.4, 'x', 10, 'solarGlass');
+  cylinder('turret-camera-lens', 2.0, 0, 18.0, 0.55, 0.5, 'x', 10, 'solarGlass');
 
-  // Laser Pitch Assembly (Pitch on Y-axis, centered at X=2.5, Y=0.0, Z=18.6)
-  // Dual Heavy Laser Diode Cannons (Left & Right)
+  // Articulated Heavy Laser Pitch Assembly (Centered at X=2.5, Y=0.0, Z=18.6)
+  // Articulated gimbal arm
+  beam('laser-gimbal-arm', [1.0, 0, 17.8], [2.5, 0, 18.6], 0.45, 'carbon', 8);
+
+  // Dual Heavy Laser Diode Cannons
   for (const side of [-1, 1]) {
-    const yL = side * 2.2;
+    const yL = side * 2.4;
     // Armored emitter receiver chassis
-    bevel(`laser-chassis-${side > 0 ? 'left' : 'right'}`, 3.8, yL, 18.6, 6.8, 1.9, 1.8, 'pearl', 0.25);
+    bevel(`laser-chassis-${side > 0 ? 'l' : 'r'}`, 4.0, yL, 18.6, 7.2, 2.2, 2.0, 'pearl', 0.3);
     // Cyan top accent plate
-    plate(`laser-top-plate-${side > 0 ? 'left' : 'right'}`, [
-      [1.0, yL - 0.7, 19.55], [6.5, yL - 0.7, 19.55],
-      [6.5, yL + 0.7, 19.55], [1.0, yL + 0.7, 19.55]
-    ], 0.15, 'cyan');
+    curvedQuad(`laser-top-plate-${side > 0 ? 'l' : 'r'}`, [
+      [1.0, yL - 0.8, 19.65], [7.0, yL - 0.8, 19.65],
+      [7.0, yL + 0.8, 19.65], [1.0, yL + 0.8, 19.65]
+    ], 'cyan');
 
     // Ribbed Cooling Heat-Sink Fins on Emitter Barrel
-    cylinder(`laser-barrel-${side > 0 ? 'left' : 'right'}`, 7.2, yL, 18.6, 0.7, 3.8, 'x', 12, 'gunmetal');
-    for (const fx of [6.2, 6.8, 7.4, 8.0]) {
-      cylinder(`laser-heatsink-${side > 0 ? 'left' : 'right'}`, fx, yL, 18.6, 0.88, 0.15, 'x', 12, 'carbon');
+    cylinder(`laser-barrel-${side > 0 ? 'l' : 'r'}`, 7.8, yL, 18.6, 0.8, 4.2, 'x', 14, 'gunmetal');
+    for (const fx of [6.8, 7.4, 8.0, 8.6]) {
+      cylinder(`laser-heatsink-${side > 0 ? 'l' : 'r'}`, fx, yL, 18.6, 0.98, 0.16, 'x', 14, 'carbon');
     }
 
     // High-Energy Diode Focusing Crystal Lens Faceplate
-    lathe(`laser-focus-${side > 0 ? 'left' : 'right'}`, 9.1, yL, 18.6, [
-      [0.0, 0.7], [0.2, 0.85], [0.45, 0.85], [0.55, 0.5]
+    lathe(`laser-focus-${side > 0 ? 'l' : 'r'}`, 9.9, yL, 18.6, [
+      [0.0, 0.8], [0.22, 0.95], [0.5, 0.95], [0.6, 0.55]
     ], 'laserFace', 'x', 14);
 
-    // High-Voltage Power Conduit from Roof Rack to Emitter Rear
-    beam(`laser-conduit-${side > 0 ? 'left' : 'right'}`, [0.5, side * 1.5, 17.5], [1.5, yL, 18.4], 0.2, 'cyan', 6);
+    // High-Voltage Power Conduit Cable
+    beam(`laser-conduit-${side > 0 ? 'l' : 'r'}`, [0.2, side * 1.8, 17.2], [1.2, yL, 18.4], 0.22, 'cyan', 6);
   }
 
-  // Center targeting optical sensor pod
-  bevel('laser-sensor-pod', 4.2, 0, 19.3, 3.5, 2.0, 1.3, 'cyan', 0.2);
-  cylinder('laser-sensor-lens', 5.8, 0, 19.3, 0.55, 0.45, 'x', 10, 'strobe');
+  // Central Targeting Optical Sensor Pod
+  bevel('laser-sensor-pod', 4.4, 0, 19.4, 3.8, 2.2, 1.4, 'cyan', 0.2);
+  cylinder('laser-sensor-lens', 6.2, 0, 19.4, 0.6, 0.5, 'x', 10, 'strobe');
 
   // ==========================================
-  // 8. ROOF EMP CAPACITOR DISH (UPGRADE NODE)
+  // 8. ROOF EMP RADAR DISH & DISCHARGE ANTENNA
   // ==========================================
-  // Rear Roof EMP Hardpoint (centered at X=-5.5, Y=0.0, Z=16.5)
-  lathe('emp-dish-base', -5.5, 0, 16.4, [
-    [0.0, 2.2], [0.4, 1.9], [0.75, 1.0], [1.0, 0.4]
+  // Rear Roof EMP Hardpoint (Centered at X=-5.5, Y=0.0, Z=16.2)
+  lathe('emp-dish-base', -5.5, 0, 16.2, [
+    [0.0, 2.4], [0.45, 2.0], [0.85, 1.1], [1.1, 0.4]
   ], 'carbon', 'z', 14);
-  // Segmented multi-stage capacitor rings
-  lathe('emp-emitter-ring', -5.5, 0, 18.2, [
-    [0.0, 0.9], [0.25, 1.3], [0.45, 1.3], [0.6, 0.9]
-  ], 'cyan', 'z', 14);
-  // Chrome lightning discharge rod
-  cylinder('emp-antenna-rod', -5.5, 0, 19.2, 0.18, 2.6, 'z', 8, 'chrome');
+  // Multi-ring parabolic capacitor dish
+  lathe('emp-dish-parabolic', -5.5, 0, 17.6, [
+    [0.0, 0.5], [0.3, 1.5], [0.6, 2.4], [0.8, 2.6]
+  ], 'chrome', 'z', 16);
+  // Central chrome lightning discharge antenna rod
+  cylinder('emp-antenna-rod', -5.5, 0, 19.0, 0.18, 2.8, 'z', 8, 'chrome');
 };
