@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+	<Texture id="CVPriusAtlas" File="CVPriusAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+	<Texture id="CVPriusNormal" File="CVPriusNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+	<Texture id="CVPriusSpec" File="CVPriusSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+	<Texture id="CVPriusHouse" File="CVPriusHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

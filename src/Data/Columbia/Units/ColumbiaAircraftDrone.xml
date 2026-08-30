@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaAircraftDrone"
+		inheritFrom="BaseAircraft"
+		SelectPortrait="Portrait_ColumbiaDrone"
+		ButtonImage="Button_ColumbiaDrone"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="1000"
+		BuildTime="10"
+		WeaponCategory="LASER"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS AIRCRAFT"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaDroneHoverLocomotor" DisplayName="Name:ColumbiaAircraftDrone" Description="Desc:ColumbiaAircraftDrone">
+		<ArmorSet Armor="ColumbiaLithiumCompositeArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="750.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaAirDroneLaser" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="CYLINDER" MajorRadius="12.0" Height="6.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

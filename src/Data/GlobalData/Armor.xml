@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Pasadena Custom Armors -->
+	<ArmorTemplate id="PasadenaRustedSteelArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="75%" />
+		<Armor Damage="ROCKET" Percent="90%" />
+		<Armor Damage="GUN" Percent="50%" />
+		<Armor Damage="SNIPER" Percent="25%" />
+		<Armor Damage="GRENADE" Percent="100%" />
+		<Armor Damage="LASER" Percent="125%" />
+		<Armor Damage="FORCE" Percent="100%" />
+	</ArmorTemplate>
+
+	<ArmorTemplate id="PasadenaFiberglassHullArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="90%" />
+		<Armor Damage="ROCKET" Percent="85%" />
+		<Armor Damage="GUN" Percent="60%" />
+		<Armor Damage="SNIPER" Percent="40%" />
+		<Armor Damage="GRENADE" Percent="110%" />
+		<Armor Damage="LASER" Percent="115%" />
+		<Armor Damage="FORCE" Percent="80%" />
+	</ArmorTemplate>
+
+	<ArmorTemplate id="PasadenaInfantryDenimArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="150%" />
+		<Armor Damage="ROCKET" Percent="150%" />
+		<Armor Damage="GUN" Percent="100%" />
+		<Armor Damage="SNIPER" Percent="150%" />
+		<Armor Damage="GRENADE" Percent="120%" />
+		<Armor Damage="LASER" Percent="120%" />
+		<Armor Damage="FORCE" Percent="100%" />
+	</ArmorTemplate>
+
+	<!-- Columbia Custom Armors -->
+	<ArmorTemplate id="ColumbiaSpandexInfantryArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="175%" />
+		<Armor Damage="ROCKET" Percent="150%" />
+		<Armor Damage="GUN" Percent="80%" />
+		<Armor Damage="SNIPER" Percent="125%" />
+		<Armor Damage="GRENADE" Percent="130%" />
+		<Armor Damage="LASER" Percent="75%" />
+		<Armor Damage="FORCE" Percent="110%" />
+	</ArmorTemplate>
+
+	<ArmorTemplate id="ColumbiaLithiumCompositeArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="80%" />
+		<Armor Damage="ROCKET" Percent="80%" />
+		<Armor Damage="GUN" Percent="70%" />
+		<Armor Damage="SNIPER" Percent="30%" />
+		<Armor Damage="GRENADE" Percent="90%" />
+		<Armor Damage="LASER" Percent="50%" />
+		<Armor Damage="FORCE" Percent="130%" />
+	</ArmorTemplate>
+
+	<ArmorTemplate id="ColumbiaHOAStructureArmor" Default="100%">
+		<Armor Damage="CANNON" Percent="60%" />
+		<Armor Damage="ROCKET" Percent="70%" />
+		<Armor Damage="GUN" Percent="30%" />
+		<Armor Damage="SNIPER" Percent="10%" />
+		<Armor Damage="GRENADE" Percent="85%" />
+		<Armor Damage="LASER" Percent="60%" />
+		<Armor Damage="FORCE" Percent="110%" />
+	</ArmorTemplate>
+</AssetDeclaration>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaBarracks"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaBarracks"
+		ButtonImage="Button_ColumbiaBarracks"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="500"
+		BuildTime="5"
+		EnergyProduction="-5"
+		CommandSet="ColumbiaBarracksCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_FACTORY AUTO_RALLYPOINT"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaBarracks" Description="Desc:ColumbiaBarracks">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="2200.0" />
+		</Body>
+		<Behaviors>
+			<ProductionUpdate id="ModuleTag_ProductionUpdate" GiveNoXP="true" />
+			<QueueProductionExitUpdate id="ModuleTag_Exit">
+				<UnitCreatePoint X="0.0" Y="0.0" Z="0.0" />
+				<NaturalRallyPoint X="40.0" Y="0.0" Z="0.0" />
+			</QueueProductionExitUpdate>
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="30.0" MinorRadius="30.0" Height="25.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

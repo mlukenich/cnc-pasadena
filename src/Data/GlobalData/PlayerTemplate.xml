@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Pasadena Player Template ('The Dena Dominion) -->
+	<PlayerTemplate
+		id="FactionPasadena"
+		Name="FactionPasadena"
+		DisplayName="GUI:FactionPasadena"
+		Description="GUI:FactionPasadenaDescription"
+		StartingMoney="10000"
+		Side="Pasadena"
+		BaseCreationSound="Pasadena_BaseCreated"
+		PlayableSide="true"
+		SkirmishAI="PasadenaSkirmishAI"
+		StartingUnit1="PasadenaMCV"
+		StartingUnitPosition1="X:0 Y:0 Z:0"
+		InitialBuildable="PasadenaConYard"
+		StartingBuilding="PasadenaConYard"
+		DefaultPlayerAIType="PasadenaSkirmishAI"
+		BeaconName="BeaconPasadena"
+		SpellBook="PasadenaSpellBook"
+		Status="ACTIVE">
+		<PreferredColor R="230" G="75" B="25" />
+	</PlayerTemplate>
+
+	<!-- Columbia Player Template (The Columbia Planned Collective) -->
+	<PlayerTemplate
+		id="FactionColumbia"
+		Name="FactionColumbia"
+		DisplayName="GUI:FactionColumbia"
+		Description="GUI:FactionColumbiaDescription"
+		StartingMoney="10000"
+		Side="Columbia"
+		BaseCreationSound="Columbia_BaseCreated"
+		PlayableSide="true"
+		SkirmishAI="ColumbiaSkirmishAI"
+		StartingUnit1="ColumbiaMCV"
+		StartingUnitPosition1="X:0 Y:0 Z:0"
+		InitialBuildable="ColumbiaConYard"
+		StartingBuilding="ColumbiaConYard"
+		DefaultPlayerAIType="ColumbiaSkirmishAI"
+		BeaconName="BeaconColumbia"
+		SpellBook="ColumbiaSpellBook"
+		Status="ACTIVE">
+		<PreferredColor R="50" G="180" B="120" />
+	</PlayerTemplate>
+</AssetDeclaration>

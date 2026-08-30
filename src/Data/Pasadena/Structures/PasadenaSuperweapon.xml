@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaSuperweapon"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_PasadenaSuperweapon"
+		ButtonImage="Button_PasadenaSuperweapon"
+		Side="Pasadena"
+		EditorSorting="STRUCTURE"
+		BuildCost="5000"
+		BuildTime="50"
+		EnergyProduction="-15"
+		CommandSet="PasadenaSuperweaponCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS SUPERWEAPON"
+		RadarPriority="STRUCTURE" DisplayName="Name:PasadenaSuperweapon" Description="Desc:PasadenaSuperweapon">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="6000.0" />
+		</Body>
+		<Behaviors>
+			<SpecialPower id="ModuleTag_OldBayCataclysmSP" SpecialPowerTemplate="SpecialPower_PasadenaOldBayCataclysm" Update="SpecialPowerUpdate_OldBay" />
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="CYLINDER" MajorRadius="30.0" Height="60.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

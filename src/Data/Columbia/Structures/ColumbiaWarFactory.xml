@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaWarFactory"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaWarFactory"
+		ButtonImage="Button_ColumbiaWarFactory"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="2000"
+		BuildTime="20"
+		EnergyProduction="-7"
+		CommandSet="ColumbiaWarFactoryCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_FACTORY AUTO_RALLYPOINT"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaWarFactory" Description="Desc:ColumbiaWarFactory">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="4200.0" />
+		</Body>
+		<Behaviors>
+			<ProductionUpdate id="ModuleTag_ProductionUpdate" GiveNoXP="true" />
+			<QueueProductionExitUpdate id="ModuleTag_Exit">
+				<UnitCreatePoint X="0.0" Y="0.0" Z="0.0" />
+				<NaturalRallyPoint X="60.0" Y="0.0" Z="0.0" />
+			</QueueProductionExitUpdate>
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="50.0" MinorRadius="45.0" Height="30.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

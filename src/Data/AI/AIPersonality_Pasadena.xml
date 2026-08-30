@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+	<AIPersonalityDefinition
+		id="PasadenaSkirmishAI"
+		PersonalityType="PasadenaSkirmishAI"
+		BaseRefinery="PasadenaRefinery"
+		BaseBarracks="PasadenaBarracks"
+		BaseFactory="PasadenaWarFactory"
+		BaseAirfield="PasadenaAirfield"
+		BasePower="PasadenaPowerPlant"
+		BaseTechCenter="PasadenaTechCenter"
+		BaseSuperweapon="PasadenaSuperweapon"
+		BasicHarvester="PasadenaHarvester"
+		BasicMCV="PasadenaMCV"
+		UnitBuilder="PasadenaWarFactory"
+		StructureBuilder="PasadenaConYard"
+		UnitBuilderBarracks="PasadenaBarracks"
+		SkirmishAI="true">
+		<Side>Pasadena</Side>
+		<StrategicState id="PasadenaEarlyRushState" State="PasadenaEarlyRush" Weight="80" />
+		<StrategicState id="PasadenaDieselConvoyState" State="PasadenaDieselConvoy" Weight="90" />
+		<StrategicState id="PasadenaOldBayBombardState" State="PasadenaOldBayBombard" Weight="100" />
+		<BuildDelay MinDelay="1.0s" MaxDelay="3.0s" />
+	</AIPersonalityDefinition>
+</AssetDeclaration>

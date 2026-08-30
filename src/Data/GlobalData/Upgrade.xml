@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Pasadena Upgrades -->
+	<UpgradeTemplate
+		id="Upgrade_PasadenaLiftKit"
+		DisplayName="Upgrade:PasadenaLiftKit"
+		Description="Upgrade:PasadenaLiftKitDescription"
+		BuildCost="1000"
+		BuildTime="30s"
+		ResearchSound="Pasadena_Upgrade_LiftKit" />
+
+	<UpgradeTemplate
+		id="Upgrade_PasadenaOldBaySeasoning"
+		DisplayName="Upgrade:PasadenaOldBaySeasoning"
+		Description="Upgrade:PasadenaOldBaySeasoningDescription"
+		BuildCost="1500"
+		BuildTime="45s"
+		ResearchSound="Pasadena_Upgrade_OldBay" />
+
+	<UpgradeTemplate
+		id="Upgrade_PasadenaStraightPipes"
+		DisplayName="Upgrade:PasadenaStraightPipes"
+		Description="Upgrade:PasadenaStraightPipesDescription"
+		BuildCost="800"
+		BuildTime="25s"
+		ResearchSound="Pasadena_Upgrade_StraightPipes" />
+
+	<!-- Columbia Upgrades -->
+	<UpgradeTemplate
+		id="Upgrade_ColumbiaKevlarSpandex"
+		DisplayName="Upgrade:ColumbiaKevlarSpandex"
+		Description="Upgrade:ColumbiaKevlarSpandexDescription"
+		BuildCost="1000"
+		BuildTime="30s"
+		ResearchSound="Columbia_Upgrade_Spandex" />
+
+	<UpgradeTemplate
+		id="Upgrade_ColumbiaLithiumBatteryPack"
+		DisplayName="Upgrade:ColumbiaLithiumBatteryPack"
+		Description="Upgrade:ColumbiaLithiumBatteryPackDescription"
+		BuildCost="1500"
+		BuildTime="45s"
+		ResearchSound="Columbia_Upgrade_Lithium" />
+
+	<UpgradeTemplate
+		id="Upgrade_ColumbiaHOAZoningCertification"
+		DisplayName="Upgrade:ColumbiaHOAZoningCertification"
+		Description="Upgrade:ColumbiaHOAZoningCertificationDescription"
+		BuildCost="1200"
+		BuildTime="35s"
+		ResearchSound="Columbia_Upgrade_HOACert" />
+</AssetDeclaration>

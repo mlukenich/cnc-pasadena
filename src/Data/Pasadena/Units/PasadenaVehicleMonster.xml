@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaVehicleMonster"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaMonster"
+		ButtonImage="Button_PasadenaMonster"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="2200"
+		BuildTime="22"
+		WeaponCategory="FORCE"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE HUGE_VEHICLE CRUSH_VEHICLES"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaLiftedTruckLocomotor" DisplayName="Name:PasadenaVehicleMonster" Description="Desc:PasadenaVehicleMonster">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="3800.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaMudderSubwoofer" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="26.0" MinorRadius="18.0" Height="22.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

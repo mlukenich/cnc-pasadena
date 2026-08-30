@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseInfantry.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaInfantryOfficer"
+		inheritFrom="BaseInfantry"
+		SelectPortrait="Portrait_ColumbiaOfficer"
+		ButtonImage="Button_ColumbiaOfficer"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="350"
+		BuildTime="4"
+		CommandSet="ColumbiaOfficerCommandSet"
+		WeaponCategory="LASER"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS INFANTRY"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaInfantryOfficerLocomotor" DisplayName="Name:ColumbiaInfantryOfficer" Description="Desc:ColumbiaInfantryOfficer">
+		<ArmorSet Armor="ColumbiaSpandexInfantryArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="240.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaHOATaserBeam" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Behaviors>
+			<SpecialPower id="ModuleTag_CitationStunSP" SpecialPowerTemplate="SpecialPower_ColumbiaCitationStun" Update="SpecialPowerUpdate_CitationStun" />
+		</Behaviors>
+		<Geometry IsSmall="true">
+			<Shape Type="CYLINDER" MajorRadius="6.0" Height="14.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

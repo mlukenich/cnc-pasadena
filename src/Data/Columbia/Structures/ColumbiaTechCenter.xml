@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaTechCenter"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaTechCenter"
+		ButtonImage="Button_ColumbiaTechCenter"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="3000"
+		BuildTime="30"
+		EnergyProduction="-10"
+		CommandSet="ColumbiaTechCenterCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_TECH_CENTER"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaTechCenter" Description="Desc:ColumbiaTechCenter">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="3600.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="35.0" MinorRadius="35.0" Height="35.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

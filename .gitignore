@@ -1,0 +1,20 @@
+# Build outputs and temporary packages
+build/
+BuiltMods/
+*.log
+
+# Generated / staged directories in ModSDK
+ModSDK/Art/
+ModSDK/BuiltMods/
+ModSDK/Mods/
+
+# Large installers exceeding GitHub 100MB limit
+tools/CnC3ModSDK_v5.exe
+
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+*.tmp
+.vs/
+.vscode/
+.idea/

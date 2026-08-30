@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaPowerPlant"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_PasadenaPowerPlant"
+		ButtonImage="Button_PasadenaPowerPlant"
+		Side="Pasadena"
+		EditorSorting="STRUCTURE"
+		BuildCost="600"
+		BuildTime="6"
+		EnergyProduction="22"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_POWER MP_COUNT_FOR_VICTORY"
+		RadarPriority="STRUCTURE" DisplayName="Name:PasadenaPowerPlant" Description="Desc:PasadenaPowerPlant">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1500.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="25.0" MinorRadius="25.0" Height="25.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

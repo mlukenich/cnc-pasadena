@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<AssetDeclaration >
+	<Tags/>
+	<Includes />
+
+	
+	<LogicCommand id="Command_ConstructPasadenaConYard" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaConYard</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaPowerPlant" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaPowerPlant</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaRefinery" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaRefinery</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaBarracks" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaBarracks</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaWarFactory" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaWarFactory</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaAirfield" Type="UNIT_BUILD"><Object>PasadenaAirfield</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaTechCenter" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaTechCenter</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaDefenseTurret" Type="UNIT_BUILD"><Object>PasadenaDefenseTurret</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaAA" Type="UNIT_BUILD"><Object>PasadenaAA</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaSuperweapon" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>PasadenaSuperweapon</Object></LogicCommand>
+
+	
+	<LogicCommand id="Command_ConstructPasadenaMCV" Type="UNIT_BUILD"><Object>PasadenaMCV</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaHarvester" Type="UNIT_BUILD"><Object>PasadenaHarvester</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaInfantryMilitia" Type="UNIT_BUILD"><Object>PasadenaInfantryMilitia</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaInfantryLeafblower" Type="UNIT_BUILD"><Object>PasadenaInfantryLeafblower</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaInfantryWaterman" Type="UNIT_BUILD"><Object>PasadenaInfantryWaterman</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaInfantryCommando" Type="UNIT_BUILD"><Object>PasadenaInfantryCommando</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaVehicleDually" Type="UNIT_BUILD"><Object>PasadenaVehicleDually</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaVehicleBuggy" Type="UNIT_BUILD"><Object>PasadenaVehicleBuggy</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaVehiclePontoon" Type="UNIT_BUILD"><Object>PasadenaVehiclePontoon</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaVehicleMonster" Type="UNIT_BUILD"><Object>PasadenaVehicleMonster</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructPasadenaAircraftSeaplane" Type="UNIT_BUILD"><Object>PasadenaAircraftSeaplane</Object></LogicCommand>
+
+	
+	<LogicCommand id="Command_AbilityRollingCoal" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_PasadenaRollingCoal</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_AbilityCrabFeast" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_PasadenaCrabFeast</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_AbilityOldBayCataclysm" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_PasadenaOldBayCataclysm</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_UpgradePasadenaLiftKit" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_PasadenaLiftKit</Upgrade></LogicCommand>
+	<LogicCommand id="Command_UpgradePasadenaOldBay" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_PasadenaOldBaySeasoning</Upgrade></LogicCommand>
+	<LogicCommand id="Command_UpgradePasadenaStraightPipes" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_PasadenaStraightPipes</Upgrade></LogicCommand>
+
+	
+	<LogicCommand id="Command_ConstructColumbiaConYard" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaConYard</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaPowerPlant" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaPowerPlant</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaRefinery" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaRefinery</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaBarracks" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaBarracks</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaWarFactory" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaWarFactory</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaAirfield" Type="UNIT_BUILD"><Object>ColumbiaAirfield</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaTechCenter" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaTechCenter</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaDefenseTurret" Type="UNIT_BUILD"><Object>ColumbiaDefenseTurret</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaAA" Type="UNIT_BUILD"><Object>ColumbiaAA</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaSuperweapon" Type="CONSTRUCTION_YARD_CONSTRUCT"><Object>ColumbiaSuperweapon</Object></LogicCommand>
+
+	
+	<LogicCommand id="Command_ConstructColumbiaMCV" Type="UNIT_BUILD"><Object>ColumbiaMCV</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaHarvester" Type="UNIT_BUILD"><Object>ColumbiaHarvester</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaInfantryCyclist" Type="UNIT_BUILD"><Object>ColumbiaInfantryCyclist</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaInfantryOfficer" Type="UNIT_BUILD"><Object>ColumbiaInfantryOfficer</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaInfantryPilates" Type="UNIT_BUILD"><Object>ColumbiaInfantryPilates</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaInfantryCommando" Type="UNIT_BUILD"><Object>ColumbiaInfantryCommando</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaVehiclePrius" Type="UNIT_BUILD"><Object>ColumbiaVehiclePrius</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaVehicleRoundabout" Type="SPECIAL_POWER"><Object>ColumbiaVehicleRoundabout</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaVehicleStreetSweeper" Type="UNIT_BUILD"><Object>ColumbiaVehicleStreetSweeper</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaVehicleDroneCarrier" Type="UNIT_BUILD"><Object>ColumbiaVehicleDroneCarrier</Object></LogicCommand>
+	<LogicCommand id="Command_ConstructColumbiaAircraftDrone" Type="UNIT_BUILD"><Object>ColumbiaAircraftDrone</Object></LogicCommand>
+
+	
+	<LogicCommand id="Command_AbilityCitationStun" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_ColumbiaCitationStun</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_AbilityRoundaboutGridlock" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_ColumbiaRoundaboutGridlock</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_AbilityMandatoryForeclosure" Type="SPECIAL_POWER"><SpecialPower>SpecialPower_ColumbiaMandatoryForeclosure</SpecialPower></LogicCommand>
+	<LogicCommand id="Command_UpgradeColumbiaSpandex" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_ColumbiaKevlarSpandex</Upgrade></LogicCommand>
+	<LogicCommand id="Command_UpgradeColumbiaLithium" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_ColumbiaLithiumBatteryPack</Upgrade></LogicCommand>
+	<LogicCommand id="Command_UpgradeColumbiaHOACert" Type="PURCHASE_UPGRADE"><Upgrade>Upgrade_ColumbiaHOAZoningCertification</Upgrade></LogicCommand>
+</AssetDeclaration>

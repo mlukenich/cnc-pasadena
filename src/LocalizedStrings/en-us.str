@@ -1,0 +1,16 @@
+// C&C 3 Pasadena vs Columbia Localized String Table
+GUI:FactionPasadena
+"The 'Dena Dominion"
+END
+
+GUI:FactionPasadenaDescription
+"Pasadena, MD - The proud blue-collar kingdom of the Chesapeake. Armed with straight-pipe diesel trucks, commercial lawncare equipment, bushel baskets of steamed crabs, and weaponized Old Bay seasoning."
+END
+
+GUI:FactionColumbia
+"The Columbia Planned Collective"
+END
+
+GUI:FactionColumbiaDescription
+"Columbia, MD - The meticulously planned HOA utopia. Features whisper-silent electric vehicle swarms, code-compliance citation stun beams, aggressive bicycle pelotons, organic co-op drone carriers, and orbital zoning foreclosures."
+END

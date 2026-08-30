@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Pasadena Locomotors -->
+	<LocomotorTemplate
+		id="PasadenaLiftedTruckLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.8s"
+		AccelerationSeconds="0.4s"
+		BrakingSeconds="0.3s"
+		Appearance="FOUR_WHEELS" />
+
+	<LocomotorTemplate
+		id="PasadenaPontoonAmphibiousLocomotor"
+		Surfaces="GROUND WATER"
+		TurnTimeSeconds="1.2s"
+		AccelerationSeconds="0.8s"
+		BrakingSeconds="0.5s"
+		Appearance="HOVER" />
+
+	<LocomotorTemplate
+		id="PasadenaInfantryFootLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.2s"
+		AccelerationSeconds="0.2s"
+		BrakingSeconds="0.1s"
+		Appearance="TWO_LEGS" />
+
+	<LocomotorTemplate
+		id="PasadenaAircraftFlyLocomotor"
+		Surfaces="AIR"
+		TurnTimeSeconds="1.0s"
+		AccelerationSeconds="0.5s"
+		BrakingSeconds="0.5s"
+		Appearance="WINGS" />
+
+	<!-- Columbia Locomotors -->
+	<LocomotorTemplate
+		id="ColumbiaPriusWhisperLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.4s"
+		AccelerationSeconds="0.3s"
+		BrakingSeconds="0.2s"
+		Appearance="FOUR_WHEELS" />
+
+	<LocomotorTemplate
+		id="ColumbiaPelotonSprintLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.1s"
+		AccelerationSeconds="0.2s"
+		BrakingSeconds="0.1s"
+		Appearance="TWO_LEGS" />
+
+	<LocomotorTemplate
+		id="ColumbiaInfantryOfficerLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.2s"
+		AccelerationSeconds="0.2s"
+		BrakingSeconds="0.1s"
+		Appearance="TWO_LEGS" />
+
+	<LocomotorTemplate
+		id="ColumbiaDroneHoverLocomotor"
+		Surfaces="AIR"
+		TurnTimeSeconds="0.3s"
+		AccelerationSeconds="0.3s"
+		BrakingSeconds="0.2s"
+		Appearance="HOVER" />
+
+	<LocomotorTemplate
+		id="ColumbiaSweeperHeavyLocomotor"
+		Surfaces="GROUND"
+		TurnTimeSeconds="0.9s"
+		AccelerationSeconds="0.6s"
+		BrakingSeconds="0.4s"
+		Appearance="FOUR_WHEELS" />
+</AssetDeclaration>

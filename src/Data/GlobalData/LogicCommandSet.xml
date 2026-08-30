@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- ==================== PASADENA COMMAND SETS ==================== -->
+	<LogicCommandSet id="PasadenaConYardCommandSet">
+		<Cmd>Command_ConstructPasadenaPowerPlant</Cmd>
+		<Cmd>Command_ConstructPasadenaRefinery</Cmd>
+		<Cmd>Command_ConstructPasadenaBarracks</Cmd>
+		<Cmd>Command_ConstructPasadenaWarFactory</Cmd>
+		<Cmd>Command_ConstructPasadenaAirfield</Cmd>
+		<Cmd>Command_ConstructPasadenaTechCenter</Cmd>
+		<Cmd>Command_ConstructPasadenaDefenseTurret</Cmd>
+		<Cmd>Command_ConstructPasadenaAA</Cmd>
+		<Cmd>Command_ConstructPasadenaSuperweapon</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="GDIConstructionYardCommandSet">
+		<Cmd>Command_ConstructPasadenaPowerPlant</Cmd>
+		<Cmd>Command_ConstructPasadenaRefinery</Cmd>
+		<Cmd>Command_ConstructPasadenaBarracks</Cmd>
+		<Cmd>Command_ConstructPasadenaWarFactory</Cmd>
+		<Cmd>Command_ConstructPasadenaAirfield</Cmd>
+		<Cmd>Command_ConstructPasadenaTechCenter</Cmd>
+		<Cmd>Command_ConstructPasadenaDefenseTurret</Cmd>
+		<Cmd>Command_ConstructPasadenaAA</Cmd>
+		<Cmd>Command_ConstructPasadenaSuperweapon</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaBarracksCommandSet">
+		<Cmd>Command_ConstructPasadenaInfantryMilitia</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryLeafblower</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryWaterman</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryCommando</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="GDIBarracksCommandSet">
+		<Cmd>Command_ConstructPasadenaInfantryMilitia</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryLeafblower</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryWaterman</Cmd>
+		<Cmd>Command_ConstructPasadenaInfantryCommando</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaWarFactoryCommandSet">
+		<Cmd>Command_ConstructPasadenaHarvester</Cmd>
+		<Cmd>Command_ConstructPasadenaMCV</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleDually</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleBuggy</Cmd>
+		<Cmd>Command_ConstructPasadenaVehiclePontoon</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleMonster</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="GDIWarFactoryCommandSet">
+		<Cmd>Command_ConstructPasadenaHarvester</Cmd>
+		<Cmd>Command_ConstructPasadenaMCV</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleDually</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleBuggy</Cmd>
+		<Cmd>Command_ConstructPasadenaVehiclePontoon</Cmd>
+		<Cmd>Command_ConstructPasadenaVehicleMonster</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaAirfieldCommandSet">
+		<Cmd>Command_ConstructPasadenaAircraftSeaplane</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="GDIAirTowerCommandSet">
+		<Cmd>Command_ConstructPasadenaAircraftSeaplane</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaTechCenterCommandSet">
+		<Cmd>Command_UpgradePasadenaLiftKit</Cmd>
+		<Cmd>Command_UpgradePasadenaOldBay</Cmd>
+		<Cmd>Command_UpgradePasadenaStraightPipes</Cmd>
+		<Cmd>Command_AbilityCrabFeast</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="GDITechCenterCommandSet">
+		<Cmd>Command_UpgradePasadenaLiftKit</Cmd>
+		<Cmd>Command_UpgradePasadenaOldBay</Cmd>
+		<Cmd>Command_UpgradePasadenaStraightPipes</Cmd>
+		<Cmd>Command_AbilityCrabFeast</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaDuallyCommandSet">
+		<Cmd>Command_AbilityRollingCoal</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="PasadenaSuperweaponCommandSet">
+		<Cmd>Command_AbilityOldBayCataclysm</Cmd>
+	</LogicCommandSet>
+
+	<!-- ==================== COLUMBIA COMMAND SETS ==================== -->
+	<LogicCommandSet id="ColumbiaConYardCommandSet">
+		<Cmd>Command_ConstructColumbiaPowerPlant</Cmd>
+		<Cmd>Command_ConstructColumbiaRefinery</Cmd>
+		<Cmd>Command_ConstructColumbiaBarracks</Cmd>
+		<Cmd>Command_ConstructColumbiaWarFactory</Cmd>
+		<Cmd>Command_ConstructColumbiaAirfield</Cmd>
+		<Cmd>Command_ConstructColumbiaTechCenter</Cmd>
+		<Cmd>Command_ConstructColumbiaDefenseTurret</Cmd>
+		<Cmd>Command_ConstructColumbiaAA</Cmd>
+		<Cmd>Command_ConstructColumbiaSuperweapon</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="NODConstructionYardCommandSet">
+		<Cmd>Command_ConstructColumbiaPowerPlant</Cmd>
+		<Cmd>Command_ConstructColumbiaRefinery</Cmd>
+		<Cmd>Command_ConstructColumbiaBarracks</Cmd>
+		<Cmd>Command_ConstructColumbiaWarFactory</Cmd>
+		<Cmd>Command_ConstructColumbiaAirfield</Cmd>
+		<Cmd>Command_ConstructColumbiaTechCenter</Cmd>
+		<Cmd>Command_ConstructColumbiaDefenseTurret</Cmd>
+		<Cmd>Command_ConstructColumbiaAA</Cmd>
+		<Cmd>Command_ConstructColumbiaSuperweapon</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaBarracksCommandSet">
+		<Cmd>Command_ConstructColumbiaInfantryCyclist</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryOfficer</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryPilates</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryCommando</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="NODBarracksCommandSet">
+		<Cmd>Command_ConstructColumbiaInfantryCyclist</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryOfficer</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryPilates</Cmd>
+		<Cmd>Command_ConstructColumbiaInfantryCommando</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaWarFactoryCommandSet">
+		<Cmd>Command_ConstructColumbiaHarvester</Cmd>
+		<Cmd>Command_ConstructColumbiaMCV</Cmd>
+		<Cmd>Command_ConstructColumbiaVehiclePrius</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleRoundabout</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleStreetSweeper</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleDroneCarrier</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="NODWarFactoryCommandSet">
+		<Cmd>Command_ConstructColumbiaHarvester</Cmd>
+		<Cmd>Command_ConstructColumbiaMCV</Cmd>
+		<Cmd>Command_ConstructColumbiaVehiclePrius</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleRoundabout</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleStreetSweeper</Cmd>
+		<Cmd>Command_ConstructColumbiaVehicleDroneCarrier</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaAirfieldCommandSet">
+		<Cmd>Command_ConstructColumbiaAircraftDrone</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="NODAirTowerCommandSet">
+		<Cmd>Command_ConstructColumbiaAircraftDrone</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaTechCenterCommandSet">
+		<Cmd>Command_UpgradeColumbiaSpandex</Cmd>
+		<Cmd>Command_UpgradeColumbiaLithium</Cmd>
+		<Cmd>Command_UpgradeColumbiaHOACert</Cmd>
+		<Cmd>Command_AbilityRoundaboutGridlock</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="NODTechCenterCommandSet">
+		<Cmd>Command_UpgradeColumbiaSpandex</Cmd>
+		<Cmd>Command_UpgradeColumbiaLithium</Cmd>
+		<Cmd>Command_UpgradeColumbiaHOACert</Cmd>
+		<Cmd>Command_AbilityRoundaboutGridlock</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaOfficerCommandSet">
+		<Cmd>Command_AbilityCitationStun</Cmd>
+	</LogicCommandSet>
+
+	<LogicCommandSet id="ColumbiaSuperweaponCommandSet">
+		<Cmd>Command_AbilityMandatoryForeclosure</Cmd>
+	</LogicCommandSet>
+</AssetDeclaration>

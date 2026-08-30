@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+	<InGameUIFactionSetting
+		id="PasadenaInGameUI"
+		Side="Pasadena"
+		MinimapBackgroundColor="R:15 G:10 B:8"
+		RadarColor="R:230 G:75 B:25"
+		CursorColor="R:255 G:120 B:30" />
+
+	<InGameUIFactionSetting
+		id="ColumbiaInGameUI"
+		Side="Columbia"
+		MinimapBackgroundColor="R:8 G:14 B:12"
+		RadarColor="R:50 G:180 B:120"
+		CursorColor="R:70 G:220 B:160" />
+</AssetDeclaration>

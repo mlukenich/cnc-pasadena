@@ -1,0 +1,51 @@
+{
+  "artVersion": 1,
+  "unit": "ColumbiaVehiclePrius",
+  "slot": "NODScorpionBuggy",
+  "artScale": 0.88,
+  "shader": "ObjectsGDI.fx",
+  "model": "CUPRIUS_SKIN",
+  "vertices": 6592,
+  "triangles": 3056,
+  "bounds": {
+    "min": [
+      -22.792,
+      -10.956000000000001,
+      0
+    ],
+    "max": [
+      25.035999999999998,
+      10.956000000000001,
+      17.424
+    ],
+    "center": [
+      1.121999999999998,
+      0,
+      8.712
+    ],
+    "radius": 25.510655664730464
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "Turret",
+    "Turret_Pitch",
+    "FX_Weapon01",
+    "EMP"
+  ],
+  "outputs": [
+    "CVPrius_Model.w3x",
+    "CVPrius_Texture.xml",
+    "CVPriusAtlas.tga",
+    "CVPriusNormal.tga",
+    "CVPriusSpec.tga",
+    "CVPriusHouse.tga",
+    "CVPrius_Portrait.xml",
+    "CVPriusPortrait.tga",
+    "CVPrius.obj",
+    "CVPrius.mtl"
+  ]
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Pasadena Special Powers -->
+	<SpecialPowerTemplate
+		id="SpecialPower_PasadenaRollingCoal"
+		ReloadTime="30s"
+		TargetType="NONE"
+		Name="SpecialPower_PasadenaRollingCoal"
+		DisplayName="NAME:SpecialPower_RollingCoal"
+		Description="DESC:SpecialPower_RollingCoal"
+		Flags="NEEDS_OBJECT_FILTER" />
+
+	<SpecialPowerTemplate
+		id="SpecialPower_PasadenaCrabFeast"
+		ReloadTime="90s"
+		TargetType="LOCATION"
+		RadiusCursorRadius="150"
+		Name="SpecialPower_PasadenaCrabFeast"
+		DisplayName="NAME:SpecialPower_CrabFeast"
+		Description="DESC:SpecialPower_CrabFeast" />
+
+	<SpecialPowerTemplate
+		id="SpecialPower_PasadenaOldBayCataclysm"
+		ReloadTime="360s"
+		TargetType="LOCATION"
+		RadiusCursorRadius="250"
+		Name="SpecialPower_PasadenaOldBayCataclysm"
+		DisplayName="NAME:SpecialPower_OldBayCataclysm"
+		Description="DESC:SpecialPower_OldBayCataclysm" />
+
+	<!-- Columbia Special Powers -->
+	<SpecialPowerTemplate
+		id="SpecialPower_ColumbiaCitationStun"
+		ReloadTime="45s"
+		TargetType="OBJECT"
+		Name="SpecialPower_ColumbiaCitationStun"
+		DisplayName="NAME:SpecialPower_CitationStun"
+		Description="DESC:SpecialPower_CitationStun" />
+
+	<SpecialPowerTemplate
+		id="SpecialPower_ColumbiaRoundaboutGridlock"
+		ReloadTime="75s"
+		TargetType="LOCATION"
+		RadiusCursorRadius="180"
+		Name="SpecialPower_ColumbiaRoundaboutGridlock"
+		DisplayName="NAME:SpecialPower_RoundaboutGridlock"
+		Description="DESC:SpecialPower_RoundaboutGridlock" />
+
+	<SpecialPowerTemplate
+		id="SpecialPower_ColumbiaMandatoryForeclosure"
+		ReloadTime="360s"
+		TargetType="LOCATION"
+		RadiusCursorRadius="250"
+		Name="SpecialPower_ColumbiaMandatoryForeclosure"
+		DisplayName="NAME:SpecialPower_MandatoryForeclosure"
+		Description="DESC:SpecialPower_MandatoryForeclosure" />
+</AssetDeclaration>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaTechCenter"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_PasadenaTechCenter"
+		ButtonImage="Button_PasadenaTechCenter"
+		Side="Pasadena"
+		EditorSorting="STRUCTURE"
+		BuildCost="3000"
+		BuildTime="30"
+		EnergyProduction="-10"
+		CommandSet="PasadenaTechCenterCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_TECH_CENTER"
+		RadarPriority="STRUCTURE" DisplayName="Name:PasadenaTechCenter" Description="Desc:PasadenaTechCenter">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="3500.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="35.0" MinorRadius="35.0" Height="35.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

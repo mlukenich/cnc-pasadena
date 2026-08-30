@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+
+	<!-- Base & Global Events -->
+	<AudioEvent id="Pasadena_BaseCreated" Volume="100" />
+	<AudioEvent id="Columbia_BaseCreated" Volume="100" />
+
+	<!-- Pasadena Weapon & Ability Events -->
+	<AudioEvent id="Pasadena_Shotgun_Fire" Volume="90" />
+	<AudioEvent id="Pasadena_Leafblower_Loop" Volume="75" />
+	<AudioEvent id="Pasadena_Harpoon_Fire" Volume="85" />
+	<AudioEvent id="Pasadena_Molotov_Throw" Volume="80" />
+	<AudioEvent id="Pasadena_50Cal_Fire" Volume="95" />
+	<AudioEvent id="Pasadena_Pontoon_Launch" Volume="95" />
+	<AudioEvent id="Pasadena_Subwoofer_BassDrop" Volume="100" />
+	<AudioEvent id="Pasadena_Upgrade_LiftKit" Volume="85" />
+	<AudioEvent id="Pasadena_Upgrade_OldBay" Volume="85" />
+	<AudioEvent id="Pasadena_Upgrade_StraightPipes" Volume="85" />
+
+	<!-- Columbia Weapon & Ability Events -->
+	<AudioEvent id="Columbia_BicycleBell_Ring" Volume="70" />
+	<AudioEvent id="Columbia_Taser_Zap" Volume="80" />
+	<AudioEvent id="Columbia_Pilates_Throw" Volume="75" />
+	<AudioEvent id="Columbia_Karen_Scream" Volume="100" />
+	<AudioEvent id="Columbia_PriusLaser_Fire" Volume="65" />
+	<AudioEvent id="Columbia_Roundabout_Hum" Volume="85" />
+	<AudioEvent id="Columbia_Drone_Drop" Volume="80" />
+	<AudioEvent id="Columbia_Upgrade_Spandex" Volume="85" />
+	<AudioEvent id="Columbia_Upgrade_Lithium" Volume="85" />
+	<AudioEvent id="Columbia_Upgrade_HOACert" Volume="85" />
+</AssetDeclaration>

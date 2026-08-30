@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseInfantry.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaInfantryMilitia"
+		inheritFrom="BaseInfantry"
+		SelectPortrait="Portrait_PasadenaMilitia"
+		ButtonImage="Button_PasadenaMilitia"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="150"
+		BuildTime="2"
+		WeaponCategory="GUN"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS INFANTRY"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaInfantryFootLocomotor" DisplayName="Name:PasadenaInfantryMilitia" Description="Desc:PasadenaInfantryMilitia">
+		<ArmorSet Armor="PasadenaInfantryDenimArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="160.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaMilitiaShotgun" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="true">
+			<Shape Type="CYLINDER" MajorRadius="6.0" Height="14.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

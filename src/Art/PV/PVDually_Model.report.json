@@ -1,0 +1,53 @@
+{
+  "artVersion": 3,
+  "geometryRevision": "3.2-detail-and-proportions",
+  "artScale": 0.88,
+  "materialRevision": "3.4-runtime-verified-highlights",
+  "shadingRevision": "explicit complete hood smoothing group; runtime-calibrated paint specular",
+  "shader": "ObjectsGDI.fx",
+  "textureSource": "Textures/dually-panels-v3-3.png",
+  "uvConvention": "Internal top-left; W3X bottom-left; SDK compiles V to 1-V. OBJ bottom-left.",
+  "model": "PVDUALLY_SKIN",
+  "vertices": 26264,
+  "triangles": 11952,
+  "bounds": {
+    "min": [
+      -33.836000000000006,
+      -14.96,
+      0.014239127661591766
+    ],
+    "max": [
+      34.98,
+      14.96,
+      32.575444037573604
+    ],
+    "center": [
+      0.5719999999999956,
+      0,
+      16.294841582617597
+    ],
+    "radius": 36.527701416161335
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Tire01",
+    "Tire02",
+    "Tire03",
+    "Tire04",
+    "Turret",
+    "B_ Gun",
+    "FXWEAPON01",
+    "FXWEAPON02",
+    "mortortube",
+    "B_SPOTLIGHT"
+  ],
+  "outputs": [
+    "PVDually_Model.w3x",
+    "PVDually_Texture.xml",
+    "PVDuallyAtlas.tga",
+    "PVDually_Model.obj",
+    "PVDually_Model.mtl",
+    "PVDually_Portrait.xml",
+    "PVDuallyPortrait.tga"
+  ]
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaVehiclePontoon"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaPontoon"
+		ButtonImage="Button_PasadenaPontoon"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="1600"
+		BuildTime="16"
+		WeaponCategory="CANNON"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE AMPHIBIOUS"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaPontoonAmphibiousLocomotor" DisplayName="Name:PasadenaVehiclePontoon" Description="Desc:PasadenaVehiclePontoon">
+		<ArmorSet Armor="PasadenaFiberglassHullArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1800.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaPontoonMortar" />
+				<TurretSettings TurnRate="120" MinPhysicalPitch="10d" MaxPhysicalPitch="60d">
+					<TurretPose X="0.0" Y="0.0" Z="10.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="22.0" MinorRadius="14.0" Height="14.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

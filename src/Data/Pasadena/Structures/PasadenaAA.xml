@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaAA"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_PasadenaAA"
+		ButtonImage="Button_PasadenaAA"
+		Side="Pasadena"
+		EditorSorting="STRUCTURE"
+		BuildCost="700"
+		BuildTime="7"
+		EnergyProduction="-3"
+		WeaponCategory="GUN"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_BASE_DEFENSE CAN_ATTACK"
+		RadarPriority="STRUCTURE" DisplayName="Name:PasadenaAA" Description="Desc:PasadenaAA">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1800.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaFlakCannon" />
+				<TurretSettings TurnRate="250" MinPhysicalPitch="10d" MaxPhysicalPitch="85d">
+					<TurretPose X="0.0" Y="0.0" Z="20.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="CYLINDER" MajorRadius="16.0" Height="25.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

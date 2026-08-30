@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaMCV"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaMCV"
+		ButtonImage="Button_PasadenaMCV"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="3500"
+		BuildTime="35"
+		KindOf="SELECTABLE CAN_ATTACK CAN_CAST_REFLECTIONS VEHICLE HUGE_VEHICLE MCV EXPANSION_UNIT"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaLiftedTruckLocomotor" DisplayName="Name:PasadenaMCV" Description="Desc:PasadenaMCV">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="5000.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="28.0" MinorRadius="18.0" Height="22.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+	<AIPersonalityDefinition
+		id="ColumbiaSkirmishAI"
+		PersonalityType="ColumbiaSkirmishAI"
+		BaseRefinery="ColumbiaRefinery"
+		BaseBarracks="ColumbiaBarracks"
+		BaseFactory="ColumbiaWarFactory"
+		BaseAirfield="ColumbiaAirfield"
+		BasePower="ColumbiaPowerPlant"
+		BaseTechCenter="ColumbiaTechCenter"
+		BaseSuperweapon="ColumbiaSuperweapon"
+		BasicHarvester="ColumbiaHarvester"
+		BasicMCV="ColumbiaMCV"
+		UnitBuilder="ColumbiaWarFactory"
+		StructureBuilder="ColumbiaConYard"
+		UnitBuilderBarracks="ColumbiaBarracks"
+		SkirmishAI="true">
+		<Side>Columbia</Side>
+		<StrategicState id="ColumbiaZoningDefenseState" State="ColumbiaZoningDefense" Weight="85" />
+		<StrategicState id="ColumbiaPriusSwarmState" State="ColumbiaPriusSwarm" Weight="90" />
+		<StrategicState id="ColumbiaForeclosureStrikeState" State="ColumbiaForeclosureStrike" Weight="100" />
+		<BuildDelay MinDelay="1.0s" MaxDelay="2.5s" />
+	</AIPersonalityDefinition>
+</AssetDeclaration>

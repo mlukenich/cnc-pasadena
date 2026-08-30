@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaVehicleDually"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaDually"
+		ButtonImage="Button_PasadenaDually"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="700"
+		BuildTime="7"
+		CommandSet="PasadenaDuallyCommandSet"
+		WeaponCategory="GUN"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaLiftedTruckLocomotor" DisplayName="Name:PasadenaVehicleDually" Description="Desc:PasadenaVehicleDually">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1100.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaDuallyFiftyCal" />
+				<TurretSettings TurnRate="240" MinPhysicalPitch="-10d" MaxPhysicalPitch="30d">
+					<TurretPose X="0.0" Y="0.0" Z="8.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Behaviors>
+			<SpecialPower id="ModuleTag_RollingCoalSP" SpecialPowerTemplate="SpecialPower_PasadenaRollingCoal" Update="SpecialPowerUpdate_RollingCoal" />
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="16.0" MinorRadius="10.0" Height="12.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

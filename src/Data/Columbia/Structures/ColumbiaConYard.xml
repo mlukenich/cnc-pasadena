@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaConYard"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaConYard"
+		ButtonImage="Button_ColumbiaConYard"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="3000"
+		BuildTime="30"
+		EnergyProduction="10"
+		CommandSet="ColumbiaConYardCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS CONSTRUCTION_YARD MP_COUNT_FOR_VICTORY AUTO_RALLYPOINT"
+		RadarPriority="STRUCTURE"
+		PlacementViewAngle="315d" DisplayName="Name:ColumbiaConYard" Description="Desc:ColumbiaConYard">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="5500.0" />
+		</Body>
+		<Behaviors>
+			<ProductionUpdate id="ModuleTag_ProductionUpdate" GiveNoXP="true" />
+			<ConstructionYardUpdate id="ModuleTag_ConstructionYardUpdate" />
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="40.0" MinorRadius="40.0" Height="35.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaDefenseTurret"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaDefenseTurret"
+		ButtonImage="Button_ColumbiaDefenseTurret"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="800"
+		BuildTime="8"
+		EnergyProduction="-3"
+		WeaponCategory="LASER"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_BASE_DEFENSE ATTACK_NEEDS_LINE_OF_SIGHT CAN_ATTACK"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaDefenseTurret" Description="Desc:ColumbiaDefenseTurret">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="2400.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaTurretCitationLaser" />
+				<TurretSettings TurnRate="220" MinPhysicalPitch="-20d" MaxPhysicalPitch="45d">
+					<TurretPose X="0.0" Y="0.0" Z="15.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="CYLINDER" MajorRadius="18.0" Height="30.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

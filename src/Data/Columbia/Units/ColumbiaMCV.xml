@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaMCV"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_ColumbiaMCV"
+		ButtonImage="Button_ColumbiaMCV"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="3500"
+		BuildTime="35"
+		KindOf="SELECTABLE CAN_ATTACK CAN_CAST_REFLECTIONS VEHICLE HUGE_VEHICLE MCV EXPANSION_UNIT"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaPriusWhisperLocomotor" DisplayName="Name:ColumbiaMCV" Description="Desc:ColumbiaMCV">
+		<ArmorSet Armor="ColumbiaLithiumCompositeArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="5200.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="28.0" MinorRadius="18.0" Height="22.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

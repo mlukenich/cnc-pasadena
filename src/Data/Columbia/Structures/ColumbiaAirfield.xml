@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaAirfield"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaAirfield"
+		ButtonImage="Button_ColumbiaAirfield"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="1000"
+		BuildTime="10"
+		EnergyProduction="-5"
+		CommandSet="ColumbiaAirfieldCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS FS_FACTORY AUTO_RALLYPOINT"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaAirfield" Description="Desc:ColumbiaAirfield">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="2600.0" />
+		</Body>
+		<Behaviors>
+			<ProductionUpdate id="ModuleTag_ProductionUpdate" GiveNoXP="true" />
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="40.0" MinorRadius="40.0" Height="20.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

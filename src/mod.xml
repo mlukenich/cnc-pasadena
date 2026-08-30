@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+	<Tags/>
+	<Includes>
+		<Include type="reference" source="DATA:static.xml"/>
+		<Include type="reference" source="DATA:global.xml"/>
+		<Include type="all" source="ART:PV/PVDually_Model.w3x"/>
+		<Include type="all" source="ART:PV/PVDually_Portrait.xml"/>
+		<Include type="all" source="ART:CV/CVPrius_Model.w3x"/>
+		<Include type="all" source="ART:CV/CVPrius_Portrait.xml"/>
+
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIConstructionYard.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIPowerPlant.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIRefinery.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIBarracks.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIWarfactory.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIAirTower.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDISpaceCommandUplink.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIGolumCannon.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIAABattery.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIIonCannonControl.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIRifleSoldier.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIRifleSoldierSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIMissileSoldier.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIMissileSoldierSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIZoneTrooper.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIZoneTrooperSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDICommando.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIPitbull.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIPredator.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIJuggernaught.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIMammoth.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Units/GDIOrca.xml"/>
+
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODConstructionYard.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODPowerPlant.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODRefinery.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODHandOfNOD.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODTechAssemblyPlant.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODHangar.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODOperationsCenter.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODShredderTurretHub.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODRocketBunker.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Structures/NODTempleOfNOD.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODMilitant.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODMilitantSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODMilitantRocket.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODMilitantRocketSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODBlackHand.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODBlackHandSquad.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODCommando.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODScorpionBuggy.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODRaiderTank.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODFlameTank.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODAvatar.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODVenom.xml"/>
+	</Includes>
+</AssetDeclaration>

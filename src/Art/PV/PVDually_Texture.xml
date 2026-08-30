@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+  <Texture id="PVDuallyAtlas" File="PVDuallyAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+  <Texture id="PVDuallyNormal" File="PVDuallyNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+  <Texture id="PVDuallySpec" File="PVDuallySpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+  <Texture id="PVDuallyHouse" File="PVDuallyHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

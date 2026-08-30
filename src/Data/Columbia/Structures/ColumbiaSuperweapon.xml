@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseStructure.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaSuperweapon"
+		inheritFrom="BaseStructure"
+		SelectPortrait="Portrait_ColumbiaSuperweapon"
+		ButtonImage="Button_ColumbiaSuperweapon"
+		Side="Columbia"
+		EditorSorting="STRUCTURE"
+		BuildCost="5000"
+		BuildTime="50"
+		EnergyProduction="-15"
+		CommandSet="ColumbiaSuperweaponCommandSet"
+		KindOf="STRUCTURE SELECTABLE IMMOBILE CAN_CAST_REFLECTIONS SUPERWEAPON"
+		RadarPriority="STRUCTURE" DisplayName="Name:ColumbiaSuperweapon" Description="Desc:ColumbiaSuperweapon">
+		<ArmorSet Armor="ColumbiaHOAStructureArmor" DamageFX="StructureDamageFX" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="6200.0" />
+		</Body>
+		<Behaviors>
+			<SpecialPower id="ModuleTag_MandatoryForeclosureSP" SpecialPowerTemplate="SpecialPower_ColumbiaMandatoryForeclosure" Update="SpecialPowerUpdate_MandatoryForeclosure" />
+		</Behaviors>
+		<Geometry IsSmall="false">
+			<Shape Type="CYLINDER" MajorRadius="30.0" Height="60.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

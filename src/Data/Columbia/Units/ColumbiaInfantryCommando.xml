@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseInfantry.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaInfantryCommando"
+		inheritFrom="BaseInfantry"
+		SelectPortrait="Portrait_ColumbiaKaren"
+		ButtonImage="Button_ColumbiaKaren"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="1500"
+		BuildTime="15"
+		WeaponCategory="FORCE"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS INFANTRY UNIQUE_UNIT COMMANDO"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaInfantryOfficerLocomotor" DisplayName="Name:ColumbiaInfantryCommando" Description="Desc:ColumbiaInfantryCommando">
+		<ArmorSet Armor="ColumbiaSpandexInfantryArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="650.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaKarenMegaphoneScream" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="true">
+			<Shape Type="CYLINDER" MajorRadius="7.0" Height="15.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

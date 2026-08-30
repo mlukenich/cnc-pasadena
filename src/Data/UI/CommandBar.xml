@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+	<CommandBarTemplate id="PasadenaCommandBar">
+		<Color R="230" G="75" B="25" />
+		<BackgroundTexture>Pasadena_HUD_Background</BackgroundTexture>
+		<ButtonSkinNormal>Pasadena_Button_Normal</ButtonSkinNormal>
+		<ButtonSkinPressed>Pasadena_Button_Pressed</ButtonSkinPressed>
+	</CommandBarTemplate>
+
+	<CommandBarTemplate id="ColumbiaCommandBar">
+		<Color R="50" G="180" B="120" />
+		<BackgroundTexture>Columbia_HUD_Background</BackgroundTexture>
+		<ButtonSkinNormal>Columbia_Button_Normal</ButtonSkinNormal>
+		<ButtonSkinPressed>Columbia_Button_Pressed</ButtonSkinPressed>
+	</CommandBarTemplate>
+</AssetDeclaration>

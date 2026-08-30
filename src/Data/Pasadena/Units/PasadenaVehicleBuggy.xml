@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaVehicleBuggy"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaBuggy"
+		ButtonImage="Button_PasadenaBuggy"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="500"
+		BuildTime="5"
+		WeaponCategory="ROCKET"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaLiftedTruckLocomotor" DisplayName="Name:PasadenaVehicleBuggy" Description="Desc:PasadenaVehicleBuggy">
+		<ArmorSet Armor="PasadenaFiberglassHullArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="650.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="PasadenaBuggyRockets" />
+				<TurretSettings TurnRate="300" MinPhysicalPitch="0d" MaxPhysicalPitch="40d">
+					<TurretPose X="0.0" Y="0.0" Z="6.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="true">
+			<Shape Type="BOX" MajorRadius="12.0" MinorRadius="8.0" Height="8.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

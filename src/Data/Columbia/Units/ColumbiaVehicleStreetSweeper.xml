@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaVehicleStreetSweeper"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_ColumbiaSweeper"
+		ButtonImage="Button_ColumbiaSweeper"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="900"
+		BuildTime="9"
+		WeaponCategory="GUN"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaSweeperHeavyLocomotor" DisplayName="Name:ColumbiaVehicleStreetSweeper" Description="Desc:ColumbiaVehicleStreetSweeper">
+		<ArmorSet Armor="ColumbiaLithiumCompositeArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1600.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaSweeperRotaryBlade" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="18.0" MinorRadius="12.0" Height="14.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

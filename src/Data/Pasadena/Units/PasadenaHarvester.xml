@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="PasadenaHarvester"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_PasadenaHarvester"
+		ButtonImage="Button_PasadenaHarvester"
+		Side="Pasadena"
+		EditorSorting="UNIT"
+		BuildCost="1400"
+		BuildTime="14"
+		KindOf="SELECTABLE CAN_CAST_REFLECTIONS VEHICLE HARVESTER"
+		RadarPriority="UNIT"
+		LocomotorSet="PasadenaLiftedTruckLocomotor" DisplayName="Name:PasadenaHarvester" Description="Desc:PasadenaHarvester">
+		<ArmorSet Armor="PasadenaRustedSteelArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="3200.0" />
+		</Body>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="24.0" MinorRadius="14.0" Height="18.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

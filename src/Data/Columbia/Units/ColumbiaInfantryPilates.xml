@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseInfantry.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaInfantryPilates"
+		inheritFrom="BaseInfantry"
+		SelectPortrait="Portrait_ColumbiaPilates"
+		ButtonImage="Button_ColumbiaPilates"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="550"
+		BuildTime="5"
+		WeaponCategory="GUN"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS INFANTRY STEALTH_GARRISON"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaPelotonSprintLocomotor" DisplayName="Name:ColumbiaInfantryPilates" Description="Desc:ColumbiaInfantryPilates">
+		<ArmorSet Armor="ColumbiaSpandexInfantryArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="200.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotHardpoint ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaPilatesRingDisc" />
+			</WeaponSlotHardpoint>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="true">
+			<Shape Type="CYLINDER" MajorRadius="6.0" Height="14.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

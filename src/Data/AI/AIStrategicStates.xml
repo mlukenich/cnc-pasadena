@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+	<Includes/>
+	<AIStrategicStateDefinition id="PasadenaEarlyRush">
+		<TargetHeuristic TargetType="EnemyStructure" Priority="100" />
+		<RecruitUnit Unit="PasadenaInfantryMilitia" Count="8" />
+		<RecruitUnit Unit="PasadenaVehicleBuggy" Count="4" />
+	</AIStrategicStateDefinition>
+
+	<AIStrategicStateDefinition id="PasadenaDieselConvoy">
+		<TargetHeuristic TargetType="EnemyVehicle" Priority="90" />
+		<RecruitUnit Unit="PasadenaVehicleDually" Count="6" />
+		<RecruitUnit Unit="PasadenaVehiclePontoon" Count="3" />
+		<RecruitUnit Unit="PasadenaVehicleMonster" Count="2" />
+	</AIStrategicStateDefinition>
+
+	<AIStrategicStateDefinition id="PasadenaOldBayBombard">
+		<TargetHeuristic TargetType="EnemyConYard" Priority="120" />
+		<RecruitUnit Unit="PasadenaVehiclePontoon" Count="5" />
+		<RecruitUnit Unit="PasadenaAircraftSeaplane" Count="4" />
+	</AIStrategicStateDefinition>
+
+	<AIStrategicStateDefinition id="ColumbiaZoningDefense">
+		<TargetHeuristic TargetType="FriendlyStructure" Priority="100" />
+		<RecruitUnit Unit="ColumbiaDefenseTurret" Count="4" />
+		<RecruitUnit Unit="ColumbiaAA" Count="3" />
+		<RecruitUnit Unit="ColumbiaInfantryOfficer" Count="4" />
+	</AIStrategicStateDefinition>
+
+	<AIStrategicStateDefinition id="ColumbiaPriusSwarm">
+		<TargetHeuristic TargetType="EnemyHarvester" Priority="110" />
+		<RecruitUnit Unit="ColumbiaVehiclePrius" Count="8" />
+		<RecruitUnit Unit="ColumbiaVehicleRoundabout" Count="2" />
+		<RecruitUnit Unit="ColumbiaInfantryCyclist" Count="6" />
+	</AIStrategicStateDefinition>
+
+	<AIStrategicStateDefinition id="ColumbiaForeclosureStrike">
+		<TargetHeuristic TargetType="EnemySuperweapon" Priority="130" />
+		<RecruitUnit Unit="ColumbiaVehicleDroneCarrier" Count="4" />
+		<RecruitUnit Unit="ColumbiaAircraftDrone" Count="6" />
+		<RecruitUnit Unit="ColumbiaInfantryPilates" Count="4" />
+	</AIStrategicStateDefinition>
+</AssetDeclaration>

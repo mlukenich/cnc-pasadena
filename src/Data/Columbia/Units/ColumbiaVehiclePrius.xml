@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaVehiclePrius"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_ColumbiaPrius"
+		ButtonImage="Button_ColumbiaPrius"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="800"
+		BuildTime="8"
+		WeaponCategory="LASER"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaPriusWhisperLocomotor" DisplayName="Name:ColumbiaVehiclePrius" Description="Desc:ColumbiaVehiclePrius">
+		<ArmorSet Armor="ColumbiaLithiumCompositeArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="1000.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaPriusPulseLaser" />
+				<TurretSettings TurnRate="260" MinPhysicalPitch="-10d" MaxPhysicalPitch="30d">
+					<TurretPose X="0.0" Y="0.0" Z="8.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="15.0" MinorRadius="9.0" Height="10.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>

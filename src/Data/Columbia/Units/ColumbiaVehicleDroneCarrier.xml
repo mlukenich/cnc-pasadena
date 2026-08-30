@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Tags/>
+		<Includes>
+		<Include type="instance" source="DATA:BaseObjects/BaseVehicle.xml" />
+	</Includes>
+	<GameObject
+		id="ColumbiaVehicleDroneCarrier"
+		inheritFrom="BaseVehicle"
+		SelectPortrait="Portrait_ColumbiaDroneCarrier"
+		ButtonImage="Button_ColumbiaDroneCarrier"
+		Side="Columbia"
+		EditorSorting="UNIT"
+		BuildCost="2000"
+		BuildTime="20"
+		WeaponCategory="GRENADE"
+		KindOf="SELECTABLE CAN_ATTACK ATTACK_NEEDS_LINE_OF_SIGHT CAN_CAST_REFLECTIONS VEHICLE HUGE_VEHICLE"
+		RadarPriority="UNIT"
+		LocomotorSet="ColumbiaPriusWhisperLocomotor" DisplayName="Name:ColumbiaVehicleDroneCarrier" Description="Desc:ColumbiaVehicleDroneCarrier">
+		<ArmorSet Armor="ColumbiaLithiumCompositeArmor" />
+		<Body>
+			<ActiveBody id="ModuleTag_Body" MaxHealth="3200.0" />
+		</Body>
+		<WeaponSetUpdate id="ModuleTag_WeaponSetUpdate">
+			<WeaponSlotTurret ID="1">
+				<Weapon Ordering="PRIMARY_WEAPON" Template="ColumbiaDroneAvocadoBomb" />
+				<TurretSettings TurnRate="180" MinPhysicalPitch="10d" MaxPhysicalPitch="60d">
+					<TurretPose X="0.0" Y="0.0" Z="12.0" />
+				</TurretSettings>
+			</WeaponSlotTurret>
+		</WeaponSetUpdate>
+		<Geometry IsSmall="false">
+			<Shape Type="BOX" MajorRadius="25.0" MinorRadius="16.0" Height="16.0" />
+		</Geometry>
+	</GameObject>
+</AssetDeclaration>
