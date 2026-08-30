@@ -4,6 +4,8 @@
 
 ## Custom-model guides
 
+- [Prius art revision 2](src/Art/CV/README.md): repaired body/wheel visibility, revised cabin and wheel openings, texture mapping, previews and verification. Available through `launch_prius_preview.bat`; the regular package is unchanged.
+
 - [Agent playbook](MODEL_CREATION_AGENT_PLAYBOOK.md): a step-by-step, lower-cost workflow for creating and refining custom in-game vehicles, with source locations, tested contracts, commands, troubleshooting, and handoff checks.
 - [Technical learning guide](HOW_THE_CUSTOM_UNIT_PIPELINE_WORKS.md): how this project's geometry, textures, shaders, skeleton, collision, compiler, and launcher work together; the defects we diagnosed and the work still outstanding.
 

@@ -43,6 +43,8 @@
 	<String id="Desc:PasadenaInfantryCommando">Legendary waterman hero. Dual-wields sawed-off shotguns and hurls flaming bottles of Natty Boh molotovs.</String>
 	<String id="Name:PasadenaVehicleDually">Lifted F-250 'Rolling Coal'</String>
 	<String id="Desc:PasadenaVehicleDually">Twin .50 caliber heavy gun truck on a 10-inch lift. Ability: 'Rolling Coal' covers the area in dense black smog.</String>
+	<String id="Name:PasadenaVehicleMudTank">Pasadena Monster Mud Tank</String>
+	<String id="Desc:PasadenaVehicleMudTank">Lifted Chevy Squarebody on 54-inch swamper tractor tires with exposed supercharged big-block V8 and pneumatic Potato &amp; Old Bay Cannon turret.</String>
 	<String id="Name:PasadenaVehicleBuggy">Chesapeake Mud Buggy</String>
 	<String id="Desc:PasadenaVehicleBuggy">Lightweight tubular rollcage buggy armed with twin bottle rockets. Fast harasser.</String>
 	<String id="Name:PasadenaVehiclePontoon">Pontoon Battle Barge</String>

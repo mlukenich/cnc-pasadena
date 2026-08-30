@@ -23,10 +23,11 @@ function savePng(file,width,height,rgb) {
   fs.writeFileSync(file,Buffer.concat([Buffer.from('89504e470d0a1a0a','hex'),pngChunk('IHDR',header),pngChunk('IDAT',zlib.deflateSync(rows)),pngChunk('IEND',Buffer.alloc(0))]));
 }
 module.exports=function render(mesh,artDir,options={}) {
-  const atlas=fs.readFileSync(path.join(artDir,'PVDuallyAtlas.tga'));
-  const normalMap=fs.readFileSync(path.join(artDir,'PVDuallyNormal.tga'));
-  const specMap=fs.readFileSync(path.join(artDir,'PVDuallySpec.tga'));
-  const houseMap=fs.readFileSync(path.join(artDir,'PVDuallyHouse.tga'));
+  const prefix=options.texturePrefix||'PVDually';
+  const atlas=fs.readFileSync(path.join(artDir,prefix+'Atlas.tga'));
+  const normalMap=fs.readFileSync(path.join(artDir,prefix+'Normal.tga'));
+  const specMap=fs.readFileSync(path.join(artDir,prefix+'Spec.tga'));
+  const houseMap=fs.readFileSync(path.join(artDir,prefix+'House.tga'));
   const {tangentFrame,shaderResponse}=require('./dually_surface_pipeline');
   const {tangents,binormals}=tangentFrame(mesh);
   const tw=atlas.readUInt16LE(12),th=atlas.readUInt16LE(14);
@@ -90,6 +91,6 @@ module.exports=function render(mesh,artDir,options={}) {
       let sum=0;for(let yy=0;yy<size;yy++)for(let xx=0;xx<size;xx++)sum+=rgb[((y*size+yy)*width+x*size+xx)*3+c];
       final[(y*width/size+x)*3+c]=Math.round(sum/(size*size));
     }
-    const file=path.join(outDir,`dually-v3-${name}.png`);savePng(file,width/size,height/size,final);console.log('Rendered '+file);
+    const file=path.join(outDir,`${options.namePrefix||'dually-v3'}-${name}.png`);savePng(file,width/size,height/size,final);console.log('Rendered '+file);
   }
 };

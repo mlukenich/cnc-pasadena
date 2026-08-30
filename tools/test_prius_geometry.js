@@ -61,6 +61,35 @@ function worldPivot(index) {
   return p[1] < 0 ? local : local.map((v, i) => v + worldPivot(p[1])[i]);
 }
 
+// External orientation, independent of the authored normals. The previous
+// shell passed normal-vs-triangle tests while both faced into the vehicle.
+let shellSamples = 0, tireSamples = 0;
+mesh.triangles.forEach((t,i) => {
+  const g = mesh.groups[i];
+  const [a,b,c] = t.map(v=>mesh.vertices[v]);
+  const n = cross(sub(b,a),sub(c,a));
+  const center = a.map((v,k)=>(v+b[k]+c[k])/3);
+  if (/^(hood-top|roof-surface|windshield|rear-glass)$/.test(g)) {
+    assert(n[2]>0, `Exterior shell faces inward: ${g} triangle ${i}`);
+    shellSamples++;
+  }
+  if(g.endsWith('tire-outer')) {
+    const cx=(g.includes('front')?16:-16)*mesh.artScale;
+    const cz=5.2*mesh.artScale;
+    assert(n[0]*(center[0]-cx)+n[2]*(center[2]-cz)>0, `Tire tread faces inward: ${g}`);
+    tireSamples++;
+  }
+  if(g.endsWith('tire-sidewall')) {
+    assert(n[1]*(g.includes('left')?1:-1)>0, `Sidewall faces inward: ${g}`);
+  }
+});
+assert(shellSamples>20 && tireSamples>200, 'Exterior checks did not exercise shell and wheels');
+
+// Each side must contain a real window, not a roof texture down the flank.
+for(const side of [-1,1]) {
+  assert(mesh.triangles.some((t,i)=>mesh.groups[i]==='side-glass' && t.every(v=>mesh.vertices[v][1]*side>0)), 'Missing cabin side glass');
+}
+
 assert.equal(mesh.artScale, 0.88, 'Prius art scale mismatch');
 
 // Wheel offset / pivot alignment

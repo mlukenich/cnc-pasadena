@@ -21,8 +21,8 @@ function smoothNormals({ vertices, normals, triangles, groups }) {
 
   triangles.forEach((t, i) => {
     const g = groups[i];
-    const shell = /^(body-shell|hood-top|roof-surface|windshield|rear-glass|side-glass|door-badge-panel)$/.test(g);
-    const smoothGroup = shell || /^(wheel-.*|turret-dome|laser-barrel.*|laser-heatsink.*|laser-focus.*|emp-dish.*|emp-emitter.*)$/.test(g);
+    const shell = /^(cab-.*|hood-.*|fender-.*|roof-.*|door-.*|bed-.*|tailgate-.*)$/.test(g);
+    const smoothGroup = shell || /^(wheel-.*|barrel-.*|muzzle-.*|turret-dome.*|airtank-.*)$/.test(g);
     if (!smoothGroup) return;
 
     for (let corner = 0; corner < 3; corner++) {
@@ -86,87 +86,81 @@ function tangentFrame(mesh) {
   return { tangents, binormals };
 }
 
-function writeTga(file, size, rgba) {
+function writeTga(filepath, size, rgba) {
   const header = Buffer.alloc(18);
   header[2] = 2; // uncompressed true-color
   header.writeUInt16LE(size, 12);
   header.writeUInt16LE(size, 14);
-  header[16] = 32; // 32 bits per pixel
+  header[16] = 32; // 32 bpp
   header[17] = 0x28; // top-origin, 8-bit alpha
 
-  const pixels = Buffer.alloc(rgba.length);
-  for (let i = 0; i < rgba.length; i += 4) {
-    pixels[i] = rgba[i + 2];     // B
-    pixels[i + 1] = rgba[i + 1]; // G
-    pixels[i + 2] = rgba[i];     // R
-    pixels[i + 3] = rgba[i + 3]; // A
+  const out = Buffer.alloc(size * size * 4);
+  for (let i = 0; i < size * size; i++) {
+    out[i * 4 + 0] = rgba[i * 4 + 2]; // B
+    out[i * 4 + 1] = rgba[i * 4 + 1]; // G
+    out[i * 4 + 2] = rgba[i * 4 + 0]; // R
+    out[i * 4 + 3] = rgba[i * 4 + 3]; // A
   }
-  fs.writeFileSync(file, Buffer.concat([header, pixels]));
+
+  fs.writeFileSync(filepath, Buffer.concat([header, out]));
 }
 
-function readTga(file) {
-  if (!fs.existsSync(file)) return null;
-  const buf = fs.readFileSync(file);
-  const width = buf.readUInt16LE(12);
-  const height = buf.readUInt16LE(14);
-  const bpp = buf[16];
-  const raw = buf.slice(18);
-  // Convert BGRA to RGBA buffer
+function readTga(filepath) {
+  if (!fs.existsSync(filepath)) return null;
+  const data = fs.readFileSync(filepath);
+  const width = data.readUInt16LE(12);
+  const height = data.readUInt16LE(14);
+  const bpp = data[16];
+  if (bpp !== 32) return null;
+
   const rgba = Buffer.alloc(width * height * 4);
-  for (let i = 0; i < rgba.length; i += 4) {
-    rgba[i] = raw[i + 2];     // R
-    rgba[i + 1] = raw[i + 1]; // G
-    rgba[i + 2] = raw[i];     // B
-    rgba[i + 3] = bpp === 32 ? raw[i + 3] : 255;
+  for (let i = 0; i < width * height; i++) {
+    rgba[i * 4 + 0] = data[18 + i * 4 + 2]; // R
+    rgba[i * 4 + 1] = data[18 + i * 4 + 1]; // G
+    rgba[i * 4 + 2] = data[18 + i * 4 + 0]; // B
+    rgba[i * 4 + 3] = data[18 + i * 4 + 3]; // A
   }
   return { width, height, rgba };
 }
 
 function heightAt(cell, u, v) {
-  const edge = Math.min(u, v, 1 - u, 1 - v);
   let h = 0.5;
-
-  // Seams & bevels
-  if (cell === 8) { // Hood
-    h += 0.05 * Math.sin(u * Math.PI * 4) * Math.cos(v * Math.PI * 2);
-  }
-  if (cell === 9) { // Door
-    h -= 0.08 * Math.exp(-Math.pow((edge - 0.02) / 0.015, 2));
-    if (u > 0.65 && u < 0.85 && v > 0.18 && v < 0.28) h -= 0.12; // handle recess
-  }
-  if (cell === 10) { // Solar Roof
-    const gx = Math.abs(Math.sin(u * Math.PI * 16));
-    const gy = Math.abs(Math.sin(v * Math.PI * 24));
-    if (gx > 0.9 || gy > 0.9) h += 0.04;
-  }
-  if (cell === 14) { // Tire Tread
-    h += 0.08 * Math.cos(u * Math.PI * 18) * Math.sin(v * Math.PI * 6);
-  }
-  if (cell === 15) { // Laser Face
-    const rL = Math.hypot(u - 0.3, v - 0.5);
-    const rR = Math.hypot(u - 0.7, v - 0.5);
-    if (rL < 0.15 || rR < 0.15) h -= 0.2;
+  if (cell === 5) {
+    // Diamond plate pattern
+    const su = (u * 16) % 1.0;
+    const sv = (v * 16) % 1.0;
+    const d = Math.hypot(su - 0.5, sv - 0.5);
+    h = d < 0.35 ? 0.75 : 0.45;
+  } else if (cell === 14) {
+    // Chevron tractor tire tread pattern
+    const chevron = Math.abs((u * 8) % 1.0 - 0.5) * 2.0;
+    const tv = (v * 12 + chevron * 0.4) % 1.0;
+    h = tv < 0.45 ? 0.9 : 0.2;
+  } else if (cell === 15) {
+    // Ribbed cannon muzzle brake
+    const ring = Math.sin(v * Math.PI * 16);
+    h = ring > 0 ? 0.75 : 0.35;
   }
   return h;
 }
 
 const materialResponses = [
-  { name: 'pearl white paint', specular: 14, reflection: 0 },
-  { name: 'columbia cyan', specular: 14, reflection: 0 },
-  { name: 'eco tire rubber', specular: 2, reflection: 0 },
-  { name: 'aero alloy/chrome', specular: 95, reflection: 20 },
-  { name: 'solar blue glass', specular: 85, reflection: 35 },
-  { name: 'carbon fiber', specular: 4, reflection: 0 },
-  { name: 'strobe optics', specular: 90, reflection: 15 },
-  { name: 'gunmetal alloy', specular: 50, reflection: 4 },
+  { name: 'pasadena burgundy paint', specular: 14, reflection: 0 },
+  { name: 'matte black fender', specular: 6, reflection: 0 },
+  { name: 'muddy tractor tire rubber', specular: 2, reflection: 0 },
+  { name: 'rusty steel wheel rim', specular: 45, reflection: 4 },
+  { name: 'cast-iron turret shell', specular: 18, reflection: 0 },
+  { name: 'diamond plate steel', specular: 60, reflection: 8 },
+  { name: 'tinted glass', specular: 80, reflection: 25 },
+  { name: 'supercharger chrome', specular: 110, reflection: 20 },
   { name: 'hood panel', specular: 14, reflection: 0 },
   { name: 'door panel', specular: 14, reflection: 0 },
-  { name: 'solar roof matrix', specular: 70, reflection: 25 },
-  { name: 'rear hatch/spoiler', specular: 14, reflection: 0 },
-  { name: 'front led fascia', specular: 50, reflection: 8 },
-  { name: 'team badge strip', specular: 14, reflection: 0 },
-  { name: 'tire tread', specular: 2, reflection: 0 },
-  { name: 'laser emitter face', specular: 65, reflection: 10 },
+  { name: 'cab roof panel', specular: 14, reflection: 0 },
+  { name: 'tailgate panel', specular: 14, reflection: 0 },
+  { name: 'front chevy grille', specular: 50, reflection: 8 },
+  { name: 'old bay crate decal', specular: 10, reflection: 0 },
+  { name: 'tractor tire tread', specular: 2, reflection: 0 },
+  { name: 'cannon muzzle faceplate', specular: 35, reflection: 2 },
 ];
 
 function writeMaterialMaps(outputDir) {
@@ -179,15 +173,15 @@ function writeMaterialMaps(outputDir) {
   const houseRgba = Buffer.alloc(size * size * 4);
 
   // Check if high-resolution source atlas exists
-  const sourceAtlasPath = path.join(outputDir, 'Textures', 'prius-panels-v1.tga');
+  const sourceAtlasPath = path.join(outputDir, 'Textures', 'mudtank-panels-v1.tga');
   const sourceAtlas = readTga(sourceAtlasPath);
 
   // Fallback palette
   const colors = [
-    [236, 240, 245], [0, 168, 204], [25, 26, 28], [220, 225, 230],
-    [16, 32, 54],    [32, 34, 36],  [255, 60, 40], [48, 50, 56],
-    [232, 236, 242], [235, 239, 244], [18, 38, 62], [232, 236, 242],
-    [30, 32, 36],    [220, 225, 230], [22, 23, 25],  [40, 42, 48],
+    [136, 32, 42],  [30, 30, 32],   [24, 24, 26],   [90, 85, 80],
+    [55, 52, 50],   [160, 165, 170], [30, 42, 50],  [210, 215, 220],
+    [130, 30, 40],  [132, 31, 41],  [128, 28, 38],  [125, 26, 36],
+    [40, 40, 44],   [220, 180, 40], [20, 20, 22],   [70, 68, 65],
   ];
 
   for (let y = 0; y < size; y++) {
@@ -211,12 +205,10 @@ function writeMaterialMaps(outputDir) {
 
       const mat = materialResponses[cell];
 
-      // Recolor mask: Team color on Cell 1 (cyan trim), Cell 9 (door cyan stripe), and Cell 13 (badge)
+      // Recolor mask: Team color on Cell 9 (Maryland flag badge), Cell 13 (Old Bay box trim)
       let teamAlpha = 0;
-      if (cell === 1 || cell === 13) {
-        teamAlpha = 255;
-      } else if (cell === 9 && localY > 0.38 && localY < 0.62) {
-        teamAlpha = 255; // horizontal cyan stripe on door
+      if (cell === 9 && localX > 0.35 && localX < 0.65 && localY > 0.55 && localY < 0.85) {
+        teamAlpha = 255; // badge area
       }
 
       // 1. Diffuse (RGBA)
@@ -242,7 +234,7 @@ function writeMaterialMaps(outputDir) {
       // 3. SpecMap: R = Specular Highlight, G = Reflection, B = Glow
       specRgba[offset] = mat.specular;
       specRgba[offset + 1] = mat.reflection;
-      specRgba[offset + 2] = (cell === 6 || (cell === 12 && localY > 0.35 && localY < 0.45)) ? 180 : 0;
+      specRgba[offset + 2] = 0;
       specRgba[offset + 3] = 255;
 
       // 4. RecolorTexture: Grayscale luminance in RGB, team color mask in Alpha
@@ -254,18 +246,10 @@ function writeMaterialMaps(outputDir) {
     }
   }
 
-  writeTga(path.join(outputDir, 'CVPriusAtlas.tga'), size, diffuseRgba);
-  writeTga(path.join(outputDir, 'CVPriusNormal.tga'), size, normalRgba);
-  writeTga(path.join(outputDir, 'CVPriusSpec.tga'), size, specRgba);
-  writeTga(path.join(outputDir, 'CVPriusHouse.tga'), size, houseRgba);
-}
-
-function writePortraitTga(outputDir) {
-  const targetPath = path.join(outputDir, 'CVPriusPortrait.tga');
-  // If the converted high-res portrait already exists, preserve it!
-  if (fs.existsSync(targetPath) && fs.statSync(targetPath).size > 1000) {
-    return;
-  }
+  writeTga(path.join(outputDir, 'PVMudTankAtlas.tga'), size, diffuseRgba);
+  writeTga(path.join(outputDir, 'PVMudTankNormal.tga'), size, normalRgba);
+  writeTga(path.join(outputDir, 'PVMudTankSpec.tga'), size, specRgba);
+  writeTga(path.join(outputDir, 'PVMudTankHouse.tga'), size, houseRgba);
 }
 
 module.exports = {
@@ -276,5 +260,4 @@ module.exports = {
   heightAt,
   materialResponses,
   writeMaterialMaps,
-  writePortraitTga,
 };

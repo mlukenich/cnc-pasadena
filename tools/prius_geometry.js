@@ -82,6 +82,12 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
   }
 
   function lathe(name, cx, cy, cz, profile, mat, axis = 'y', segments = 18) {
+    // Choose winding from the profile's outward meridian normal. Axis-Y
+    // uses the opposite angular handedness to X/Z; mirrored wheels reverse
+    // the axial traversal too. Matching stored normals to inward triangles
+    // does not make those triangles externally visible.
+    const direction = Math.sign(profile[profile.length - 1][0] - profile[0][0]) || Math.sign(cy) || 1;
+    const oriented = points => direction * (axis === 'y' ? 1 : -1) < 0 ? [...points].reverse() : points;
     const point = (a, r, t) => axis === 'y'
       ? [cx + r * Math.cos(t), cy + a, cz + r * Math.sin(t)]
       : axis === 'z'
@@ -94,11 +100,13 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
         const t = i * 2 * Math.PI / segments, u = (i + 1) * 2 * Math.PI / segments;
         const p0 = point(a, r, t), p1 = point(b, s, t), p2 = point(b, s, u), p3 = point(a, r, u);
         if (s <= 1e-5) {
-          triangle([p0, p1, p3], normal([p0, p1, p3]), mat, name);
+          const p = oriented([p0, p1, p3]);
+          triangle(p, normal(p), mat, name);
         } else if (r <= 1e-5) {
-          triangle([p0, p2, p3], normal([p0, p2, p3]), mat, name);
+          const p = oriented([p0, p2, p3]);
+          triangle(p, normal(p), mat, name);
         } else {
-          quad(name, [p0, p1, p2, p3], mat);
+          quad(name, oriented([p0, p1, p2, p3]), mat);
         }
       }
     }
@@ -221,10 +229,43 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
     }
   ];
 
+  // Beltline, side glass and roof rails are separate strips. A roof texture
+  // wrapped down the entire flank obscures the hatchback silhouette.
+  for (const k of [5,6,7,8]) {
+    const cs = crossSections[k];
+    cs.points[2] = [8.0, cs.points[4][1] - 0.45];
+    cs.points[3] = [6.9, cs.points[4][1] - 0.12];
+    cs.points[5] = [-6.9, cs.points[4][1] - 0.12];
+    cs.points[6] = [-8.0, cs.points[4][1] - 0.45];
+  }
+
+  // Resample around each wheel to cut actual openings in the shell. Liners
+  // alone cannot create a hole in a solid fender. Keep the original wheel rig.
+  const stationXs = [...new Set([...crossSections.map(s=>s.x), ...[-16,16].flatMap(cx=>
+    Array.from({length:13},(_,i)=>cx+5.5*Math.cos(i*Math.PI/12)))])].sort((a,b)=>b-a);
+  const stations = stationXs.map(x => {
+    let k = crossSections.findIndex((s,i)=>i<crossSections.length-1 && x<=s.x && x>=crossSections[i+1].x);
+    if(k<0) k=crossSections.length-2;
+    const a=crossSections[k], b=crossSections[k+1], t=(a.x-x)/(a.x-b.x);
+    const points=a.points.map((p,i)=>p.map((v,j)=>v+(b.points[i][j]-v)*t));
+    for(const cx of [-16,16]) {
+      const dx=x-cx;
+      if(Math.abs(dx)<=5.5) {
+        const z=5.2+Math.sqrt(Math.max(0,5.5**2-dx**2));
+        for(const i of [0,8]) { points[i][1]=Math.max(points[i][1],z); points[i][0]=Math.sign(points[i][0])*11.0; }
+        for(const i of [1,7]) points[i][1]=Math.max(points[i][1],z+0.55);
+        for(const i of [2,6]) points[i][1]=Math.max(points[i][1],z+0.7);
+      }
+    }
+    return {x,points};
+  });
+
   // Generate the smooth lofted surface across adjacent cross-sections
-  for (let k = 0; k < crossSections.length - 1; k++) {
-    const csA = crossSections[k];
-    const csB = crossSections[k + 1];
+  for (let station = 0; station < stations.length - 1; station++) {
+    const csA = stations[station];
+    const csB = stations[station + 1];
+    const midX = (csA.x + csB.x)/2;
+    const k = crossSections.findIndex((s,i)=>i<crossSections.length-1 && midX<=s.x && midX>=crossSections[i+1].x);
 
     for (let i = 0; i < 8; i++) {
       // 4 points on the quad:
@@ -238,26 +279,32 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
       const p3 = [csB.x, csB.points[i][0], csB.points[i][1]];
 
       // Material and group assignment per region:
-      let mat = csA.mat;
-      let group = csA.group;
+      let mat = 'pearl';
+      let group = 'body-shell';
+
+      if(i>=2 && i<=5 && k>=2 && k<=3) { mat='hoodPanel'; group='hood-top'; }
+      if(i>=2 && i<=5 && k===4) { mat='solarGlass'; group='windshield'; }
+      if(i>=3 && i<=4 && k>=5 && k<=7) { mat='solarRoof'; group='roof-surface'; }
+      if((i===1 || i===6) && k>=5 && k<=7) { mat='solarGlass'; group='side-glass'; }
+      if(i>=2 && i<=5 && k===8) { mat='solarGlass'; group='rear-glass'; }
 
       // Lower side panels (i=0 or i=7) use door panel texture
-      if ((i === 0 || i === 7) && k >= 3 && k <= 8) {
+      if ((i === 0 || i === 7) && csA.x <= 10.5 && csB.x >= -10.5) {
         group = 'door-badge-panel';
         mat = 'doorPanel';
       }
 
-      quad(group, [p0, p1, p2, p3], mat);
+      quad(group, [p3, p2, p1, p0], mat);
     }
   }
 
   // Nose cap (front bumper center closeout)
   const noseRing = crossSections[0].points.map(pt => [crossSections[0].x, pt[0], pt[1]]);
-  cap('front-bumper-cap', noseRing, 'pearl', [1, 0, 0]);
+  cap('front-bumper-cap', noseRing, 'frontFascia', [1, 0, 0]);
 
   // Tailgate cap (rear bumper center closeout)
   const tailRing = [...crossSections[crossSections.length - 1].points.map(pt => [crossSections[crossSections.length - 1].x, pt[0], pt[1]])].reverse();
-  cap('rear-bumper-cap', tailRing, 'pearl', [-1, 0, 0]);
+  cap('rear-bumper-cap', tailRing, 'tailPanel', [-1, 0, 0]);
 
   // Underbody flat floor pan
   bevel('underbody-pan', 0, 0, 4.4, 46, 17.5, 1.0, 'carbon', 0.3);
@@ -266,6 +313,12 @@ module.exports = function buildPrius({ addBox: box, addCylinder: cylinder, addFa
   // 2. INNER WHEEL ARCH LINERS (DARK CAVITY BEHIND WHEELS)
   // =========================================================================
   for (const side of [-1, 1]) {
+    plate('headlamp-housing', [[23.9,side*4.9,8.8],[21.0,side*8.9,10.2],[21.9,side*9.3,9.65],[24.0,side*6.2,8.5]], 0.12, 'gunmetal');
+    beam('headlamp-led', [23.75,side*5.2,9.12], [21.35,side*8.75,10.42], 0.17, 'pearl');
+    // Slim pillars and door shutlines give the cabin a readable scale.
+    beam('b-pillar', [-3.8, side*10.45, 9.8], [-3.8, side*8.02, 15.85], 0.21, 'carbon');
+    beam('window-sill', [-9, side*10.46, 9.8], [6, side*10.46, 9.6], 0.13, 'chrome');
+    beam('door-seam', [-3.8, side*9.84, 5.35], [-3.8, side*10.45, 9.7], 0.065, 'gunmetal', 6);
     const ySign = side;
     const yInner = ySign * 8.0;
     const yOuter = ySign * 10.5;

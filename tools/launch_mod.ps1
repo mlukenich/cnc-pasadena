@@ -1,6 +1,7 @@
 param(
     [switch]$CheckOnly,
-    [switch]$ArtPreview
+    [switch]$ArtPreview,
+    [switch]$PriusPreview
 )
 
 $ErrorActionPreference = 'Stop'
@@ -18,12 +19,14 @@ $builtModArchive = Join-Path $workspaceDir ('build\' + $runtimeArchiveName)
 if ((Test-Path -LiteralPath $builtModConfig -PathType Leaf) -and (Test-Path -LiteralPath $builtModArchive -PathType Leaf)) {
     $modConfig = $builtModConfig
 }
-if ($ArtPreview) {
-    $previewDir = Join-Path $workspaceDir 'build\art-v3'
+if ($ArtPreview -and $PriusPreview) { throw 'Select only one preview package.' }
+if ($ArtPreview -or $PriusPreview) {
+    $previewFolder = if ($PriusPreview) { 'build\prius-v2' } else { 'build\art-v3' }
+    $previewDir = Join-Path $workspaceDir $previewFolder
     $modConfig = Join-Path $previewDir $runtimeConfigName
     $previewArchive = Join-Path $previewDir $runtimeArchiveName
-    if (-not (Test-Path -LiteralPath $previewArchive -PathType Leaf)) { throw 'The art-preview build is missing. Rebuild with -OutputDirectory build/art-v3 first.' }
-    Write-Host '[INFO] Art pass 3 preview: the regular launcher and previous package remain unchanged.'
+    if (-not (Test-Path -LiteralPath $previewArchive -PathType Leaf)) { throw "The preview build is missing. Rebuild with -OutputDirectory $previewFolder first." }
+    Write-Host "[INFO] Preview: $previewFolder. The regular package remains unchanged."
 }
 $oldStream = Join-Path $gameDir 'MarylandShowdown_1.0_Streams.big'
 $gameSku = Join-Path $gameDir 'CNC3_english_1.9.SkuDef'

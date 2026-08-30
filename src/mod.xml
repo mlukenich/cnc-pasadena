@@ -6,6 +6,8 @@
 		<Include type="reference" source="DATA:global.xml"/>
 		<Include type="all" source="ART:PV/PVDually_Model.w3x"/>
 		<Include type="all" source="ART:PV/PVDually_Portrait.xml"/>
+		<Include type="all" source="ART:PM/PVMudTank_Model.w3x"/>
+		<Include type="all" source="ART:PM/PVMudTank_Portrait.xml"/>
 		<Include type="all" source="ART:CV/CVPrius_Model.w3x"/>
 		<Include type="all" source="ART:CV/CVPrius_Portrait.xml"/>
 

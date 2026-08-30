@@ -74,16 +74,16 @@ function faceUvs(material, points, normal, group) {
   const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
 
   // Dedicated panel projections
-  if (group === 'hood-top' && normal[2] > 0.3) {
+  if (group === 'hood-top' && normal[2] > 0.6) {
     index = 8; projection = p => [(p[1] + 10.0) / 20.0, (24.2 - p[0]) / 13.0];
   } else if (group === 'door-badge-panel') {
-    index = 9; projection = p => [(p[0] + 10.0) / 22.0, (11.0 - p[2]) / 6.0];
+    index = 9; projection = p => [0.1 + 0.8 * (10.5 - p[0]) / 21, 0.38 + 0.54 * (10.6 - p[2]) / 5.4];
   } else if (group === 'roof-surface' && normal[2] > 0.4) {
-    index = 10; projection = p => [(p[1] + 8.0) / 16.0, (1.0 - p[0]) / 10.0];
-  } else if (group === 'tailgate-panel' && normal[0] < -0.3) {
-    index = 11; projection = p => [(p[1] + 9.0) / 18.0, (12.0 - p[2]) / 4.0];
-  } else if (group === 'front-headlights' && normal[0] > 0.3) {
-    index = 12; projection = p => [(p[1] + 8.5) / 17.0, (8.5 - p[2]) / 3.5];
+    index = 10; projection = p => [(p[1] + 8.0) / 16.0, (6.0 - p[0]) / 15.0];
+  } else if (group === 'rear-bumper-cap') {
+    index = 11; projection = p => [0.07 + 0.86 * (p[1] + 8.2) / 16.4, 0.37 + 0.43 * (9.4 - p[2]) / 5];
+  } else if (group === 'front-bumper-cap') {
+    index = 12; projection = p => [0.04 + 0.92 * (p[1] + 7.2) / 14.4, 0.52 + 0.43 * (8.0 - p[2]) / 3.8];
   } else if (group === 'turret-strobe-lens' && normal[2] > 0.4) {
     index = 6; projection = p => [(p[1] + 4.5) / 9.0, (p[0] + 2.8) / 7.2];
   } else if (group.startsWith('wheel-')) {
@@ -102,34 +102,31 @@ function faceUvs(material, points, normal, group) {
   const col = index % 4, row = Math.floor(index / 4);
 
   if (projection) {
-    return points.map(p => {
+    const mapped = points.map(p => {
       const [u, v] = projection(p);
       return [(col + 0.03 + 0.94 * clamp(u)) / 4, (row + 0.03 + 0.94 * clamp(v)) / 4];
     });
+    // A region projection must not collapse triangles at its crop boundary.
+    const [a,b,c] = mapped;
+    if (Math.abs((b[0]-a[0])*(c[1]-a[1])-(c[0]-a[0])*(b[1]-a[1])) > 1e-10) return mapped;
   }
 
-  const u0 = col / 4 + 0.035;
-  const v0 = row / 4 + 0.035;
-  const dist = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
-  const w = dist(points[0], points[1]) || 0.01;
-  const edge = points[1].map((v, i) => (v - points[0][i]) / w);
-  const vertical = [
-    normal[1] * edge[2] - normal[2] * edge[1],
-    normal[2] * edge[0] - normal[0] * edge[2],
-    normal[0] * edge[1] - normal[1] * edge[0],
-  ];
-  const local = points.map(p => {
-    const d = p.map((v, i) => v - points[0][i]);
-    return [
-      d.reduce((s, v, i) => s + v * edge[i], 0),
-      d.reduce((s, v, i) => s + v * vertical[i], 0)
-    ];
-  });
-  const low = [0, 1].map(k => Math.min(...local.map(p => p[k])));
-  const high = [0, 1].map(k => Math.max(...local.map(p => p[k])));
-  const span = Math.max(high[0] - low[0], high[1] - low[1], 0.01);
-  const scale = 0.18 / span;
-  return local.map(p => [u0 + (p[0] - low[0]) * scale, v0 + (p[1] - low[1]) * scale]);
+  // Continuous object-space UVs: adjacent triangles sample the same area,
+  // instead of restarting a whole material swatch at every triangle edge.
+  const axis = normal.map(Math.abs).indexOf(Math.max(...normal.map(Math.abs)));
+  const axes = axis === 0 ? [1,2] : axis === 1 ? [0,2] : [1,0];
+  let ranges = axes.map(k => k === 0 ? [-27,27] : k === 1 ? [-13,13] : [0,21]);
+  let crop = [0.18,0.82,0.18,0.82];
+  if (material === 'solarGlass') crop = [0.2,0.75,0.2,0.75];
+  if (material === 'carbon') crop = [0.42,0.47,0.42,0.47];
+  if (group.startsWith('wheel-')) {
+    const cx = group.includes('front') ? 16 : -16;
+    ranges = axes.map(k => k === 0 ? [cx-5.1,cx+5.1] : k === 2 ? [0.1,10.3] : [-12,12]);
+  }
+  return points.map(p => axes.map((k,j) => {
+    const q = clamp((p[k]-ranges[j][0])/(ranges[j][1]-ranges[j][0]));
+    return ((j === 0 ? col : row) + crop[j*2] + (crop[j*2+1]-crop[j*2])*q)/4;
+  }));
 }
 
 function addFace(points, normal, material, group) {
@@ -410,8 +407,9 @@ writePortraitTga(outputDir);
 // Write OBJ/MTL
 const objLines = [`# Columbia Prius Patrol EV OBJ export`, `mtllib CVPrius.mtl`, `o CVPrius`];
 for (const v of vertices) objLines.push(`v ${fmt(v[0])} ${fmt(v[1])} ${fmt(v[2])}`);
-for (const uv of uvs) objLines.push(`vt ${fmt(uv[0])} ${fmt(uv[1])}`);
+for (const uv of uvs) objLines.push(`vt ${fmt(uv[0])} ${fmt(1 - uv[1])}`);
 for (const n of normals) objLines.push(`vn ${fmt(n[0])} ${fmt(n[1])} ${fmt(n[2])}`);
+objLines.push('usemtl Material');
 for (const t of triangles) {
   objLines.push(`f ${t[0] + 1}/${t[0] + 1}/${t[0] + 1} ${t[1] + 1}/${t[1] + 1}/${t[1] + 1} ${t[2] + 1}/${t[2] + 1}/${t[2] + 1}`);
 }
@@ -419,7 +417,7 @@ fs.writeFileSync(path.join(outputDir, 'CVPrius.obj'), objLines.join('\n') + '\n'
 fs.writeFileSync(path.join(outputDir, 'CVPrius.mtl'), `newmtl Material\nmap_Kd CVPriusAtlas.tga\n`, 'utf8');
 
 const report = {
-  artVersion: 1,
+  artVersion: 2,
   unit: 'ColumbiaVehiclePrius',
   slot: 'NODScorpionBuggy',
   artScale,

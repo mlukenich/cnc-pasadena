@@ -1,0 +1,52 @@
+{
+  "artVersion": 1,
+  "unit": "PasadenaVehicleMudTank",
+  "slot": "GDIPredator",
+  "artScale": 0.88,
+  "shader": "ObjectsGDI.fx",
+  "model": "PVMUDTANK_SKIN",
+  "vertices": 26768,
+  "triangles": 9596,
+  "bounds": {
+    "min": [
+      -22.352,
+      -10.362,
+      0.132
+    ],
+    "max": [
+      24.068,
+      10.362,
+      18.788
+    ],
+    "center": [
+      0.8580000000000005,
+      0,
+      9.46
+    ],
+    "radius": 23.955696858993687
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "Turret",
+    "Barrel",
+    "FXMUZZLEFLASH",
+    "FXTracksL",
+    "FXTracksR"
+  ],
+  "outputs": [
+    "PVMudTank_Model.w3x",
+    "PVMudTank_Texture.xml",
+    "PVMudTankAtlas.tga",
+    "PVMudTankNormal.tga",
+    "PVMudTankSpec.tga",
+    "PVMudTankHouse.tga",
+    "PVMudTank_Portrait.xml",
+    "PVMudTankPortrait.tga",
+    "PVMudTank.obj",
+    "PVMudTank.mtl"
+  ]
+}

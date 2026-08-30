@@ -1,12 +1,12 @@
 {
-  "artVersion": 1,
+  "artVersion": 2,
   "unit": "ColumbiaVehiclePrius",
   "slot": "NODScorpionBuggy",
   "artScale": 0.88,
   "shader": "ObjectsGDI.fx",
   "model": "CUPRIUS_SKIN",
-  "vertices": 12116,
-  "triangles": 4196,
+  "vertices": 13964,
+  "triangles": 4812,
   "bounds": {
     "min": [
       -22.176,

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+  <Texture id="PVMudTankAtlas" File="PVMudTankAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+  <Texture id="PVMudTankNormal" File="PVMudTankNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+  <Texture id="PVMudTankSpec" File="PVMudTankSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+  <Texture id="PVMudTankHouse" File="PVMudTankHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

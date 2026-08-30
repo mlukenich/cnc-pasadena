@@ -7,6 +7,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'mod_runtime.ps1')
 . (Join-Path $PSScriptRoot 'dually_behavior.ps1')
 . (Join-Path $PSScriptRoot 'prius_behavior.ps1')
+. (Join-Path $PSScriptRoot 'mudtank_behavior.ps1')
 
 $workspaceDir = Split-Path -Parent $PSScriptRoot
 $sdkDir = Join-Path $workspaceDir 'ModSDK'
@@ -15,6 +16,8 @@ $sourceArtDir = Join-Path $sourceDir 'Art\PV'
 $sdkArtDir = Join-Path $sdkDir 'Art\PV'
 $sourceCvArtDir = Join-Path $sourceDir 'Art\CV'
 $sdkCvArtDir = Join-Path $sdkDir 'Art\CV'
+$sourcePmArtDir = Join-Path $sourceDir 'Art\PM'
+$sdkPmArtDir = Join-Path $sdkDir 'Art\PM'
 $stageDir = Join-Path $sdkDir 'Mods\MarylandShowdown\data'
 $overrideDir = Join-Path $stageDir 'GeneratedOverrides'
 $builtModsDir = Join-Path $sdkDir 'BuiltMods'
@@ -120,6 +123,15 @@ Assert-File (Join-Path $sourceCvArtDir 'CVPriusAtlas.tga')
 Assert-File (Join-Path $sourceCvArtDir 'CVPrius_Portrait.xml')
 Assert-File (Join-Path $sourceCvArtDir 'CVPriusPortrait.tga')
 
+& $node.Source (Join-Path $workspaceDir 'tools\test_mudtank_geometry.js')
+if ($LASTEXITCODE -ne 0) { throw "Pasadena Mud Tank asset generation failed with exit code $LASTEXITCODE" }
+& (Join-Path $PSScriptRoot 'test_mudtank_material.ps1') -ArtDirectory $sourcePmArtDir
+Assert-File (Join-Path $sourcePmArtDir 'PVMudTank_Model.w3x')
+Assert-File (Join-Path $sourcePmArtDir 'PVMudTank_Texture.xml')
+Assert-File (Join-Path $sourcePmArtDir 'PVMudTankAtlas.tga')
+Assert-File (Join-Path $sourcePmArtDir 'PVMudTank_Portrait.xml')
+Assert-File (Join-Path $sourcePmArtDir 'PVMudTankPortrait.tga')
+
 Remove-GeneratedDirectory $sdkArtDir (Join-Path $sdkDir 'Art')
 New-Item -ItemType Directory -Force -Path $sdkArtDir | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourceArtDir 'PVDually_Model.w3x') -Destination $sdkArtDir -Force
@@ -142,6 +154,18 @@ Copy-Item -LiteralPath (Join-Path $sourceCvArtDir 'CVPriusPortrait.tga') -Destin
 foreach ($materialMap in @('CVPriusNormal.tga','CVPriusSpec.tga','CVPriusHouse.tga')) {
     Assert-File (Join-Path $sourceCvArtDir $materialMap)
     Copy-Item -LiteralPath (Join-Path $sourceCvArtDir $materialMap) -Destination $sdkCvArtDir -Force
+}
+
+Remove-GeneratedDirectory $sdkPmArtDir (Join-Path $sdkDir 'Art')
+New-Item -ItemType Directory -Force -Path $sdkPmArtDir | Out-Null
+Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTank_Model.w3x') -Destination $sdkPmArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTank_Texture.xml') -Destination $sdkPmArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTankAtlas.tga') -Destination $sdkPmArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTank_Portrait.xml') -Destination $sdkPmArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePmArtDir 'PVMudTankPortrait.tga') -Destination $sdkPmArtDir -Force
+foreach ($materialMap in @('PVMudTankNormal.tga','PVMudTankSpec.tga','PVMudTankHouse.tga')) {
+    Assert-File (Join-Path $sourcePmArtDir $materialMap)
+    Copy-Item -LiteralPath (Join-Path $sourcePmArtDir $materialMap) -Destination $sdkPmArtDir -Force
 }
 
 New-Item -ItemType Directory -Force -Path $stageDir, $buildDir | Out-Null
@@ -171,7 +195,7 @@ $overrides = @(
     @('GDI\Units\GDIZoneTrooperSquad.xml', 'Name:PasadenaInfantryLeafblower', 'Desc:PasadenaInfantryLeafblower'),
     @('GDI\Units\GDICommando.xml', 'Name:PasadenaInfantryCommando', 'Desc:PasadenaInfantryCommando'),
     @('GDI\Units\GDIPitbull.xml', 'Name:PasadenaVehicleDually', 'Desc:PasadenaVehicleDually'),
-    @('GDI\Units\GDIPredator.xml', 'Name:PasadenaVehicleBuggy', 'Desc:PasadenaVehicleBuggy'),
+    @('GDI\Units\GDIPredator.xml', 'Name:PasadenaVehicleMudTank', 'Desc:PasadenaVehicleMudTank'),
     @('GDI\Units\GDIJuggernaught.xml', 'Name:PasadenaVehiclePontoon', 'Desc:PasadenaVehiclePontoon'),
     @('GDI\Units\GDIMammoth.xml', 'Name:PasadenaVehicleMonster', 'Desc:PasadenaVehicleMonster'),
     @('GDI\Units\GDIOrca.xml', 'Name:PasadenaAircraftSeaplane', 'Desc:PasadenaAircraftSeaplane'),
@@ -225,6 +249,9 @@ foreach ($item in $overrides) {
     if ($relativePath -eq 'GDI\Units\GDIPitbull.xml') {
         $content = ConvertTo-DuallyObjectContent $content
     }
+    if ($relativePath -eq 'GDI\Units\GDIPredator.xml') {
+        $content = ConvertTo-MudTankObjectContent $content
+    }
     if ($relativePath -eq 'NOD\Units\NODScorpionBuggy.xml') {
         $content = ConvertTo-PriusObjectContent $content
     }
@@ -232,6 +259,7 @@ foreach ($item in $overrides) {
 }
 
 & (Join-Path $PSScriptRoot 'test_dually_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIPitbull.xml')
+& (Join-Path $PSScriptRoot 'test_mudtank_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIPredator.xml')
 & (Join-Path $PSScriptRoot 'test_prius_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODScorpionBuggy.xml')
 
 Copy-Item -LiteralPath (Join-Path $sourceDir 'mod.xml') -Destination (Join-Path $stageDir 'mod.xml') -Force
@@ -271,6 +299,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Compiled Dually art verification failed; refus
 
 & $node.Source (Join-Path $workspaceDir 'tools\test_prius_compiled.js')
 if ($LASTEXITCODE -ne 0) { throw 'Compiled Prius art verification failed; refusing to package the mod.' }
+
+& $node.Source (Join-Path $workspaceDir 'tools\test_mudtank_compiled.js')
+if ($LASTEXITCODE -ne 0) { throw 'Compiled Mud Tank art verification failed; refusing to package the mod.' }
 
 $builtDataDir = Join-Path $builtModDir 'data'
 New-Item -ItemType Directory -Force -Path $builtDataDir | Out-Null
