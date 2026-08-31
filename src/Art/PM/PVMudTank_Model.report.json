@@ -2,28 +2,28 @@
   "artVersion": 2,
   "unit": "PasadenaVehicleMudTank",
   "slot": "GDIPredator",
-  "artScale": 0.88,
+  "artScale": 1.1,
   "shader": "ObjectsGDI.fx",
   "model": "PVMUDTANK_SKIN",
   "vertices": 39228,
   "triangles": 13812,
   "bounds": {
     "min": [
-      -22.352,
-      -13.44376,
-      0.013463
+      -27.94,
+      -16.8047,
+      0.016828
     ],
     "max": [
-      24.068,
-      13.44376,
-      24.728
+      30.085,
+      16.8047,
+      30.91
     ],
     "center": [
-      0.8580000000000005,
+      1.0724999999999998,
       0,
-      12.370731500000002
+      15.463414
     ],
-    "radius": 25.639969810841418
+    "radius": 32.04996251174614
   },
   "bones": [
     "ROOTTRANSFORM",

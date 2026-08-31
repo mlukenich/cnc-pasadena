@@ -8,7 +8,7 @@ const {
   writeMaterialMaps,
 } = require('./mudtank_surface_pipeline');
 
-const artScale = 0.88;
+const artScale = 1.10; // 25% larger than revision 2; vertices and attachments scale together.
 const scalePoint = p => p.map(v => Number((v * artScale).toFixed(6)));
 
 const palette = {

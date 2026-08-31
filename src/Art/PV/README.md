@@ -1,5 +1,7 @@
 # Pasadena custom-art exemplar
 
+**Current size correction: truck-size/wheel fix v1.** The F-250 now uses artScale **0.66**, 25% smaller than the earlier 0.88 export, including every rigid pivot. Its simulation box is **54 x 24 x 25**; the existing wheel driver, combat settings and locomotor are retained. Material/art revisions below are preserved history. See [paired comparison and candidate evidence](../../../docs/unit-art/truck-size-wheels-v1/README.md). Use `launch_truck_fix.bat` for this isolated candidate; the regular release is unchanged.
+
 This folder contains the complete source trail for the **Lifted F-250 “Rolling Coal”** exemplar. The in-game object remains `GDIPitbull` for stable C&C 3 behavior, while every model condition and both UI image fields are redirected to the custom assets.
 
 ## Files

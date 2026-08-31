@@ -65,10 +65,7 @@ function tangentFrame(mesh) {
     const det = u1 * v2 - u2 * v1;
     let tangent, bitangent;
     if (Math.abs(det) < 1e-12) {
-      const fn = unit(cross(e1, e2));
-      const arb = Math.abs(fn[2]) < 0.8 ? [0, 0, 1] : [0, 1, 0];
-      tangent = unit(cross(fn, arb));
-      bitangent = unit(cross(fn, tangent));
+      throw new Error('Degenerate Sweeper UV triangle: '+JSON.stringify({t,points:[a,b,c],uv:[ua,ub,uc]}));
     } else {
       const f = 1.0 / det;
       tangent = unit([
@@ -159,28 +156,28 @@ function heightAt(cell, u, v) {
   if (cell === 3) {
     // Stainless steel central weld bead
     const du = Math.abs(u - 0.5);
-    h = du < 0.05 ? 0.85 : 0.5;
+    h = du < 0.025 ? 0.53 : 0.5;
   } else if (cell === 5) {
     // Steel wire bristles
     const su = (u * 32) % 1.0;
-    h = Math.sin(su * Math.PI * 2) * 0.3 + 0.5;
+    h = Math.sin(su * Math.PI * 2) * 0.06 + 0.5;
   } else if (cell === 7) {
     // Perforated gunmetal heat shield holes
     const su = (u * 8) % 1.0;
     const sv = (v * 8) % 1.0;
     const d = Math.hypot(su - 0.5, sv - 0.5);
-    h = d < 0.3 ? 0.1 : 0.8;
+    h = d < 0.3 ? 0.46 : 0.53;
   } else if (cell === 11) {
     // Diamond plate pattern
     const su = (u * 12) % 1.0;
     const sv = (v * 12) % 1.0;
     const diag1 = Math.abs(su - sv);
     const diag2 = Math.abs(su + sv - 1.0);
-    h = (diag1 < 0.15 || diag2 < 0.15) ? 0.9 : 0.4;
+    h = (diag1 < 0.15 || diag2 < 0.15) ? 0.54 : 0.48;
   } else if (cell === 12) {
     // Circular blower fan intake grill
     const d = Math.hypot(u - 0.5, v - 0.5);
-    h = Math.sin(d * Math.PI * 16) > 0 ? 0.75 : 0.35;
+    h = Math.sin(d * Math.PI * 16) > 0 ? 0.52 : 0.48;
   }
   return h;
 }
@@ -189,8 +186,8 @@ const materialResponses = [
   { name: 'pearl white enamel paint', specular: 14, reflection: 0 },
   { name: 'columbia cyan metallic trim', specular: 35, reflection: 4 },
   { name: 'black rubber tire tread & skirt', specular: 2, reflection: 0 },
-  { name: 'brushed stainless steel tank', specular: 75, reflection: 20 },
-  { name: 'dark tinted safety glass', specular: 85, reflection: 35 },
+  { name: 'brushed stainless steel tank', specular: 60, reflection: 10 },
+  { name: 'dark tinted safety glass', specular: 60, reflection: 15 },
   { name: 'steel wire scrubber bristles', specular: 18, reflection: 2 },
   { name: 'amber & cyan strobe lens', specular: 95, reflection: 15 },
   { name: 'perforated heat shield alloy', specular: 50, reflection: 6 },
@@ -273,29 +270,27 @@ function writeMaterialMaps(outputDir) {
       normalRgba[offset + 2] = Math.round(clamp((n[2] * 0.5 + 0.5) * 255, 0, 255));
       normalRgba[offset + 3] = 255;
 
-      // Specular map
+      // ObjectsGDI contract: R highlight, G reflection, B house-color glow.
       specRgba[offset + 0] = mat.specular;
-      specRgba[offset + 1] = mat.specular;
-      specRgba[offset + 2] = mat.specular;
-      specRgba[offset + 3] = mat.reflection;
+      specRgba[offset + 1] = mat.reflection;
+      specRgba[offset + 2] = cell === 6 ? 80 : 0;
+      specRgba[offset + 3] = 255;
 
       // House color team recolor mask
       let houseMask = 0;
       if (cell === 1) {
         // Columbia cyan metallic trim
         houseMask = 255;
-      } else if (cell === 9 && (localY > 0.65 || (localX > 0.45 && localY > 0.35))) {
-        // Safety chevrons and HOA accent on side panel
+      } else if (cell === 9 && localY > 0.75 && g > r * 1.4 && b > r * 1.4) {
+        // Only cyan chevrons, preserving lettering and white gaps.
         houseMask = 255;
-      } else if (cell === 6 && (localX > 0.35 && localX < 0.65)) {
-        // Cyan strobe lens
-        houseMask = 200;
       }
 
-      houseRgba[offset + 0] = houseMask;
-      houseRgba[offset + 1] = houseMask;
-      houseRgba[offset + 2] = houseMask;
-      houseRgba[offset + 3] = 0;
+      const luminance=Math.round(.299*r+.587*g+.114*b);
+      houseRgba[offset + 0] = luminance;
+      houseRgba[offset + 1] = luminance;
+      houseRgba[offset + 2] = luminance;
+      houseRgba[offset + 3] = houseMask;
     }
   }
 

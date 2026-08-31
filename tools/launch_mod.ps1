@@ -1,7 +1,9 @@
 param(
     [switch]$CheckOnly,
     [switch]$ArtPreview,
-    [switch]$PriusPreview
+    [switch]$PriusPreview,
+    [switch]$SweeperPreview,
+    [switch]$TruckFixPreview
 )
 
 $ErrorActionPreference = 'Stop'
@@ -19,9 +21,9 @@ $builtModArchive = Join-Path $workspaceDir ('build\' + $runtimeArchiveName)
 if ((Test-Path -LiteralPath $builtModConfig -PathType Leaf) -and (Test-Path -LiteralPath $builtModArchive -PathType Leaf)) {
     $modConfig = $builtModConfig
 }
-if ($ArtPreview -and $PriusPreview) { throw 'Select only one preview package.' }
-if ($ArtPreview -or $PriusPreview) {
-    $previewFolder = if ($PriusPreview) { 'build\prius-v2' } else { 'build\art-v3' }
+if (([int][bool]$ArtPreview + [int][bool]$PriusPreview + [int][bool]$SweeperPreview + [int][bool]$TruckFixPreview) -gt 1) { throw 'Select only one preview package.' }
+if ($ArtPreview -or $PriusPreview -or $SweeperPreview -or $TruckFixPreview) {
+    $previewFolder = if ($TruckFixPreview) { 'build\truck-scale-wheels-v1' } elseif ($SweeperPreview) { 'build\sweeper-v3' } elseif ($PriusPreview) { 'build\prius-v2' } else { 'build\art-v3' }
     $previewDir = Join-Path $workspaceDir $previewFolder
     $modConfig = Join-Path $previewDir $runtimeConfigName
     $previewArchive = Join-Path $previewDir $runtimeArchiveName

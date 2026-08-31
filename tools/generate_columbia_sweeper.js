@@ -9,9 +9,9 @@ smoothNormals({ vertices, normals, triangles, groups });
 
 const pivots = [
   ['ROOTTRANSFORM', -1, 0.0, 0.0, 0.0],
-  ['Turret', 0, 5.0, 0.0, 11.5],
-  ['FXFireL', 1, 9.0, 11.0, 0.0],
-  ['FXFireR', 1, 9.0, -11.0, 0.0],
+  ['Turret', 0, 7.5, 0.0, 21.2],
+  ['FXFireL', 16, 11.75, 2.6, 0],
+  ['FXFireR', 16, 11.75, -2.6, 0],
   ['Brush_L', 0, 20.0, 14.5, 4.0],
   ['Brush_R', 0, 20.0, -14.5, 4.0],
   ['Bone_TireLF', 0, 14.0, 10.5, 5.5],
@@ -24,6 +24,7 @@ const pivots = [
   ['FXHULKFIRE', 0, 0.0, 0.0, 10.0],
   ['FXTreadL', 0, 0.0, 12.0, 0.0],
   ['FXTreadR', 0, 0.0, -12.0, 0.0],
+  ['GunPitch', 1, 0, 0, 1.8],
 ];
 
 function worldPivot(index) {
@@ -43,13 +44,15 @@ const isBrushR = g => g.startsWith('brush-') && g.includes('right');
 const isCannonL = g => g.startsWith('cannon-') && g.includes('left');
 const isCannonR = g => g.startsWith('cannon-') && g.includes('right');
 const isSkirt = g => g.startsWith('skirt-treads');
-const isBody = g => !isWheelFL(g) && !isWheelFR(g) && !isWheelRL(g) && !isWheelRR(g) && !isBrushL(g) && !isBrushR(g) && !isCannonL(g) && !isCannonR(g) && !isSkirt(g);
+const isTurret = g => g.startsWith('mount-yaw');
+const isBody = g => !isWheelFL(g) && !isWheelFR(g) && !isWheelRL(g) && !isWheelRR(g) && !isBrushL(g) && !isBrushR(g) && !isCannonL(g) && !isCannonR(g) && !isSkirt(g) && !isTurret(g);
 
 function selectMesh(predicate, offset) {
   const selV = [];
   const selN = [];
   const selUV = [];
   const selTri = [];
+  const selGroups = [];
   const remap = new Map();
 
   triangles.forEach((tri, triIdx) => {
@@ -68,6 +71,7 @@ function selectMesh(predicate, offset) {
       return remap.get(oldIdx);
     });
     selTri.push(mapped);
+    selGroups.push(groups[triIdx]);
   });
 
   return {
@@ -75,6 +79,7 @@ function selectMesh(predicate, offset) {
     normals: selN,
     uvs: selUV,
     triangles: selTri,
+    groups: selGroups,
   };
 }
 
@@ -91,6 +96,7 @@ const skirtMesh = selectMesh(isSkirt, worldPivot(0));
 
 const submeshDefs = [
   { id: 'BODY', bone: 0, mesh: bodyMesh },
+  { id: 'TURRET', bone: 1, mesh: selectMesh(isTurret,worldPivot(1)) },
   { id: 'CANNON_L', bone: 2, mesh: cannonLMesh },
   { id: 'CANNON_R', bone: 3, mesh: cannonRMesh },
   { id: 'BRUSH_L', bone: 4, mesh: brushLMesh },
@@ -184,6 +190,12 @@ ${trisXml}
 const meshXmlBlocks = submeshDefs.map(d => meshToXml(d.id, d.mesh)).join('\n\n');
 const containerSubObjects = submeshDefs.map(d => `\t\t<SubObject SubObjectID="${d.id}" BoneIndex="${d.bone}"><RenderObject><Mesh>${modelId}.${d.id}</Mesh></RenderObject></SubObject>`).join('\n');
 const identityFixup = '<FixupMatrix M00="1" M10="0" M20="0" M30="0" M01="0" M11="1" M21="0" M31="0" M02="0" M12="0" M22="1" M32="0"/>';
+const brushAnimation = `<W3DAnimation id="CSSWEEPER_SCRUB" Hierarchy="CSSWEEPER_SKL" NumFrames="31" FrameRate="30">
+  <Channels>${[4,5].map(bone=>`<ChannelQuaternion Pivot="${bone}" Type="Orientation" FirstFrame="0">${Array.from({length:31},(_,i)=>{
+    const angle=(bone===4?1:-1)*i*Math.PI/30;
+    return `<Frame X="0" Y="0" Z="${fmt(Math.sin(angle))}" W="${fmt(Math.cos(angle))}"/>`;
+  }).join('')}</ChannelQuaternion>`).join('')}</Channels>
+</W3DAnimation>`;
 
 const w3x = `<?xml version="1.0" encoding="UTF-8"?>
 <AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -191,6 +203,7 @@ const w3x = `<?xml version="1.0" encoding="UTF-8"?>
 \t<W3DHierarchy id="CSSWEEPER_SKL">
 ${pivots.map((p, i) => `\t\t<Pivot Name="${p[0]}" Parent="${p[1]}"><Translation X="${fmt(p[2])}" Y="${fmt(p[3])}" Z="${fmt(p[4])}"/>\t\t<Rotation X="0" Y="0" Z="0" W="1"/>${identityFixup}</Pivot>`).join('\n')}
 \t</W3DHierarchy>
+${brushAnimation}
 \t<W3DCollisionBox id="${modelId}.COLLISION"><Center X="${fmt(allBounds.center[0])}" Y="${fmt(allBounds.center[1])}" Z="${fmt(allBounds.center[2])}"/><Extent X="${fmt((allBounds.max[0] - allBounds.min[0]) / 2)}" Y="${fmt((allBounds.max[1] - allBounds.min[1]) / 2)}" Z="${fmt((allBounds.max[2] - allBounds.min[2]) / 2)}"/></W3DCollisionBox>
 
 ${meshXmlBlocks}
@@ -206,13 +219,14 @@ const outputDir = path.resolve(__dirname, '..', 'src', 'Art', 'CS');
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 const report = {
-  artVersion: 1,
+  artVersion: 3,
   unit: 'ColumbiaVehicleStreetSweeper',
   slot: 'NODFlameTank',
   shader: 'ObjectsGDI.fx',
   model: modelId,
   vertices: submeshDefs.reduce((s, m) => s + m.mesh.vertices.length, 0),
   triangles: submeshDefs.reduce((s, m) => s + m.mesh.triangles.length, 0),
+  uniqueTriangles: triangles.length,
   bounds: allBounds,
   bones: pivots.map(p => p[0]),
   outputs: [

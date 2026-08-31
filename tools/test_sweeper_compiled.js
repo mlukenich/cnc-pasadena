@@ -8,7 +8,10 @@ const { ddsPixel } = require('./test_dually_compiled');
 
 const root = path.resolve(__dirname, '..');
 const art = path.join(root, 'src', 'Art', 'CS');
-const directory = path.join(root, 'ModSDK', 'BuiltMods', 'mods', 'marylandshowdown', 'data', 'mod', 'assets');
+// LowLOD uses the main stream as /bps and reuses these unchanged assets.
+const stream = 'mod';
+assert(!process.argv[2], 'Verify the main asset stream; LowLOD does not emit duplicate meshes/textures.');
+const directory = path.join(root, 'ModSDK', 'BuiltMods', 'mods', 'marylandshowdown', 'data', stream, 'assets');
 const files = fs.existsSync(directory) ? fs.readdirSync(directory) : [];
 
 function asset(type, id) {
@@ -18,6 +21,7 @@ function asset(type, id) {
 }
 
 const mapNames = ['CSSweeperAtlas', 'CSSweeperNormal', 'CSSweeperSpec', 'CSSweeperHouse'];
+const textureIds = ['90928dc8', 'aaf651bb', 'b0edb132', 'c5587cfa'];
 
 if (files.length > 0) {
   const textFiles = files.filter(f => f.startsWith('21e727da.'));
@@ -29,7 +33,7 @@ if (files.length > 0) {
     const size = source.readUInt16LE(12);
     let matchedAsset = null;
 
-    for (const f of textFiles) {
+    for (const f of textFiles.filter(f => f.split('.')[2] === textureIds[mapNames.indexOf(name)])) {
       const data = fs.readFileSync(path.join(directory, f));
       if (data.length < 500000) continue; // 1024x1024 textures only
       let match = true;
@@ -38,10 +42,11 @@ if (files.length > 0) {
           const x = Math.floor((col + 0.5) * size / 4);
           const y = Math.floor((row + 0.5) * size / 4);
           const p = 18 + (y * size + x) * 4;
-          const expected = [source[p + 2], source[p + 1], source[p]];
+          const expected = [source[p + 2], source[p + 1], source[p], source[p + 3]];
           const actual = ddsPixel(data, x, y);
           expected.forEach((v, k) => {
-            if (Math.abs(actual[k] - v) > 32) match = false;
+            // Retain the original DXT RGB tolerance; check alpha separately.
+            if (Math.abs(actual[k] - v) > (k === 3 ? 18 : 32)) match = false;
           });
           if (!match) break;
         }
@@ -54,6 +59,7 @@ if (files.length > 0) {
     }
     assert(matchedAsset, `Could not locate compiled texture asset for ${name}`);
   });
+  assert(asset('2448ae30', '3bafb1bb').length > 64, 'Brush animation missing or truncated');
 
   const xml = fs.readFileSync(path.join(art, 'CSSweeper_Model.w3x'), 'utf8');
   const entries = [...xml.matchAll(/<W3DMesh id="CSSWEEPER_SKIN\.([^"]+)"[\s\S]*?<\/W3DMesh>/g)];
@@ -128,6 +134,7 @@ if (files.length > 0) {
     total += vertices.length;
   }
 
-  assert.equal(entries.length, 13, 'Expected 13 compiled meshes');
-  console.log(`[PASS] test_sweeper_compiled: All 4 material maps and all ${total} compiled vertices verified across 13 meshes.`);
+  assert.equal(entries.length, 14, 'Expected 14 compiled meshes including yaw mount');
+  console.log(`[PASS] ${stream}: Four identified RGBA maps, brush animation asset, and all ${total} compiled vertices verified across 14 meshes.`);
 }
+else { throw new Error('No compiled asset directory; this is not a successful compilation check.'); }

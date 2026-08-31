@@ -1,0 +1,7 @@
+newmtl ObjectsGDI
+Kd 1 1 1
+Ka .2 .2 .2
+Ks .1 .1 .1
+Ns 28
+map_Kd PPPowerAtlas.tga
+bump PPPowerNormal.tga

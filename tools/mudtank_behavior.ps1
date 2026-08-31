@@ -24,6 +24,39 @@ function ConvertTo-MudTankObjectContent([string]$Content) {
         $tex.ParentNode.RemoveChild($tex) | Out-Null
     }
 
+    # TankDraw only drives tread UVs; wheel bones alone cannot make it roll tires.
+    # Convert the visual module to TruckDraw, preserving weapon/turret/FX states.
+    $tankDraw = $draws[0]
+    $truckDraw = $document.CreateElement('TruckDraw', $tankDraw.NamespaceURI)
+    foreach ($attribute in @($tankDraw.Attributes)) {
+        if ($attribute.Name -notin @('TreadAnimationRate','TreadDriveSpeedFraction','TreadPivotSpeedFraction')) {
+            $truckDraw.SetAttribute($attribute.Name,$attribute.Value)
+        }
+    }
+    foreach ($child in @($tankDraw.ChildNodes)) {
+        if ($child.LocalName -notin @('LeftTread','RightTread','AnimationState')) {
+            [void]$truckDraw.AppendChild($child.CloneNode($true))
+        }
+        elseif ($child.LocalName -eq 'AnimationState') {
+            # Stock Predator states only toggle tread meshes absent from this art.
+            # Reject future animation/FX content rather than silently discarding it.
+            if (@($child.ChildNodes | Where-Object { $_.NodeType -eq 'Element' -and $_.LocalName -ne 'Script' }).Count) { throw 'Predator animation state changed; review conversion.' }
+        }
+    }
+    [void]$tankDraw.ParentNode.ReplaceChild($truckDraw,$tankDraw)
+    $truckDraw.SetAttribute('LeftFrontTireBone','Bone_TireLF')
+    $truckDraw.SetAttribute('RightFrontTireBone','Bone_TireRF')
+    $truckDraw.SetAttribute('LeftRearTireBone','Bone_TireLR')
+    $truckDraw.SetAttribute('RightRearTireBone','Bone_TireRR')
+    # Nominal 8-unit tire radius at artScale 1.10: radians per unit travelled.
+    $truckDraw.SetAttribute('TireRotationMultiplier','0.11363636')
+    $truckDraw.SetAttribute('TrackMarks','EXTireTrack2')
+    $truckDraw.SetAttribute('TrackMarksLeftBone','Bone_TireLR')
+    $truckDraw.SetAttribute('TrackMarksRightBone','Bone_TireRR')
+    $trackInclude = $document.SelectSingleNode('/a:AssetDeclaration/a:Includes/a:Include[@source="ART:EXTnkTrack.xml"]',$namespace)
+    if ($null -eq $trackInclude) { throw 'Predator track include changed.' }
+    $trackInclude.SetAttribute('source','ART:EXTireTrack2.xml')
+
     $object.SetAttribute('SelectPortrait', 'Portrait_PasadenaMudTank')
     $object.SetAttribute('ButtonImage', 'Portrait_PasadenaMudTank')
 
@@ -36,12 +69,12 @@ function ConvertTo-MudTankObjectContent([string]$Content) {
     }
     $shape = $shapes[0]
 
-    # Revision 2: widened tires and raised turret; bounds ~48.2 x 26.9 x 24.8.
+    # 25% larger art: X -27.940..30.085, Y +/-16.805, Z <=30.910.
     # Wider collision affects spacing/pathing; height affects targeting contacts.
     $geometry.SetAttribute('IsSmall', 'false')
-    $shape.SetAttribute('MajorRadius', '25.0')
-    $shape.SetAttribute('MinorRadius', '14.0')
-    $shape.SetAttribute('Height', '25.0')
+    $shape.SetAttribute('MajorRadius', '31.0')
+    $shape.SetAttribute('MinorRadius', '18.0')
+    $shape.SetAttribute('Height', '31.0')
 
     return $document.OuterXml
 }

@@ -50,7 +50,10 @@
 	<String id="Name:PasadenaVehiclePontoon">Pontoon Battle Barge</String>
 	<String id="Desc:PasadenaVehiclePontoon">Amphibious floating fortress with dual heavy crabpot mortars. Shells targets on land and water alike.</String>
 	<String id="Name:PasadenaVehicleMonster">The Monster Mudder Juggernaut</String>
-	<String id="Desc:PasadenaVehicleMonster">66-inch tractor tires that crush enemy light vehicles, equipped with a 5,000-watt tailgate subwoofer shockwave.</String>
+	<String id="Desc:PasadenaVehicleMonster">Colossal super-heavy lifted mega truck on 66-inch chevron tractor tires with dual exposed supercharged big-block V8 engines, twin chrome straight-pipe smokestacks, twin heavy Old Bay pneumatic cannons, side rocket pods, and a 5,000-watt tailgate subwoofer sound system.</String>
+	<String id="Name:GDIMammothTank">The Monster Mudder Juggernaut</String>
+	<String id="Desc:GDIMammothTank">Colossal super-heavy lifted mega truck on 66-inch chevron tractor tires with dual exposed supercharged big-block V8 engines, twin chrome straight-pipe smokestacks, twin heavy Old Bay pneumatic cannons, side rocket pods, and a 5,000-watt tailgate subwoofer sound system.</String>
+	<String id="Type:GDIMammothTank">Super-Heavy Monster Mega Truck</String>
 	<String id="Name:PasadenaAircraftSeaplane">Rusty Cropduster</String>
 	<String id="Desc:PasadenaAircraftSeaplane">Low-flying aerial bomber that carpet-bombs targets with volatile fuel drums.</String>
 

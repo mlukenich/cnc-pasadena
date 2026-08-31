@@ -31,13 +31,13 @@ function ConvertTo-DuallyObjectContent([string]$Content) {
     }
     $shape = $shapes[0]
     if ($shape.HasChildNodes) { throw 'Unexpected offset or child on the stock footprint.' }
-    # Render bounds: X -33.836..34.980, Y +/-14.960, Z 0.014..32.576.
+    # Relative-size correction: X -25.377..26.235, Y +/-11.220, Z <=24.432.
     # GameObject geometry, not the W3X selection/collision box, supplies the
     # simulation footprint. Radii are half-extents; retain the root at zero.
     # No global formation padding or locomotor changes: other units stay intact.
     $geometry.SetAttribute('IsSmall', 'false')
-    $shape.SetAttribute('MajorRadius', '35.0')
-    $shape.SetAttribute('MinorRadius', '16.0')
-    $shape.SetAttribute('Height', '33.0')
+    $shape.SetAttribute('MajorRadius', '27.0')
+    $shape.SetAttribute('MinorRadius', '12.0')
+    $shape.SetAttribute('Height', '25.0')
     return $document.OuterXml
 }

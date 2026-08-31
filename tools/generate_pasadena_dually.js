@@ -21,7 +21,7 @@ const modelId = 'PVDUALLY_SKIN';
 const meshId = `${modelId}.BODY`;
 // Art-only scaling: keep geometry, rigid offsets and every attachment in
 // agreement. Do not modify GameObject.Scale, stats or simulation geometry.
-const artScale = .88;
+const artScale = .66; // 25% smaller than the previous .88 art, including all bones.
 const scalePoint = p => p.map(v => v * artScale);
 
 const palette = {

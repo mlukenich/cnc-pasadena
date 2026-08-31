@@ -24,6 +24,36 @@ function ConvertTo-SweeperObjectContent([string]$Content) {
         $tex.ParentNode.RemoveChild($tex) | Out-Null
     }
 
+    # TruckDraw supplies actual distance-linked wheel roll and front steering.
+    # Preserve stock combat behavior; replace only the visual draw mechanics.
+    $tankDraw = $draws[0]
+    $truckDraw = $document.CreateElement('TruckDraw', $tankDraw.NamespaceURI)
+    foreach ($attribute in @($tankDraw.Attributes)) {
+        if ($attribute.Name -notin @('TreadAnimationRate','TreadDriveSpeedFraction','TreadPivotSpeedFraction')) {
+            $truckDraw.SetAttribute($attribute.Name,$attribute.Value)
+        }
+    }
+    foreach ($child in @($tankDraw.ChildNodes)) {
+        if ($child.LocalName -notin @('LeftTread','RightTread')) { [void]$truckDraw.AppendChild($child.CloneNode($true)) }
+    }
+    [void]$tankDraw.ParentNode.ReplaceChild($truckDraw,$tankDraw)
+    $truckDraw.SetAttribute('LeftFrontTireBone','Bone_TireLF')
+    $truckDraw.SetAttribute('RightFrontTireBone','Bone_TireRF')
+    $truckDraw.SetAttribute('LeftRearTireBone','Bone_TireLR')
+    $truckDraw.SetAttribute('RightRearTireBone','Bone_TireRR')
+    $truckDraw.SetAttribute('TireRotationMultiplier','0.1923077')
+    $truckDraw.SetAttribute('TrackMarks','EXTireTrack2')
+    $truckDraw.SetAttribute('AnimationsRequirePower','false')
+    foreach ($turret in $truckDraw.SelectNodes('a:ModelConditionState/a:Turret',$namespace)) { $turret.SetAttribute('TurretPitch','GunPitch') }
+    foreach ($state in $truckDraw.SelectNodes('a:AnimationState',$namespace)) {
+        if ($state.GetAttribute('ConditionsYes') -match 'DYING|RUBBLE|FREEFALL') { continue }
+        $animation=$document.CreateElement('Animation',$truckDraw.NamespaceURI)
+        $animation.SetAttribute('AnimationName','CSSWEEPER_SCRUB')
+        $animation.SetAttribute('AnimationMode','LOOP')
+        $animation.SetAttribute('AnimationBlendTime','0')
+        [void]$state.PrependChild($animation)
+    }
+
     $object.SetAttribute('SelectPortrait', 'Portrait_ColumbiaSweeper')
     $object.SetAttribute('ButtonImage', 'Portrait_ColumbiaSweeper')
 
@@ -36,11 +66,12 @@ function ConvertTo-SweeperObjectContent([string]$Content) {
     }
     $shape = $shapes[0]
 
-    # Sweeper dimensions: length ~42 (radius 22.0), width ~29 (radius 15.0), height ~22 (height 22.0)
+    # Includes the outboard scrubbers and their complete rotation envelope.
+    # Larger than the old 44x30x22 box: 50x38x26 affects spacing/pathing/targeting.
     $geometry.SetAttribute('IsSmall', 'false')
-    $shape.SetAttribute('MajorRadius', '22.0')
-    $shape.SetAttribute('MinorRadius', '15.0')
-    $shape.SetAttribute('Height', '22.0')
+    $shape.SetAttribute('MajorRadius', '25.0')
+    $shape.SetAttribute('MinorRadius', '19.0')
+    $shape.SetAttribute('Height', '26.0')
     $shape.RemoveAttribute('Offset') | Out-Null
     $offsets = $shape.SelectNodes('a:Offset', $namespace)
     foreach ($o in $offsets) { $shape.RemoveChild($o) | Out-Null }

@@ -1,4 +1,8 @@
-# Monster Mud Tank — art revision 2
+# Monster Mud Tank — art revision 2 with truck-size/wheel fix v1
+
+Current source uses **artScale 1.10**, 25% larger than approved revision 2, with all rigid pivots scaled together. The `GDIPredator` visual module now uses **TruckDraw** and four explicit tire-bone bindings instead of TankDraw. The simulation box is **62 x 36 x 31**; combat settings and locomotor are retained. This changes spacing, pathing and targeting/contact bounds.
+
+The isolated candidate and actual same-scale renders are documented in [truck-size-wheels-v1](../../../docs/unit-art/truck-size-wheels-v1/README.md). Both compiler streams and compiled-asset checks pass. Live wheel movement remains unverified: game launch returned error 100010 before a window appeared. `launch_truck_fix.bat` selects this candidate; the regular release is unchanged. The following revision-2 evidence is historical and remains preserved.
 
 The user approved the finished render on 2026-08-30 and selected its process as the project standard. Follow [UNIT_MODEL_WORKFLOW.md](../../../UNIT_MODEL_WORKFLOW.md) for future units. The approved [front](../../../docs/unit-art/reference/monster-truck-approved-front.png) and [rear](../../../docs/unit-art/reference/monster-truck-approved-rear.png) images are frozen references, separate from regeneratable previews. This approval establishes visual acceptance only.
 

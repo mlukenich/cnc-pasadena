@@ -132,6 +132,20 @@ for(const {name,bone,mesh} of submeshes) {
     assert(Math.abs(Math.hypot(x,z)-Math.hypot(v[0],v[2]))<1e-8,'Off-axis wheel roll');
   }
 }
+// Inspect the actual OBJ, not only the in-memory partition.
+const objLines=fs.readFileSync(path.join(artDir,'CRRoundabout.obj'),'utf8').split(/\r?\n/);
+const objVertices=objLines.filter(l=>l.startsWith('v ')).map(l=>l.split(/\s+/).slice(1).map(Number));
+const objUvs=objLines.filter(l=>l.startsWith('vt ')).map(l=>l.split(/\s+/).slice(1).map(Number));
+assert.equal(objVertices.length,report.vertices);
+let offset=0;
+for(const {bone,mesh} of submeshes) {
+  const o=pivot(bone);
+  mesh.vertices.forEach((v,i)=>{
+    assert(Math.hypot(...sub(objVertices[offset+i],v.map((x,k)=>x+o[k])))<2e-6,'OBJ rigid part stacked at origin');
+    assert(Math.abs(objUvs[offset+i][0]-mesh.uvs[i][0])<1e-6 && Math.abs(objUvs[offset+i][1]-(1-mesh.uvs[i][1]))<1e-6,'OBJ V convention differs from W3X');
+  });
+  offset+=mesh.vertices.length;
+}
 // Actual exported gun and primary FX share both pitch and yaw. The stock slot
 // fires one weapon; choose the right-hand lens, rather than empty air between guns.
 const muzzle=pivot(4), pitchOrigin=pivot(2);

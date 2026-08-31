@@ -14,12 +14,12 @@ $original = $stock.AssetDeclaration.GameObject
 Assert-Dually ($unit.id -eq 'GDIPitbull') 'Wrong object staged.'
 Assert-Dually ($unit.Geometry.IsSmall -eq 'false') 'Truck still flagged as small.'
 Assert-Dually ($unit.Geometry.Shape.Type -eq 'BOX') 'Footprint must be a box.'
-Assert-Dually ($unit.Geometry.Shape.MajorRadius -eq '35.0') 'Incorrect half-length.'
-Assert-Dually ($unit.Geometry.Shape.MinorRadius -eq '16.0') 'Incorrect half-width.'
-Assert-Dually ($unit.Geometry.Shape.Height -eq '33.0') 'Incorrect height.'
+Assert-Dually ($unit.Geometry.Shape.MajorRadius -eq '27.0') 'Incorrect half-length.'
+Assert-Dually ($unit.Geometry.Shape.MinorRadius -eq '12.0') 'Incorrect half-width.'
+Assert-Dually ($unit.Geometry.Shape.Height -eq '25.0') 'Incorrect height.'
 Assert-Dually ($unit.Geometry.Shape.ContactPointGeneration -eq 'VEHICLE') 'Lost vehicle contacts.'
 $report = Get-Content -LiteralPath (Join-Path $root 'src\Art\PV\PVDually_Model.report.json') -Raw | ConvertFrom-Json
-$limits = @(35.0, 16.0, 33.0)
+$limits = @(27.0, 12.0, 25.0)
 for ($axis = 0; $axis -lt 3; $axis++) {
     $extent = [Math]::Max([Math]::Abs($report.bounds.min[$axis]), [Math]::Abs($report.bounds.max[$axis]))
     Assert-Dually ($limits[$axis] -ge $extent) 'Simulation box does not cover the exported model.'
@@ -90,5 +90,5 @@ foreach ($bad in @($stockText.Replace('id="GDIPitbull"','id="NotTheExemplar"'), 
     try { $null = ConvertTo-DuallyObjectContent $bad } catch { $failed = $true }
     Assert-Dually $failed 'Malformed source was accepted.'
 }
-Write-Host '[PASS] Dually 70x32x33 footprint covers the model; all states and wheel/turret/FX references resolve.'
+Write-Host '[PASS] Dually 54x24x25 footprint covers the model; all states and wheel/turret/FX references resolve.'
 Write-Host '[PASS] Only art/portrait/geometry attributes changed; balance, locomotor, weapon and turret settings retained.'

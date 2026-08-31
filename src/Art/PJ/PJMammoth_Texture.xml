@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+  <Texture id="PJMammothAtlas" File="PJMammothAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+  <Texture id="PJMammothNormal" File="PJMammothNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+  <Texture id="PJMammothSpec" File="PJMammothSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+  <Texture id="PJMammothHouse" File="PJMammothHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

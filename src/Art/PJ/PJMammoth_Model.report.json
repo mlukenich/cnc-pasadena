@@ -1,0 +1,62 @@
+{
+  "artVersion": 1,
+  "unit": "PasadenaVehicleMonster",
+  "slot": "GDIMammoth",
+  "shader": "ObjectsGDI.fx",
+  "model": "PJMAMMOTH_SKIN",
+  "vertices": 5972,
+  "triangles": 3412,
+  "bounds": {
+    "min": [
+      -27,
+      -21.8,
+      0.12913409939623044
+    ],
+    "max": [
+      38.5,
+      21.8,
+      28
+    ],
+    "center": [
+      5.75,
+      0,
+      14.064567049698116
+    ],
+    "radius": 38.987589056402406
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Bone_Turret",
+    "Bone_Rails",
+    "Bone_Barrel_01",
+    "Bone_Barrel_02",
+    "MuzzleFX01",
+    "MuzzleFlash_01",
+    "MuzzleFX02",
+    "MuzzleFlash_02",
+    "Turret01",
+    "RocketLaunch01",
+    "Turret02",
+    "RocketLaunch02",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "FXTracksLF",
+    "FXTracksRF",
+    "FXTracksLR",
+    "FXTracksRR"
+  ],
+  "outputs": [
+    "PJMammoth_Model.w3x",
+    "PJMammoth_Texture.xml",
+    "PJMammothAtlas.tga",
+    "PJMammothNormal.tga",
+    "PJMammothSpec.tga",
+    "PJMammothHouse.tga",
+    "PJMammoth_Portrait.xml",
+    "PJMammothPortrait.tga",
+    "PJMammoth.obj",
+    "PJMammoth.mtl"
+  ]
+}

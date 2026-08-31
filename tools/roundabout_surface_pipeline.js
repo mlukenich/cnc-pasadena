@@ -136,11 +136,11 @@ function heightAt(cell, u, v) {
     // Solar micro-hex grid
     const su = (u * 16) % 1.0;
     const sv = (v * 16) % 1.0;
-    h = (su > 0.08 && su < 0.92 && sv > 0.08 && sv < 0.92) ? 0.75 : 0.3;
+    h = (su > 0.08 && su < 0.92 && sv > 0.08 && sv < 0.92) ? 0.52 : 0.48;
   } else if (cell === 11) {
     // Rear engine louvers
     const slat = (v * 12) % 1.0;
-    h = slat < 0.6 ? 0.8 : 0.2;
+    h = slat < 0.6 ? 0.53 : 0.47;
   } else if (cell === 14) {
     // Composite tank tread cleat blocks
     const tu = (u * 4) % 1.0;
@@ -165,8 +165,8 @@ const materialResponses = [
   { name: 'gunmetal magnetic rail alloy', specular: 55, reflection: 6 },
   { name: 'sloped front wedge armor', specular: 14, reflection: 0 },
   { name: 'side hull enforcer panel', specular: 14, reflection: 0 },
-  { name: 'turret roof solar matrix', specular: 70, reflection: 25 },
-  { name: 'rear hull engine venting', specular: 40, reflection: 4 },
+  { name: 'turret roof solar matrix', specular: 35, reflection: 10 },
+  { name: 'rear hull engine venting', specular: 20, reflection: 2 },
   { name: 'front laser radar fascia', specular: 50, reflection: 8 },
   { name: 'emergency caution stripes', specular: 14, reflection: 0 },
   { name: 'stealth tank tread segment', specular: 2, reflection: 0 },

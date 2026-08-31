@@ -340,11 +340,10 @@ const identityFixup = '<FixupMatrix M00="1" M10="0" M20="0" M30="0" M01="0" M11=
 // 1: Bone_Turret (parent 0, [0, 0, 8.5])
 // 2: GunPitch (parent 1, [6.5, 0, 1.7]) -> world [6.5, 0, 10.2]
 // 3: GUN (parent 2, [3.0, 0, 0]) -> world [9.5, 0, 10.2]
-// 4: TurretFX (parent 3, [16.0, 0, 0]) -> world [25.5, 0, 10.2]
-// 5: MuzzleFlash_01 (parent 3, [16.0, 0, 0]) -> world [25.5, 0, 10.2]
+// 4/5: primary FX/flash share the right-hand lens at world [25.9, -2.4, 10.2].
 // 6: Turret2 (parent 0, [-14.0, 0, 8.5])
 // 7: Turret2_Gun (parent 6, [-5.5, 0, 9.3]) -> world [-19.5, 0, 17.8]
-// 8: TurretMS (parent 7, [-1.5, 0, 0]) -> world [-21.0, 0, 17.8]
+// 8: TurretMS -> world [-21.475, 0, 17.8], neutral rear lens face.
 // 9: Bone_Tail (parent 6, [0, 0, 0])
 // 10: Bone_TireLF (parent 0, [13.0, 9.8, 4.8])
 // 11: Bone_TireRF (parent 0, [13.0, -9.8, 4.8])

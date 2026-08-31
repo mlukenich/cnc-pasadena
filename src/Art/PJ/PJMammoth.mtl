@@ -1,0 +1,6 @@
+newmtl ObjectsGDI
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.1 0.1 0.1
+map_Kd PJMammothAtlas.tga
+bump PJMammothNormal.tga

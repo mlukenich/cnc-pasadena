@@ -1,7 +1,7 @@
 {
   "artVersion": 3,
   "geometryRevision": "3.2-detail-and-proportions",
-  "artScale": 0.88,
+  "artScale": 0.66,
   "materialRevision": "3.4-runtime-verified-highlights",
   "shadingRevision": "explicit complete hood smoothing group; runtime-calibrated paint specular",
   "shader": "ObjectsGDI.fx",
@@ -12,21 +12,21 @@
   "triangles": 11952,
   "bounds": {
     "min": [
-      -33.836000000000006,
-      -14.96,
-      0.014239127661591766
+      -25.377000000000002,
+      -11.22,
+      0.010679345746193825
     ],
     "max": [
-      34.98,
-      14.96,
-      32.575444037573604
+      26.235000000000003,
+      11.22,
+      24.431583028180206
     ],
     "center": [
-      0.5719999999999956,
+      0.42900000000000027,
       0,
-      16.294841582617597
+      12.2211311869632
     ],
-    "radius": 36.527701416161335
+    "radius": 27.395776062121
   },
   "bones": [
     "ROOTTRANSFORM",

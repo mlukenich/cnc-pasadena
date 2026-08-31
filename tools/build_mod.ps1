@@ -10,6 +10,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'mudtank_behavior.ps1')
 . (Join-Path $PSScriptRoot 'roundabout_behavior.ps1')
 . (Join-Path $PSScriptRoot 'sweeper_behavior.ps1')
+. (Join-Path $PSScriptRoot 'mammoth_behavior.ps1')
 
 $workspaceDir = Split-Path -Parent $PSScriptRoot
 $sdkDir = Join-Path $workspaceDir 'ModSDK'
@@ -24,6 +25,8 @@ $sourceCrArtDir = Join-Path $sourceDir 'Art\CR'
 $sdkCrArtDir = Join-Path $sdkDir 'Art\CR'
 $sourceCsArtDir = Join-Path $sourceDir 'Art\CS'
 $sdkCsArtDir = Join-Path $sdkDir 'Art\CS'
+$sourcePjArtDir = Join-Path $sourceDir 'Art\PJ'
+$sdkPjArtDir = Join-Path $sdkDir 'Art\PJ'
 $stageDir = Join-Path $sdkDir 'Mods\MarylandShowdown\data'
 $overrideDir = Join-Path $stageDir 'GeneratedOverrides'
 $builtModsDir = Join-Path $sdkDir 'BuiltMods'
@@ -156,6 +159,15 @@ Assert-File (Join-Path $sourceCsArtDir 'CSSweeperAtlas.tga')
 Assert-File (Join-Path $sourceCsArtDir 'CSSweeper_Portrait.xml')
 Assert-File (Join-Path $sourceCsArtDir 'CSSweeperPortrait.tga')
 
+& $node.Source (Join-Path $workspaceDir 'tools\test_mammoth_geometry.js')
+if ($LASTEXITCODE -ne 0) { throw "Pasadena Mammoth Juggernaut asset generation failed with exit code $LASTEXITCODE" }
+& (Join-Path $PSScriptRoot 'test_mammoth_material.ps1') -ArtDirectory $sourcePjArtDir
+Assert-File (Join-Path $sourcePjArtDir 'PJMammoth_Model.w3x')
+Assert-File (Join-Path $sourcePjArtDir 'PJMammoth_Texture.xml')
+Assert-File (Join-Path $sourcePjArtDir 'PJMammothAtlas.tga')
+Assert-File (Join-Path $sourcePjArtDir 'PJMammoth_Portrait.xml')
+Assert-File (Join-Path $sourcePjArtDir 'PJMammothPortrait.tga')
+
 Remove-GeneratedDirectory $sdkArtDir (Join-Path $sdkDir 'Art')
 New-Item -ItemType Directory -Force -Path $sdkArtDir | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourceArtDir 'PVDually_Model.w3x') -Destination $sdkArtDir -Force
@@ -214,6 +226,18 @@ Copy-Item -LiteralPath (Join-Path $sourceCsArtDir 'CSSweeperPortrait.tga') -Dest
 foreach ($materialMap in @('CSSweeperNormal.tga','CSSweeperSpec.tga','CSSweeperHouse.tga')) {
     Assert-File (Join-Path $sourceCsArtDir $materialMap)
     Copy-Item -LiteralPath (Join-Path $sourceCsArtDir $materialMap) -Destination $sdkCsArtDir -Force
+}
+
+Remove-GeneratedDirectory $sdkPjArtDir (Join-Path $sdkDir 'Art')
+New-Item -ItemType Directory -Force -Path $sdkPjArtDir | Out-Null
+Copy-Item -LiteralPath (Join-Path $sourcePjArtDir 'PJMammoth_Model.w3x') -Destination $sdkPjArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePjArtDir 'PJMammoth_Texture.xml') -Destination $sdkPjArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePjArtDir 'PJMammothAtlas.tga') -Destination $sdkPjArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePjArtDir 'PJMammoth_Portrait.xml') -Destination $sdkPjArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourcePjArtDir 'PJMammothPortrait.tga') -Destination $sdkPjArtDir -Force
+foreach ($materialMap in @('PJMammothNormal.tga','PJMammothSpec.tga','PJMammothHouse.tga')) {
+    Assert-File (Join-Path $sourcePjArtDir $materialMap)
+    Copy-Item -LiteralPath (Join-Path $sourcePjArtDir $materialMap) -Destination $sdkPjArtDir -Force
 }
 
 New-Item -ItemType Directory -Force -Path $stageDir, $buildDir | Out-Null
@@ -309,6 +333,9 @@ foreach ($item in $overrides) {
     if ($relativePath -eq 'NOD\Units\NODFlameTank.xml') {
         $content = ConvertTo-SweeperObjectContent $content
     }
+    if ($relativePath -eq 'GDI\Units\GDIMammoth.xml') {
+        $content = ConvertTo-MammothObjectContent $content
+    }
     [IO.File]::WriteAllText($targetPath, $content, (New-Object Text.UTF8Encoding($false)))
 }
 
@@ -317,6 +344,7 @@ foreach ($item in $overrides) {
 & (Join-Path $PSScriptRoot 'test_prius_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODScorpionBuggy.xml')
 & (Join-Path $PSScriptRoot 'test_roundabout_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODRaiderTank.xml')
 & (Join-Path $PSScriptRoot 'test_sweeper_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODFlameTank.xml')
+& (Join-Path $PSScriptRoot 'test_mammoth_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIMammoth.xml')
 
 Copy-Item -LiteralPath (Join-Path $sourceDir 'mod.xml') -Destination (Join-Path $stageDir 'mod.xml') -Force
 
@@ -364,6 +392,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Compiled Roundabout art verification failed; r
 
 & $node.Source (Join-Path $workspaceDir 'tools\test_sweeper_compiled.js')
 if ($LASTEXITCODE -ne 0) { throw 'Compiled Street Sweeper art verification failed; refusing to package the mod.' }
+
+& $node.Source (Join-Path $workspaceDir 'tools\test_mammoth_compiled.js')
+if ($LASTEXITCODE -ne 0) { throw 'Compiled Mammoth Juggernaut art verification failed; refusing to package the mod.' }
 
 $builtDataDir = Join-Path $builtModDir 'data'
 New-Item -ItemType Directory -Force -Path $builtDataDir | Out-Null

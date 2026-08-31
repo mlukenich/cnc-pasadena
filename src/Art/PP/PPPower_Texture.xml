@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+ <Texture id="PPPowerAtlas" File="PPPowerAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+ <Texture id="PPPowerNormal" File="PPPowerNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+ <Texture id="PPPowerSpec" File="PPPowerSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+ <Texture id="PPPowerHouse" File="PPPowerHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

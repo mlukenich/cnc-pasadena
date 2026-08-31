@@ -1,0 +1,71 @@
+{
+  "artVersion": 1,
+  "building": "Straight-Pipe Diesel Generator",
+  "faction": "Pasadena",
+  "intendedStockSlot": "GDIPowerPlant",
+  "detail": 2,
+  "triangles": 25836,
+  "vertices": 61982,
+  "parts": [
+    {
+      "id": "BUILDING",
+      "bone": 0,
+      "triangles": 25712
+    },
+    {
+      "id": "FAN",
+      "bone": 1,
+      "triangles": 124
+    }
+  ],
+  "bounds": {
+    "min": [
+      -32,
+      -30.16,
+      0
+    ],
+    "max": [
+      32,
+      26,
+      46.13
+    ],
+    "center": [
+      0,
+      -2.08,
+      23.065
+    ],
+    "radius": 47.86037113312015
+  },
+  "pivots": [
+    [
+      "ROOTTRANSFORM",
+      -1,
+      0,
+      0,
+      0
+    ],
+    [
+      "FAN",
+      0,
+      26.1,
+      6.4,
+      11.2
+    ],
+    [
+      "EXHAUST01",
+      0,
+      18,
+      1.4,
+      46.13
+    ],
+    [
+      "EXHAUST02",
+      0,
+      18,
+      11.4,
+      41.13
+    ]
+  ],
+  "materialAtlas": "4x4; see powerplant_materials.js",
+  "state": "Standalone art, not wired into live building states"
+}

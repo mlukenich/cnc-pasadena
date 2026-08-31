@@ -28,7 +28,7 @@ mesh.triangles.forEach((t,i)=>{
 // their original blockout positions inside the cab.
 function worldPivot(index){const p=mesh.pivots[index],local=p.slice(2);return p[1]<0?local:local.map((v,i)=>v+worldPivot(p[1])[i]);}
 const near=(a,b)=>a.every((v,i)=>Math.abs(v-b[i])<1e-6);
-assert.equal(mesh.artScale,.88,'Art scale changed without updating the exemplar contract');
+assert.equal(mesh.artScale,.66,'Expected reduced F-250 scale; recheck paired-truck proportions if changing it');
 assert(near(worldPivot(7),[8.5,2.2,31].map(v=>v*mesh.artScale)));
 assert(near(worldPivot(8),[8.5,-2.2,31].map(v=>v*mesh.artScale)));
 for(const binding of mesh.wheelBindings)assert(near(binding.offset,worldPivot(binding.bone)),`Wheel offset/pivot drift: ${binding.id}`);

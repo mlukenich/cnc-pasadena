@@ -5,6 +5,7 @@ const assert = require('assert');
 const { report, submeshes, w3x, worldMesh, pivots } = require('./generate_pasadena_mudtank');
 
 const artDir = path.resolve(__dirname, '..', 'src', 'Art', 'PM');
+assert.equal(report.artScale,1.10,'Expected enlarged monster-truck scale');
 
 // 1. Budget and structure validation
 assert(report.triangles >= 3000 && report.triangles <= 15000, `Triangles out of budget: ${report.triangles}`);
@@ -29,8 +30,8 @@ worldMesh.triangles.forEach((t,i)=> {
   if(g==='windshield-glass')assert(n[0]>0 && n[2]>0,'Windshield faces inward');
   if(g==='front-grille-fascia')assert(n[0]>0,'Grille faces inward');
   if(g.endsWith('tire-tread')) {
-    const cx=(g.includes('front')?15:-15)*0.88;
-    assert(n[0]*(c[0]-cx)+n[2]*(c[2]-8*0.88)>0,`Inward tread: ${g}`); exterior++;
+    const cx=(g.includes('front')?15:-15)*report.artScale;
+    assert(n[0]*(c[0]-cx)+n[2]*(c[2]-8*report.artScale)>0,`Inward tread: ${g}`); exterior++;
   }
   if(g.endsWith('tire-sidewall') || g.endsWith('steel-rim'))assert(n[1]*(g.includes('left')?1:-1)>0,`Inward wheel face: ${g}`);
 });
@@ -43,12 +44,12 @@ const barrelOffset=worldPivot(6);
 const cabTop=Math.max(...worldMesh.triangles.flatMap((t,i)=> {
   if(!/^(cab-roof-panel|cage-|kc-light)/.test(worldMesh.groups[i]))return [];
   const p=t.map(j=>worldMesh.vertices[j]);
-  if(Math.min(...p.map(v=>v[1]))>1.5*0.88 || Math.max(...p.map(v=>v[1]))< -1.5*0.88)return [];
+  if(Math.min(...p.map(v=>v[1]))>1.5*report.artScale || Math.max(...p.map(v=>v[1]))< -1.5*report.artScale)return [];
   return p.map(v=>v[2]);
 }));
-const overCab=barrel.vertices.map(p=>p.map((v,k)=>v+barrelOffset[k])).filter(p=>p[0]>=-3*0.88 && p[0]<=11.5*0.88);
+const overCab=barrel.vertices.map(p=>p.map((v,k)=>v+barrelOffset[k])).filter(p=>p[0]>=-3*report.artScale && p[0]<=11.5*report.artScale);
 assert(Math.min(...overCab.map(p=>p[2]))>cabTop,'Neutral cannon intersects cab/roof accessories');
-assert(Math.abs(worldPivot(7)[0]-15.9*0.88)<1e-5,'Muzzle hardpoint not aligned with barrel end');
+assert(Math.abs(worldPivot(7)[0]-15.9*report.artScale)<1e-5,'Muzzle hardpoint not aligned with barrel end');
 
 // 2. Vertex and normal checks
 submeshes.forEach(({ name, mesh }) => {
@@ -83,6 +84,7 @@ wheelNames.forEach(name => {
       const rx = v[0] * cos + v[2] * sin;
       const rz = -v[0] * sin + v[2] * cos;
       assert(Number.isFinite(rx) && Number.isFinite(rz));
+      assert(Math.abs(Math.hypot(rx,rz)-Math.hypot(v[0],v[2]))<1e-6,'Wheel orbits instead of rolling about its axle');
       wheelTested++;
     });
   }
@@ -116,4 +118,4 @@ for (let pitch = -10; pitch <= 30; pitch += 10) {
 }
 
 console.log(`[PASS] test_mudtank_geometry: ${report.triangles} triangles, ${report.vertices} vertices across 7 rigid meshes.
-       Rig verification: ${wheelTested} wheel samples, ${turretTested} turret/barrel samples.`);
+       Offline wheel radius invariants: ${wheelTested}; turret/barrel arithmetic smoke samples: ${turretTested}. Runtime motion is not established here.`);
