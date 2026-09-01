@@ -16,6 +16,8 @@
 		<Include type="all" source="ART:CS/CSSweeper_Portrait.xml"/>
 		<Include type="all" source="ART:PJ/PJMammoth_Model.w3x"/>
 		<Include type="all" source="ART:PJ/PJMammoth_Portrait.xml"/>
+		<Include type="all" source="ART:CT/CTStealth_Model.w3x"/>
+		<Include type="all" source="ART:CT/CTStealth_Portrait.xml"/>
 
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIConstructionYard.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/GDI/Structures/GDIPowerPlant.xml"/>
@@ -60,6 +62,7 @@
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODScorpionBuggy.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODRaiderTank.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODFlameTank.xml"/>
+		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODStealthTank.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODAvatar.xml"/>
 		<Include type="all" source="DATA:MarylandShowdown/data/GeneratedOverrides/NOD/Units/NODVenom.xml"/>
 	</Includes>

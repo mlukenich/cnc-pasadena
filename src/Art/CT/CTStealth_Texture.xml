@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset">
+  <Texture id="CTStealthAtlas" File="CTStealthAtlas.tga" OutputFormat="DXT1" AllowAutomaticResize="false"/>
+  <Texture id="CTStealthNormal" File="CTStealthNormal.tga" OutputFormat="A8R8G8B8" AllowAutomaticResize="false"/>
+  <Texture id="CTStealthSpec" File="CTStealthSpec.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+  <Texture id="CTStealthHouse" File="CTStealthHouse.tga" OutputFormat="DXT5" AllowAutomaticResize="false"/>
+</AssetDeclaration>

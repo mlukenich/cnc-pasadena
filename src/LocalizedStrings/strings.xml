@@ -101,6 +101,11 @@
 	<String id="Name:NODFlameTank">Columbia Autonomous Street Sweeper</String>
 	<String id="Desc:NODFlameTank">Heavy autonomous commercial street sanitizing vehicle. Armed with twin high-pressure chemical disinfectant steam lances, pressurized stainless boiler tank, and dual rotating curb scrubbers to clean HOA zoning infractions.</String>
 	<String id="Type:NODFlameTank">Autonomous Street Sanitizer</String>
+	<String id="Name:ColumbiaVehicleStealth">Columbia Active-Camouflage HOA Surveillance Cruiser</String>
+	<String id="Desc:ColumbiaVehicleStealth">Whisper-quiet autonomous stealth citation vehicle with active-cloaking hexagonal metamaterial panels, rooftop 360-degree LiDAR optical periscope, and pop-up dual 4-tube high-velocity HOA citation missile pods.</String>
+	<String id="Name:NODStealthTank">Columbia Active-Camouflage HOA Surveillance Cruiser</String>
+	<String id="Desc:NODStealthTank">Whisper-quiet autonomous stealth citation vehicle with active-cloaking hexagonal metamaterial panels, rooftop 360-degree LiDAR optical periscope, and pop-up dual 4-tube high-velocity HOA citation missile pods.</String>
+	<String id="Type:NODStealthTank">Autonomous Stealth Citation Cruiser</String>
 	<String id="Name:ColumbiaVehicleDroneCarrier">Whole Foods Delivery Platform</String>
 	<String id="Desc:ColumbiaVehicleDroneCarrier">Heavy hover platform that launches autonomous attack drones armed with explosive organic avocados.</String>
 	<String id="Name:ColumbiaAircraftDrone">Organic Co-op Precision Drone</String>

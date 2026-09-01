@@ -11,6 +11,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'roundabout_behavior.ps1')
 . (Join-Path $PSScriptRoot 'sweeper_behavior.ps1')
 . (Join-Path $PSScriptRoot 'mammoth_behavior.ps1')
+. (Join-Path $PSScriptRoot 'stealth_behavior.ps1')
 
 $workspaceDir = Split-Path -Parent $PSScriptRoot
 $sdkDir = Join-Path $workspaceDir 'ModSDK'
@@ -27,6 +28,8 @@ $sourceCsArtDir = Join-Path $sourceDir 'Art\CS'
 $sdkCsArtDir = Join-Path $sdkDir 'Art\CS'
 $sourcePjArtDir = Join-Path $sourceDir 'Art\PJ'
 $sdkPjArtDir = Join-Path $sdkDir 'Art\PJ'
+$sourceCtArtDir = Join-Path $sourceDir 'Art\CT'
+$sdkCtArtDir = Join-Path $sdkDir 'Art\CT'
 $stageDir = Join-Path $sdkDir 'Mods\MarylandShowdown\data'
 $overrideDir = Join-Path $stageDir 'GeneratedOverrides'
 $builtModsDir = Join-Path $sdkDir 'BuiltMods'
@@ -168,6 +171,15 @@ Assert-File (Join-Path $sourcePjArtDir 'PJMammothAtlas.tga')
 Assert-File (Join-Path $sourcePjArtDir 'PJMammoth_Portrait.xml')
 Assert-File (Join-Path $sourcePjArtDir 'PJMammothPortrait.tga')
 
+& $node.Source (Join-Path $workspaceDir 'tools\test_stealth_geometry.js')
+if ($LASTEXITCODE -ne 0) { throw "Columbia Stealth Cruiser asset generation failed with exit code $LASTEXITCODE" }
+& (Join-Path $PSScriptRoot 'test_stealth_material.ps1') -ArtDirectory $sourceCtArtDir
+Assert-File (Join-Path $sourceCtArtDir 'CTStealth_Model.w3x')
+Assert-File (Join-Path $sourceCtArtDir 'CTStealth_Texture.xml')
+Assert-File (Join-Path $sourceCtArtDir 'CTStealthAtlas.tga')
+Assert-File (Join-Path $sourceCtArtDir 'CTStealth_Portrait.xml')
+Assert-File (Join-Path $sourceCtArtDir 'CTStealthPortrait.tga')
+
 Remove-GeneratedDirectory $sdkArtDir (Join-Path $sdkDir 'Art')
 New-Item -ItemType Directory -Force -Path $sdkArtDir | Out-Null
 Copy-Item -LiteralPath (Join-Path $sourceArtDir 'PVDually_Model.w3x') -Destination $sdkArtDir -Force
@@ -240,6 +252,18 @@ foreach ($materialMap in @('PJMammothNormal.tga','PJMammothSpec.tga','PJMammothH
     Copy-Item -LiteralPath (Join-Path $sourcePjArtDir $materialMap) -Destination $sdkPjArtDir -Force
 }
 
+Remove-GeneratedDirectory $sdkCtArtDir (Join-Path $sdkDir 'Art')
+New-Item -ItemType Directory -Force -Path $sdkCtArtDir | Out-Null
+Copy-Item -LiteralPath (Join-Path $sourceCtArtDir 'CTStealth_Model.w3x') -Destination $sdkCtArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCtArtDir 'CTStealth_Texture.xml') -Destination $sdkCtArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCtArtDir 'CTStealthAtlas.tga') -Destination $sdkCtArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCtArtDir 'CTStealth_Portrait.xml') -Destination $sdkCtArtDir -Force
+Copy-Item -LiteralPath (Join-Path $sourceCtArtDir 'CTStealthPortrait.tga') -Destination $sdkCtArtDir -Force
+foreach ($materialMap in @('CTStealthNormal.tga','CTStealthSpec.tga','CTStealthHouse.tga')) {
+    Assert-File (Join-Path $sourceCtArtDir $materialMap)
+    Copy-Item -LiteralPath (Join-Path $sourceCtArtDir $materialMap) -Destination $sdkCtArtDir -Force
+}
+
 New-Item -ItemType Directory -Force -Path $stageDir, $buildDir | Out-Null
 Remove-GeneratedDirectory $overrideDir $stageDir
 Remove-GeneratedDirectory $builtModDir (Join-Path $builtModsDir 'mods')
@@ -291,6 +315,7 @@ $overrides = @(
     @('NOD\Units\NODScorpionBuggy.xml', 'Name:ColumbiaVehiclePrius', 'Desc:ColumbiaVehiclePrius'),
     @('NOD\Units\NODRaiderTank.xml', 'Name:ColumbiaVehicleRoundabout', 'Desc:ColumbiaVehicleRoundabout'),
     @('NOD\Units\NODFlameTank.xml', 'Name:ColumbiaVehicleStreetSweeper', 'Desc:ColumbiaVehicleStreetSweeper'),
+    @('NOD\Units\NODStealthTank.xml', 'Name:ColumbiaVehicleStealth', 'Desc:ColumbiaVehicleStealth'),
     @('NOD\Units\NODAvatar.xml', 'Name:ColumbiaVehicleDroneCarrier', 'Desc:ColumbiaVehicleDroneCarrier'),
     @('NOD\Units\NODVenom.xml', 'Name:ColumbiaAircraftDrone', 'Desc:ColumbiaAircraftDrone')
 )
@@ -336,6 +361,9 @@ foreach ($item in $overrides) {
     if ($relativePath -eq 'GDI\Units\GDIMammoth.xml') {
         $content = ConvertTo-MammothObjectContent $content
     }
+    if ($relativePath -eq 'NOD\Units\NODStealthTank.xml') {
+        $content = ConvertTo-StealthObjectContent $content
+    }
     [IO.File]::WriteAllText($targetPath, $content, (New-Object Text.UTF8Encoding($false)))
 }
 
@@ -345,6 +373,7 @@ foreach ($item in $overrides) {
 & (Join-Path $PSScriptRoot 'test_roundabout_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODRaiderTank.xml')
 & (Join-Path $PSScriptRoot 'test_sweeper_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODFlameTank.xml')
 & (Join-Path $PSScriptRoot 'test_mammoth_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'GDI\Units\GDIMammoth.xml')
+& (Join-Path $PSScriptRoot 'test_stealth_behavior.ps1') -ObjectPath (Join-Path $overrideDir 'NOD\Units\NODStealthTank.xml')
 
 Copy-Item -LiteralPath (Join-Path $sourceDir 'mod.xml') -Destination (Join-Path $stageDir 'mod.xml') -Force
 
@@ -395,6 +424,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Compiled Street Sweeper art verification faile
 
 & $node.Source (Join-Path $workspaceDir 'tools\test_mammoth_compiled.js')
 if ($LASTEXITCODE -ne 0) { throw 'Compiled Mammoth Juggernaut art verification failed; refusing to package the mod.' }
+
+& $node.Source (Join-Path $workspaceDir 'tools\test_stealth_compiled.js')
+if ($LASTEXITCODE -ne 0) { throw 'Compiled Stealth Cruiser art verification failed; refusing to package the mod.' }
 
 $builtDataDir = Join-Path $builtModDir 'data'
 New-Item -ItemType Directory -Force -Path $builtDataDir | Out-Null

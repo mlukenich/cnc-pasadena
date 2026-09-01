@@ -1,0 +1,53 @@
+{
+  "artVersion": 1,
+  "unit": "ColumbiaVehicleStealth",
+  "slot": "NODStealthTank",
+  "shader": "ObjectsGDI.fx",
+  "model": "CTSTEALTH_SKIN",
+  "vertices": 3514,
+  "triangles": 1560,
+  "bounds": {
+    "min": [
+      -21.5,
+      -12,
+      -4.2
+    ],
+    "max": [
+      22,
+      12,
+      13.8
+    ],
+    "center": [
+      0.25,
+      0,
+      4.800000000000001
+    ],
+    "radius": 23.812234250485613
+  },
+  "bones": [
+    "ROOTTRANSFORM",
+    "Turret",
+    "FXWeaponL",
+    "FXWeaponR",
+    "FXMUZZLEFLASH",
+    "Bone_TireLF",
+    "Bone_TireRF",
+    "Bone_TireLR",
+    "Bone_TireRR",
+    "FXTracksL",
+    "FXTracksR",
+    "FXTracksB"
+  ],
+  "outputs": [
+    "CTStealth_Model.w3x",
+    "CTStealth_Texture.xml",
+    "CTStealthAtlas.tga",
+    "CTStealthNormal.tga",
+    "CTStealthSpec.tga",
+    "CTStealthHouse.tga",
+    "CTStealth_Portrait.xml",
+    "CTStealthPortrait.tga",
+    "CTStealth.obj",
+    "CTStealth.mtl"
+  ]
+}
