@@ -4,25 +4,25 @@
   "slot": "NODStealthTank",
   "shader": "ObjectsGDI.fx",
   "model": "CTSTEALTH_SKIN",
-  "vertices": 3514,
-  "triangles": 1560,
+  "vertices": 3948,
+  "triangles": 1752,
   "bounds": {
     "min": [
-      -21.5,
-      -12,
-      -4.2
+      -23.2,
+      -11.7,
+      0
     ],
     "max": [
-      22,
-      12,
-      13.8
+      23.5,
+      11.7,
+      17.1
     ],
     "center": [
-      0.25,
+      0.15000000000000036,
       0,
-      4.800000000000001
+      8.55
     ],
-    "radius": 23.812234250485613
+    "radius": 26.749485976369716
   },
   "bones": [
     "ROOTTRANSFORM",

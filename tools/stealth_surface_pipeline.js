@@ -62,8 +62,10 @@ function generateMaterialMaps(sourceAtlasPath) {
 
   for (let y = 0; y < h; y++) {
     const cellY = Math.floor((y / h) * 4);
+    const localY = y % (h / 4);
     for (let x = 0; x < w; x++) {
       const cellX = Math.floor((x / w) * 4);
+      const localX = x % (w / 4);
       const idx = (y * w + x) * 4;
 
       const r = src[idx + 2];
@@ -171,14 +173,15 @@ function generateMaterialMaps(sourceAtlasPath) {
       specPix[idx + 2] = specR;
       specPix[idx + 3] = 255;
 
-      // House Color Map (Team Recolor)
+      // House Color Map (Team Recolor):
+      // Apply clean team accent stripe along upper edge of cell (0, 0) paint
       let houseRecolor = 0;
       if (cellX === 0 && cellY === 0) {
-        // Base Pearl White gets team recolor
-        houseRecolor = Math.round(lum);
+        if (localY < 32) {
+          houseRecolor = Math.round(lum);
+        }
       } else if (cellX === 1 && cellY === 2) {
-        // Door seal badge accent
-        if (x % (w / 4) > 200 && y % (h / 4) > 200) houseRecolor = Math.round(lum);
+        if (localX > 200 && localY > 200) houseRecolor = Math.round(lum);
       }
 
       housePix[idx + 0] = houseRecolor;
